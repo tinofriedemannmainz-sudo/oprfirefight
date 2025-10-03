@@ -22,11 +22,14 @@ export type GameState = {
   regenerate: (size?:number) => void
   startDeploy: () => void
   placeUnit: (unitId:string, hex:Hex) => void
+  unplaceUnit: (unitId:string) => void
   startGame: () => void
   selectUnit: (unitId?:string) => void
   moveUnit: (unitId:string, hex:Hex) => void
   attack: (attackerId:string, targetId:string, weaponName:string) => void
   endTurn: () => void
+
+  deployNext: () => void
 }
 
 export const useGame = create<GameState>((set, get) => ({
@@ -86,11 +89,20 @@ export const useGame = create<GameState>((set, get) => ({
     if (u.owner===0 && hex.r > -Math.floor(size/2)) return
     if (u.owner===1 && hex.r <  Math.floor(size/2)) return
     u.position = { q: hex.q, r: hex.r }
-    set({ units: [...get().units] })
+    set({ units: [...get().units], selectedUnitId: undefined })
+  },
+
+  unplaceUnit(unitId) {
+    const u = get().units.find(u => u.id === unitId)
+    if (!u) return
+    if (u.owner !== get().currentPlayer) return
+    u.position = undefined
+    set({ units: [...get().units], selectedUnitId: undefined })
   },
 
   startGame() {
-    set({ phase:'playing', currentPlayer: 0 })
+    if (!get().units.every(u => u.position)) return
+    set({ phase:'playing', currentPlayer: 0, selectedUnitId: undefined })
   },
 
   selectUnit(unitId) {
@@ -120,7 +132,7 @@ export const useGame = create<GameState>((set, get) => ({
     if (!atk || !tgt || !atk.position || !tgt.position) return
     const weapon = atk.weapons.find(w => w.name === weaponName)
     if (!weapon) return
-    const dist = axialDistance(atk.position, tgt.position)
+    const dist = Math.round((Math.abs(atk.position.q - tgt.position.q) + Math.abs(atk.position.q + atk.position.r - tgt.position.q - tgt.position.r) + Math.abs(atk.position.r - tgt.position.r))/2)
     if (weapon.type==='ranged' && dist > weapon.range) return
     if (weapon.type==='melee' && dist !== 1) return
 
@@ -147,5 +159,11 @@ export const useGame = create<GameState>((set, get) => ({
 
   endTurn() {
     set({ currentPlayer: (get().currentPlayer===0?1:0), selectedUnitId: undefined, selectedWeapon: undefined })
+  },
+
+  deployNext() {
+    const state = get()
+    const next = state.currentPlayer === 0 ? 1 : 0
+    set({ currentPlayer: next, selectedUnitId: undefined })
   }
 }))

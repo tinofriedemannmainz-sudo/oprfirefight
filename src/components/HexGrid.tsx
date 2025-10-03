@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import { useGame } from '@/stores/game'
 import type { Hex, Unit } from '@/types/battle'
-import HexCell from './HexCell'
-import UnitSprite from './UnitSprite'
+import HexCell from '@/components/HexCell'
+import UnitSprite from '@/components/UnitSprite'
 
 export default function HexGrid(){
   const g = useGame()
@@ -30,9 +30,18 @@ export default function HexGrid(){
   const translateX = (width - (maxX - minX)) / 2 - minX
   const translateY = (height - (maxY - minY)) / 2 - minY
 
+  const canDeployHere = (hex:Hex) => {
+    if (g.phase !== 'deploy') return false
+    const occupied = g.units.some(u => u.position && u.position.q===hex.q && u.position.r===hex.r)
+    if (occupied) return false
+    if (g.currentPlayer === 0) return hex.r <= -Math.floor(g.size/2)
+    return hex.r >= Math.floor(g.size/2)
+  }
+
   function handleHexClick(hex:Hex){
     setSelectedHex(hex)
     if (g.phase==='deploy' && g.selectedUnitId){
+      if (!canDeployHere(hex)) return
       g.placeUnit(g.selectedUnitId, hex)
     }
     if (g.phase==='playing' && g.selectedUnitId){
@@ -42,8 +51,12 @@ export default function HexGrid(){
 
   function handleUnitClick(u:Unit){
     if (g.phase==='deploy'){
-      if (u.owner!==g.currentPlayer) return
-      g.selectUnit(u.id)
+      if (u.owner===g.currentPlayer && u.position){
+        // remove from board back to list
+        g.unplaceUnit(u.id)
+      } else if (u.owner===g.currentPlayer) {
+        g.selectUnit(u.id)
+      }
     } else if (g.phase==='playing'){
       if (u.owner===g.currentPlayer) { g.selectUnit(u.id) }
       else if (g.selectedUnitId){
@@ -56,8 +69,19 @@ export default function HexGrid(){
 
   return <svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
     <g transform={`translate(${translateX},${translateY})`}>
-      {g.grid.map(hx => <HexCell key={`${hx.q},${hx.r}`} hex={hx} size={26} onClick={()=>handleHexClick(hx)} selected={selectedHex?.q===hx.q && selectedHex?.r===hx.r}/>)}
-      {g.units.filter(u => u.position).map(u => <UnitSprite key={u.id} u={u as Unit} selected={g.selectedUnitId===u.id} onClick={()=>handleUnitClick(u as Unit)} />)}
+      {g.grid.map(hx => (
+        <HexCell
+          key={`${hx.q},${hx.r}`}
+          hex={hx}
+          size={26}
+          onClick={()=>handleHexClick(hx)}
+          selected={selectedHex?.q===hx.q && selectedHex?.r===hx.r}
+          canDeploy={canDeployHere(hx)}
+        />
+      ))}
+      {g.units.filter(u => u.position).map(u => (
+        <UnitSprite key={u.id} u={u as Unit} selected={g.selectedUnitId===u.id} onClick={()=>handleUnitClick(u as Unit)} />
+      ))}
     </g>
   </svg>
 }
