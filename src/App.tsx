@@ -3,8 +3,12 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useGame } from './store'
 import type { Hex, Team, Unit, TerrainType } from './types'
 
-function loadTeams(): Promise<Team[]> {
-  return fetch('/data/teams/index.json').then(r => r.json())
+async function loadTeams(): Promise<Team[]> {
+  const index = await fetch('/data/teams/index.json').then(r => r.json());
+  const teams: Team[] = await Promise.all(
+    index.map((t: any) => fetch(t.unitsPath).then((r) => r.json()))
+  );
+  return teams;
 }
 
 const terrainColors: Record<TerrainType, string> = {
@@ -60,9 +64,9 @@ function UnitSprite({u, selected, onClick}:{u:Unit; selected:boolean; onClick:()
 function Controls(){
   const g = useGame()
   const [teams, setTeams] = useState<Team[]>([])
-  useEffect(()=>{
-    loadTeams().then(t => {setTeams(t); g.loadTeams(t)})
-  },[])
+useEffect(()=>{
+  loadTeams().then(t => { setTeams(t); g.loadTeams(t); });
+},[]);
   return <div className="floating">
     {g.phase==='team-select' && <div className="panel">
       <div className="toolbar" style={{gap:12}}>
@@ -101,6 +105,7 @@ function Grid(){
   const [selectedHex, setSelectedHex] = useState<Hex|undefined>()
   useEffect(()=>{ if(g.grid.length===0){ g.regenerate() } },[])
 
+  
   const size = 26
   const w = Math.sqrt(3) * size
   const h = 2 * size
@@ -136,7 +141,7 @@ function Grid(){
   const translateX = width/2 - (w * (minQ + minR/2))
   const translateY = height/2 - (h * (3/4) * minR)
 
-  return <svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`}>
+  return <svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
     <g transform={`translate(${translateX},${translateY})`}>
       {g.grid.map(hx => <HexCell key={`${hx.q},${hx.r}`} hex={hx} onClick={()=>handleHexClick(hx)} selected={selectedHex?.q===hx.q && selectedHex?.r===hx.r}/>)}
       {g.units.filter(u => u.position).map(u => <UnitSprite key={u.id} u={u as Unit} selected={g.selectedUnitId===u.id} onClick={()=>handleUnitClick(u as Unit)} />)}

@@ -1,24 +1,7 @@
 
 import { create } from 'zustand'
-import type { Hex, TerrainType, Unit, Team, DiceRoll } from './types'
-
-const terrainWeights: Record<TerrainType, number> = {
-  open: 50, forest: 18, rock: 18, water: 7, ruin: 7
-}
-
-function randomTerrain(): TerrainType {
-  const entries = Object.entries(terrainWeights)
-  const total = entries.reduce((a, [,w]) => a+w, 0)
-  let r = Math.random()*total
-  for (const [t, w] of entries) { if ((r -= w) <= 0) return t as TerrainType }
-  return 'open'
-}
-
-function axialDistance(a:{q:number;r:number}, b:{q:number;r:number}) {
-  return (Math.abs(a.q - b.q) + Math.abs(a.q + a.r - b.q - b.r) + Math.abs(a.r - b.r)) / 2
-}
-
-export type GamePhase = 'team-select' | 'deploy' | 'playing' | 'gameover'
+import type { Hex, Unit, Team, DiceRoll, GamePhase } from '@/types/battle'
+import { randomTerrain, axialDistance } from '@/utils/hex'
 
 export type GameState = {
   size: number
@@ -72,19 +55,24 @@ export const useGame = create<GameState>((set, get) => ({
         if (Math.abs(q + r) <= s) grid.push({ q, r, terrain: randomTerrain() })
       }
     }
-    // Clear unit positions on full regenerate
-    const clearedUnits = get().units.map(u => ({...u, position: u.position}))
-    set({ size: s, grid, units: clearedUnits })
+    set({ size: s, grid })
   },
 
   startDeploy() {
     const { selectedTeams, availableTeams } = get()
     if (!selectedTeams[0] || !selectedTeams[1]) return
-    const teamA = availableTeams.find(t => t.id === selectedTeams[0])!
-    const teamB = availableTeams.find(t => t.id === selectedTeams[1])!
-    const mkUnits = (team: typeof teamA, owner:0|1) => team.units.map(u => ({
+
+    const teamA = availableTeams.find(t => t.id === selectedTeams[0])
+    const teamB = availableTeams.find(t => t.id === selectedTeams[1])
+    if (!teamA || !teamB || !teamA.units || !teamB.units) {
+      console.warn("Teams nicht korrekt geladen:", { teamA, teamB })
+      return
+    }
+
+    const mkUnits = (team: typeof teamA, owner:0|1) => team.units!.map(u => ({
       ...u, id: `${owner}-${u.id}`, owner, wounds: u.wounds, maxWounds: u.wounds, position: undefined
     }))
+
     set({ units: [...mkUnits(teamA,0), ...mkUnits(teamB,1)], phase:'deploy', currentPlayer:0, selectedUnitId: undefined })
     get().regenerate()
   },
@@ -109,27 +97,21 @@ export const useGame = create<GameState>((set, get) => ({
     set({ selectedUnitId: unitId, selectedWeapon: undefined })
   },
 
-moveUnit(unitId, hex) {
-  const state = get();
-  const u = state.units.find(u => u.id === unitId);
-  if (!u || !u.position) return;
-
-  const destOccupied = state.units.some(x => x.position && x.position.q===hex.q && x.position.r===hex.r);
-  if (destOccupied) return;
-
-  const axialDistance = (a:{q:number;r:number}, b:{q:number;r:number}) =>
-    (Math.abs(a.q - b.q) + Math.abs(a.q + a.r - b.q - b.r) + Math.abs(a.r - b.r)) / 2;
-
-  const dist = axialDistance(u.position, hex);
-  const terrain = state.grid.find(h => h.q===hex.q && h.r===hex.r)?.terrain;
-  const penalty = terrain === 'water' || terrain === 'rock' ? 1 : 0;
-  const required = dist + penalty;
-
-  if (required <= u.speed) {
-    u.position = { q: hex.q, r: hex.r };
-    set({ units: [...state.units] });
-  }
-},
+  moveUnit(unitId, hex) {
+    const state = get()
+    const u = state.units.find(u => u.id === unitId)
+    if (!u || !u.position) return
+    const destOccupied = state.units.some(x => x.position && x.position.q===hex.q && x.position.r===hex.r)
+    if (destOccupied) return
+    const dist = axialDistance(u.position, hex)
+    const terrain = state.grid.find(h => h.q===hex.q && h.r===hex.r)?.terrain
+    const penalty = terrain === 'water' || terrain === 'rock' ? 1 : 0
+    const required = dist + penalty
+    if (required <= u.speed) {
+      u.position = { q: hex.q, r: hex.r }
+      set({ units: [...state.units] })
+    }
+  },
 
   attack(attackerId, targetId, weaponName) {
     const state = get()

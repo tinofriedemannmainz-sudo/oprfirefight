@@ -5,7 +5,7 @@
   "units": [
     {
       "id": "leader1",
-      "name": "Anf\u00fchrer",
+      "name": "Anfuehrer",
       "image": "/assets/unit_5.svg",
       "quality": 3,
       "defense": 3,
@@ -30,7 +30,7 @@
     },
     {
       "id": "trooper1",
-      "name": "Sch\u00fctze",
+      "name": "Schuetze",
       "image": "/assets/unit_5.svg",
       "quality": 4,
       "defense": 4,
@@ -55,7 +55,7 @@
     },
     {
       "id": "trooper2",
-      "name": "Sch\u00fctze",
+      "name": "Schuetze",
       "image": "/assets/unit_5.svg",
       "quality": 4,
       "defense": 4,
@@ -80,7 +80,7 @@
     },
     {
       "id": "trooper3",
-      "name": "Sch\u00fctze",
+      "name": "Schuetze",
       "image": "/assets/unit_5.svg",
       "quality": 4,
       "defense": 4,
@@ -105,7 +105,7 @@
     },
     {
       "id": "trooper4",
-      "name": "Sch\u00fctze",
+      "name": "Schuetze",
       "image": "/assets/unit_5.svg",
       "quality": 4,
       "defense": 4,
@@ -130,7 +130,7 @@
     },
     {
       "id": "elite1",
-      "name": "Elite-K\u00e4mpfer",
+      "name": "Elite-Kaempfer",
       "image": "/assets/unit_5.svg",
       "quality": 3,
       "defense": 3,
@@ -155,7 +155,7 @@
     },
     {
       "id": "elite2",
-      "name": "Elite-K\u00e4mpfer",
+      "name": "Elite-Kaempfer",
       "image": "/assets/unit_5.svg",
       "quality": 3,
       "defense": 3,
@@ -180,7 +180,7 @@
     },
     {
       "id": "sniper1",
-      "name": "Scharfsch\u00fctze",
+      "name": "Scharfschuetze",
       "image": "/assets/unit_5.svg",
       "quality": 4,
       "defense": 5,
@@ -188,7 +188,7 @@
       "wounds": 2,
       "weapons": [
         {
-          "name": "Schafsch\u00fctzengewehr",
+          "name": "Scharfschuetzengewehr",
           "range": 6,
           "attacks": 1,
           "ap": 2,
