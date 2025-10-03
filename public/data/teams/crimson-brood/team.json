@@ -1,0 +1,218 @@
+{
+  "id": "crimson-brood",
+  "name": "Crimson Brood",
+  "faction": "Crimson Brood",
+  "units": [
+    {
+      "id": "leader1",
+      "name": "Anf\u00fchrer",
+      "image": "/assets/unit_4.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 3,
+      "weapons": [
+        {
+          "name": "Energie-Klinge",
+          "range": 1,
+          "attacks": 3,
+          "ap": 1,
+          "type": "melee"
+        },
+        {
+          "name": "Bolter",
+          "range": 4,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "trooper1",
+      "name": "Sch\u00fctze",
+      "image": "/assets/unit_4.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "weapons": [
+        {
+          "name": "Gewehr",
+          "range": 4,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Bajonett",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "trooper2",
+      "name": "Sch\u00fctze",
+      "image": "/assets/unit_4.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "weapons": [
+        {
+          "name": "Gewehr",
+          "range": 4,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Bajonett",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "trooper3",
+      "name": "Sch\u00fctze",
+      "image": "/assets/unit_4.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "weapons": [
+        {
+          "name": "Gewehr",
+          "range": 4,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Bajonett",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "trooper4",
+      "name": "Sch\u00fctze",
+      "image": "/assets/unit_4.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "weapons": [
+        {
+          "name": "Gewehr",
+          "range": 4,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Bajonett",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "elite1",
+      "name": "Elite-K\u00e4mpfer",
+      "image": "/assets/unit_4.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 3,
+      "weapons": [
+        {
+          "name": "Sturmbolter",
+          "range": 3,
+          "attacks": 3,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Kettenwaffe",
+          "range": 1,
+          "attacks": 2,
+          "ap": 1,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "elite2",
+      "name": "Elite-K\u00e4mpfer",
+      "image": "/assets/unit_4.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 3,
+      "weapons": [
+        {
+          "name": "Sturmbolter",
+          "range": 3,
+          "attacks": 3,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Kettenwaffe",
+          "range": 1,
+          "attacks": 2,
+          "ap": 1,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "sniper1",
+      "name": "Scharfsch\u00fctze",
+      "image": "/assets/unit_4.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "weapons": [
+        {
+          "name": "Schafsch\u00fctzengewehr",
+          "range": 6,
+          "attacks": 1,
+          "ap": 2,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "heavy1",
+      "name": "Schwerer",
+      "image": "/assets/unit_4.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 2,
+      "wounds": 3,
+      "weapons": [
+        {
+          "name": "Schwere Waffe",
+          "range": 5,
+          "attacks": 3,
+          "ap": 1,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}
