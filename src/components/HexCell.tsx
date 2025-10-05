@@ -1,13 +1,19 @@
-
 import React, { useMemo } from 'react'
 import type { Hex, TerrainType } from '@/types/battle'
+import { TERRAIN_RULES } from '@/utils/terrain'
+import { TERRAIN_SKINS } from '@/config/terrainSkins'
 
-const terrainColors: Record<TerrainType, string> = {
-  open: '#1d2331',
-  forest: '#11331c',
-  rock: '#2b2d36',
-  water: '#0f2438',
-  ruin: '#2d1f1f'
+const fillFor: Record<TerrainType, string> = {
+  open: 'url(#tex-open)',
+  forest: 'url(#tex-forest)',
+  rock: 'url(#tex-rock)',
+  water: 'url(#tex-water)',
+  ruin: 'url(#tex-ruin)',
+  swamp: 'url(#tex-swamp)',
+  mountain: 'url(#tex-mountain)',
+  river: 'url(#tex-river)',
+  lake: 'url(#tex-lake)',
+  road: 'url(#tex-road)',
 }
 
 export default function HexCell({
@@ -31,8 +37,45 @@ export default function HexCell({
   const ownerColor = occupantOwner===0 ? '#7aafff' : occupantOwner===1 ? '#ff8a8a' : undefined
   const stroke = selected ? '#9BD0FF' : ownerColor ?? (canDeploy ? '#4cc3ff' : '#384760')
   const strokeWidth = ownerColor ? 3.5 : selected ? 3 : canDeploy ? 2 : 1
+  const impassable = TERRAIN_RULES[hex.terrain]?.impassable
 
-  return <g onClick={onClick} style={{cursor:'pointer'}}>
-    <polygon points={points} fill={terrainColors[hex.terrain]} stroke={stroke} strokeWidth={strokeWidth} />
-  </g>
+  const clipId = `hexclip-${hex.q}-${hex.r}`
+  const skin = TERRAIN_SKINS[hex.terrain]
+
+  // We clip the image to the exact hex polygon, and slightly oversize the image bbox
+  // to avoid subpixel seams between adjacent hexes.
+  const imgX = x - (w/2) - 1
+  const imgY = y - (h/2) - 1
+  const imgW = w + 2
+  const imgH = h + 2
+
+  return (
+    <g onClick={onClick} style={{cursor:'pointer'}}>
+      <defs>
+        <clipPath id={clipId}>
+          <polygon points={points} />
+        </clipPath>
+      </defs>
+
+      {skin
+        ? <image
+            href={skin}
+            x={imgX}
+            y={imgY}
+            width={imgW}
+            height={imgH}
+            preserveAspectRatio="xMidYMid slice"
+            clipPath={`url(#${clipId})`}
+            style={{ imageRendering: 'auto' }}
+          />
+        : <polygon points={points} fill={fillFor[hex.terrain]} />
+      }
+
+      {/* Draw stroke on top so borders remain crisp */}
+      <polygon points={points} fill="none" stroke={stroke} strokeWidth={strokeWidth} />
+
+      {/* Impassable overlay hatch */}
+      {impassable && <polygon points={points} fill="url(#tex-hatch)" opacity={0.35}/>}
+    </g>
+  )
 }
