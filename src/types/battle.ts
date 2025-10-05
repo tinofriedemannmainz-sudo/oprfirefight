@@ -1,18 +1,14 @@
-export type TerrainType =
-  | 'open'
-  | 'forest'
-  | 'rock'
-  | 'water'
-  | 'ruin'
-  | 'swamp'
-  | 'mountain'
-  | 'river'
-  | 'lake'
-  | 'road'
 
-export type Hex = { q: number; r: number; terrain: TerrainType }
+// Minimal type additions compatible with your existing shapes.
+export type GamePhase = 'team-select' | 'deploy' | 'playing' | 'gameover'
 
-export type Weapon = { name:string; range:number; attacks:number; ap:number; type:'melee'|'ranged' }
+export type Weapon = {
+  name: string
+  type: 'melee' | 'ranged'
+  attacks: number
+  range?: number
+  ap: number
+}
 
 export type Unit = {
   id: string
@@ -25,14 +21,30 @@ export type Unit = {
   wounds: number
   maxWounds: number
   weapons: Weapon[]
-  position?: { q: number; r: number }
-  traits?: string[] // e.g. ['Fliegen']
-  activated?: boolean // <- NEU: für Alternating Activations
+  position?: { q:number; r:number }
+  traits?: string[]
+  activated?: boolean // NEW: for alternating activations
 }
 
+export type TerrainType =
+  | 'open' | 'forest' | 'rock' | 'water' | 'river' | 'lake' | 'mountain' | 'swamp' | 'ruin' | 'road'
 
-export type Team = { id:string; name:string; faction:string; units: Omit<Unit,'owner'|'position'>[] }
+export type Hex = {
+  q:number
+  r:number
+  terrain: TerrainType
+}
 
-export type DiceRoll = { label:string; dice:number[]; success:number; target:number }
+export type Team = {
+  id: string
+  name: string
+  faction?: string
+  units?: Unit[]
+}
 
-export type GamePhase = 'team-select' | 'deploy' | 'playing' | 'gameover'
+export type DiceRoll = {
+  label: string
+  dice: number[]
+  success: number
+  target: number
+}

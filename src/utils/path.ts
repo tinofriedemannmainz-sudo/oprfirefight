@@ -1,11 +1,8 @@
+
 import type { Hex, Unit } from '@/types/battle'
 import { gridLookup, axialNeighbors, hexKey } from '@/utils/hex'
 import { canEnter, moveCost } from '@/utils/terrain'
 
-/**
- * Returns a map of reachable hexes with their minimal movement cost (BFS with costs).
- * maxCost should be unit.speed*2 for run range, unit.speed for move range.
- */
 export function reachableCosts(unit:Unit, grid:Hex[], start:{q:number;r:number}, maxCost:number){
   const map = gridLookup(grid)
   const best = new Map<string, number>()
@@ -13,7 +10,6 @@ export function reachableCosts(unit:Unit, grid:Hex[], start:{q:number;r:number},
   best.set(hexKey(start.q,start.r), 0)
 
   while (open.length){
-    // pop lowest cost
     open.sort((a,b)=>a.cost-b.cost)
     const cur = open.shift()!
     if (cur.cost > maxCost) continue
@@ -33,5 +29,5 @@ export function reachableCosts(unit:Unit, grid:Hex[], start:{q:number;r:number},
       }
     }
   }
-  return best // key -> min cost
+  return best
 }

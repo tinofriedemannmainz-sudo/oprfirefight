@@ -1,6 +1,10 @@
+
 import { create } from 'zustand'
 import type { Hex, Unit, Team, DiceRoll, GamePhase } from '@/types/battle'
 import { generateTerrain, TERRAIN_RULES, canEnter, moveCost } from '@/utils/terrain'
+import { axialDistance, axialNeighbors } from '@/utils/hex'
+
+type ActionMode = 'advance' | 'run' | 'shoot' | 'charge' | undefined
 
 export type GameState = {
   size: number
@@ -13,6 +17,7 @@ export type GameState = {
   diceLog: DiceRoll[]
   winners?: 0|1|'draw'
   round: number
+  actionMode: ActionMode
 
   loadTeams: (teams: Team[]) => void
   availableTeams: Team[]
@@ -25,16 +30,15 @@ export type GameState = {
   unplaceUnit: (unitId:string) => void
   startGame: () => void
   selectUnit: (unitId?:string) => void
+  setActionMode: (mode: ActionMode) => void
   moveUnit: (unitId:string, hex:Hex) => void
   attack: (attackerId:string, targetId:string, weaponName:string) => void
   endTurn: () => void
 
-  // Alternating activations
   endActivation: () => void
   flagAdvanced: () => void
   startNewRoundIfNeeded: () => void
 
-  // Deployment helpers
   canDeployOn: (hex:Hex) => boolean
   whyCannotDeploy: (hex:Hex) => string | null
   deployNext: () => void
@@ -50,6 +54,7 @@ export const useGame = create<GameState>((set, get) => ({
   availableTeams: [],
   selectedTeams: [],
   round: 1,
+  actionMode: undefined,
 
   loadTeams(teams) {
     const sorted = [...teams].sort((a,b)=>a.name.localeCompare(b.name))
@@ -81,16 +86,15 @@ export const useGame = create<GameState>((set, get) => ({
     get().regenerate()
   },
 
-  // fixed-width deployment zones: 3 rows for each side
   canDeployOn(hex) {
     const rules = TERRAIN_RULES[hex.terrain]
     if (!rules || !rules.deployAllowed) return false
     const occupied = get().units.some(u => u.position && u.position.q===hex.q && u.position.r===hex.r)
     if (occupied) return false
     const size = get().size
-    const rows = Math.max(2, Math.min(4, Math.floor(size/3))) // usually 3
-    const topLimit = -size + (rows - 1)  // r <= topLimit
-    const bottomLimit = size - (rows - 1) // r >= bottomLimit
+    const rows = Math.max(2, Math.min(4, Math.floor(size/3)))
+    const topLimit = -size + (rows - 1)
+    const bottomLimit = size - (rows - 1)
     if (get().currentPlayer===0 && hex.r > topLimit) return false
     if (get().currentPlayer===1 && hex.r < bottomLimit) return false
     return true
@@ -111,7 +115,6 @@ export const useGame = create<GameState>((set, get) => ({
     return null
   },
 
-  // Let DeployPanel switch player during deployment
   deployNext() {
     const s = get()
     if (s.phase !== 'deploy') return
@@ -138,10 +141,9 @@ export const useGame = create<GameState>((set, get) => ({
   startGame() {
     if (!get().units.every(u => u.position)) return
     for (const u of get().units){ (u as any).activated = false }
-    set({ phase:'playing', currentPlayer: 0, selectedUnitId: undefined, round:1 })
+    set({ phase:'playing', currentPlayer: 0, selectedUnitId: undefined, round:1, actionMode: undefined })
   },
 
-  // TOLERANT: accept owner-prefixed ids *and* base ids
   selectUnit(unitId) {
     let u = get().units.find(u => u.id === unitId)
     if (!u) {
@@ -151,26 +153,26 @@ export const useGame = create<GameState>((set, get) => ({
     if (!u) return
     if (get().phase==='playing' && u.owner!==get().currentPlayer) return
     if (get().phase==='playing' && (u as any).activated) return
-    set({ selectedUnitId: u.id, selectedWeapon: undefined })
+    set({ selectedUnitId: u.id, selectedWeapon: undefined, actionMode: undefined })
   },
+
+  setActionMode(mode){ set({ actionMode: mode }) },
 
   moveUnit(unitId, hex) {
     const state = get()
     const u = state.units.find(u => u.id === unitId)
     if (!u || !u.position) return
 
-    // cannot move into invalid/occupied hexes
     const occupied = state.units.some(x => x.position && x.position.q===hex.q && x.position.r===hex.r)
     if (occupied) return
     const toHex = state.grid.find(h => h.q===hex.q && h.r===hex.r)
     if (!toHex) return
     if (!canEnter(u, toHex)) return
 
-    // simple cost check (approx; overlays/pathfinder can be added)
     const dist = Math.round((Math.abs(u.position.q - hex.q) + Math.abs(u.position.q + u.position.r - hex.q - hex.r) + Math.abs(u.position.r - hex.r))/2)
-    const cost = moveCost(u, toHex, toHex)
-    const required = dist * (isFinite(cost) ? cost : 9999)
-    if (required <= u.speed * 2) {
+    const step = moveCost(u, toHex, toHex)
+    const req = dist * (isFinite(step) ? step : 9999)
+    if (req <= u.speed * 2) {
       u.position = { q: hex.q, r: hex.r }
       set({ units: [...state.units] })
     }
@@ -184,7 +186,7 @@ export const useGame = create<GameState>((set, get) => ({
     const weapon = atk.weapons.find(w => w.name === weaponName) || atk.weapons[0]
     if (!weapon) return
     const dist = Math.round((Math.abs(atk.position.q - tgt.position.q) + Math.abs(atk.position.q + atk.position.r - tgt.position.q - tgt.position.r) + Math.abs(atk.position.r - tgt.position.r))/2)
-    if (weapon.type==='ranged' && dist > weapon.range) return
+    if (weapon.type==='ranged' && dist > (weapon.range || 0)) return
     if (weapon.type==='melee' && dist !== 1) return
 
     const rollDice = (n:number) => Array.from({length:n}, () => 1 + Math.floor(Math.random()*6))
@@ -213,7 +215,7 @@ export const useGame = create<GameState>((set, get) => ({
     const s = get()
     const sel = s.units.find(u => u.id===s.selectedUnitId)
     if (sel){ (sel as any).activated = true }
-    set({ selectedUnitId: undefined })
+    set({ selectedUnitId: undefined, actionMode: undefined })
     const cur = s.currentPlayer, other = cur===0?1:0
     const hasOther = s.units.some(u => u.owner===other && (u as any).activated!==true && u.position)
     const hasCur = s.units.some(u => u.owner===cur && (u as any).activated!==true && u.position)
@@ -227,6 +229,6 @@ export const useGame = create<GameState>((set, get) => ({
     const anyUnactivated = s.units.some(u => (u as any).activated!==true && u.position)
     if (anyUnactivated) return
     for (const u of s.units){ (u as any).activated = false }
-    set({ round: s.round + 1, currentPlayer: 0, selectedUnitId: undefined })
+    set({ round: s.round + 1, currentPlayer: 0, selectedUnitId: undefined, actionMode: undefined })
   },
 }))
