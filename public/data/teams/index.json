@@ -1,5 +1,41 @@
 [
   {
+    "id": "eldrador-dschungelwelt",
+    "name": "Eldrador Dschungelwelt",
+    "faction": "Eldrador Dschungelwelt",
+    "unitsPath": "/data/teams/eldrador-dschungelwelt/team.json"
+  },
+  {
+    "id": "eldrador-eiswelt",
+    "name": "Eldrador Eiswelt",
+    "faction": "Eldrador Eiswelt",
+    "unitsPath": "/data/teams/eldrador-eiswelt/team.json"
+  },
+  {
+    "id": "eldrador-lavawelt",
+    "name": "Eldrador Lavawelt",
+    "faction": "Eldrador Lavawelt",
+    "unitsPath": "/data/teams/eldrador-lavawelt/team.json"
+  },
+  {
+    "id": "eldrador-schattenwelt",
+    "name": "Eldrador Schattenwelt",
+    "faction": "Eldrador Schattenwelt",
+    "unitsPath": "/data/teams/eldrador-schattenwelt/team.json"
+  },
+  {
+    "id": "eldrador-steinwelt",
+    "name": "Eldrador Steinwelt",
+    "faction": "Eldrador Steinwelt",
+    "unitsPath": "/data/teams/eldrador-steinwelt/team.json"
+  },
+  {
+    "id": "eldrador-wasserwelt",
+    "name": "Eldrador Wasserwelt",
+    "faction": "Eldrador Wasserwelt",
+    "unitsPath": "/data/teams/eldrador-wasserwelt/team.json"
+  },
+  {
     "id": "04z57ua0bwth37zh",
     "name": "04z57ua0bwth37zh",
     "faction": "04z57ua0bwth37zh",

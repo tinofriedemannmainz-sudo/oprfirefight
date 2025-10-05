@@ -1,0 +1,163 @@
+{
+  "id": "eldrador-eiswelt",
+  "name": "Eiswelt (Eldrador) – Custom",
+  "faction": "Eiswelt",
+  "units": [
+    {
+      "id": "eisdrache",
+      "name": "Eisdrache",
+      "image": "/assets/eldrador/eiswelt/01-eisdrache.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 5,
+      "wounds": 5,
+      "maxWounds": 5,
+      "weapons": [
+        {
+          "name": "Eisdornen",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Eisiger Atem",
+          "range": 5,
+          "attacks": 2,
+          "ap": 1,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "s-belzahntiger",
+      "name": "Säbelzahntiger",
+      "image": "/assets/eldrador/eiswelt/02-s-belzahntiger.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 4,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Säbelzähne",
+          "range": 1,
+          "attacks": 3,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Pranken",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "schneewolf",
+      "name": "Schneewolf",
+      "image": "/assets/eldrador/eiswelt/03-schneewolf.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 5,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Kristallstacheln",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Biss",
+          "range": 1,
+          "attacks": 3,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "eisgreif",
+      "name": "Eisgreif",
+      "image": "/assets/eldrador/eiswelt/04-eisgreif.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 5,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Scharfer Schnabel",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Eisfedern",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "blizzard-b-r",
+      "name": "Blizzard-Bär",
+      "image": "/assets/eldrador/eiswelt/05-blizzard-b-r.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 4,
+      "maxWounds": 4,
+      "weapons": [
+        {
+          "name": "Eisklaue",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Schulterstoß",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "eisgigant",
+      "name": "Eisgigant",
+      "image": "/assets/eldrador/eiswelt/06-eisgigant.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 5,
+      "maxWounds": 5,
+      "weapons": [
+        {
+          "name": "Eishammer",
+          "range": 1,
+          "attacks": 3,
+          "ap": 1,
+          "type": "melee"
+        },
+        {
+          "name": "Eisiger Atem",
+          "range": 5,
+          "attacks": 2,
+          "ap": 1,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

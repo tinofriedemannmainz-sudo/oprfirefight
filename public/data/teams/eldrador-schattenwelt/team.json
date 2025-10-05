@@ -1,0 +1,135 @@
+{
+  "id": "eldrador-schattenwelt",
+  "name": "Schattenwelt (Eldrador) – Custom",
+  "faction": "Schattenwelt",
+  "units": [
+    {
+      "id": "schattendrache",
+      "name": "Schattendrache",
+      "image": "/assets/eldrador/schattenwelt/01-schattendrache.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 5,
+      "wounds": 5,
+      "maxWounds": 5,
+      "weapons": [
+        {
+          "name": "Schattenodem",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Peitschschwanz",
+          "range": 1,
+          "attacks": 2,
+          "ap": 1,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "schattenpanther",
+      "name": "Schattenpanther",
+      "image": "/assets/eldrador/schattenwelt/02-schattenpanther.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 5,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Nachtkrallen",
+          "range": 1,
+          "attacks": 3,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "albtraum-greif",
+      "name": "Albtraum-Greif",
+      "image": "/assets/eldrador/schattenwelt/03-albtraum-greif.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 5,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Schrei",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Schnabelhieb",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "nebelbestie",
+      "name": "Nebelbestie",
+      "image": "/assets/eldrador/schattenwelt/04-nebelbestie.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 4,
+      "maxWounds": 4,
+      "weapons": [
+        {
+          "name": "Wuchtschlag",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "schattenwraith",
+      "name": "Schattenwraith",
+      "image": "/assets/eldrador/schattenwelt/05-schattenwraith.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 4,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Seelenkälte",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "nachtritter",
+      "name": "Nachtritter",
+      "image": "/assets/eldrador/schattenwelt/06-nachtritter.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 4,
+      "wounds": 4,
+      "maxWounds": 4,
+      "weapons": [
+        {
+          "name": "Schattenspeer",
+          "range": 5,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

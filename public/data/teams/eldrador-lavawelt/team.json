@@ -1,0 +1,163 @@
+{
+  "id": "eldrador-lavawelt",
+  "name": "Lavawelt (Eldrador) – Custom",
+  "faction": "Lavawelt",
+  "units": [
+    {
+      "id": "lavadrache",
+      "name": "Lavadrache",
+      "image": "/assets/eldrador/lavawelt/01-lavadrache.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 5,
+      "wounds": 5,
+      "maxWounds": 5,
+      "weapons": [
+        {
+          "name": "Feueratem",
+          "range": 5,
+          "attacks": 2,
+          "ap": 1,
+          "type": "ranged"
+        },
+        {
+          "name": "Dornenschwanz",
+          "range": 1,
+          "attacks": 2,
+          "ap": 1,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "feuerl-we",
+      "name": "Feuerlöwe",
+      "image": "/assets/eldrador/lavawelt/02-feuerl-we.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 4,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Feuer-Pranken",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Flammenschweif",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "h-llenhund",
+      "name": "Höllenhund",
+      "image": "/assets/eldrador/lavawelt/03-h-llenhund.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 5,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Doppelte Bisse",
+          "range": 1,
+          "attacks": 3,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Flammenschweif",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "feueradler",
+      "name": "Feueradler",
+      "image": "/assets/eldrador/lavawelt/04-feueradler.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 5,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Scharfer Schnabel",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Feuersturm",
+          "range": 5,
+          "attacks": 2,
+          "ap": 1,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "lava-golem",
+      "name": "Lava-Golem",
+      "image": "/assets/eldrador/lavawelt/05-lava-golem.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 5,
+      "maxWounds": 5,
+      "weapons": [
+        {
+          "name": "Mächtige Fäuste",
+          "range": 1,
+          "attacks": 3,
+          "ap": 1,
+          "type": "melee"
+        },
+        {
+          "name": "Lava-Axt",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "lavad-mon",
+      "name": "Lavadämon",
+      "image": "/assets/eldrador/lavawelt/06-lavad-mon.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 4,
+      "wounds": 4,
+      "maxWounds": 4,
+      "weapons": [
+        {
+          "name": "Feuerfäuste",
+          "range": 1,
+          "attacks": 3,
+          "ap": 1,
+          "type": "melee"
+        },
+        {
+          "name": "Feueratem",
+          "range": 5,
+          "attacks": 2,
+          "ap": 1,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

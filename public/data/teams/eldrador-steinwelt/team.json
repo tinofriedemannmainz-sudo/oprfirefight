@@ -1,0 +1,142 @@
+{
+  "id": "eldrador-steinwelt",
+  "name": "Steinwelt (Eldrador) – Custom",
+  "faction": "Steinwelt",
+  "units": [
+    {
+      "id": "steindrache",
+      "name": "Steindrache",
+      "image": "/assets/armies/eldrador/steinwelt/Steindrache.webp",
+      "quality": 3,
+      "defense": 3,
+      "speed": 4,
+      "wounds": 5,
+      "maxWounds": 5,
+      "weapons": [
+        {
+          "name": "Kristall-Hörner",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Kristallkeule",
+          "range": 1,
+          "attacks": 3,
+          "ap": 1,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "h-hlenb-r",
+      "name": "Höhlenbär",
+      "image": "/assets/armies/eldrador/steinwelt/steinbaer.webp",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 4,
+      "maxWounds": 4,
+      "weapons": [
+        {
+          "name": "Gewaltige Pranken",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Brüllen",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "panzerkr-te",
+      "name": "Panzerkröte",
+      "image": "/assets/armies/eldrador/steinwelt/Panzerkr%3Fte.PNG.webp",
+      "quality": 4,
+      "defense": 5,
+      "speed": 2,
+      "wounds": 5,
+      "maxWounds": 5,
+      "weapons": [
+        {
+          "name": "Doppelkeule",
+          "range": 1,
+          "attacks": 3,
+          "ap": 1,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "felsbestie",
+      "name": "Felsbestie",
+      "image": "/assets/armies/eldrador/steinwelt/Felsbestie.webp",
+      "quality": 4,
+      "defense": 4,
+      "speed": 4,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Reißzähne",
+          "range": 1,
+          "attacks": 3,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Kristall-Hörner",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "steinmonster",
+      "name": "Steinmonster",
+      "image": "/assets/armies/eldrador/steinwelt/Steinmonster.webp",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 5,
+      "maxWounds": 5,
+      "weapons": [
+        {
+          "name": "Steinfäuste",
+          "range": 1,
+          "attacks": 3,
+          "ap": 1,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "granitwolf",
+      "name": "Granitwolf",
+      "image": "/assets/armies/eldrador/steinwelt/Mini-Granitwolf.webp",
+      "quality": 4,
+      "defense": 4,
+      "speed": 4,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Reißzähne",
+          "range": 1,
+          "attacks": 3,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    }
+  ]
+}

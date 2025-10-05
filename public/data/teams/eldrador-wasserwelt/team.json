@@ -1,0 +1,135 @@
+{
+  "id": "eldrador-wasserwelt",
+  "name": "Wasserwelt (Eldrador) – Custom",
+  "faction": "Wasserwelt",
+  "units": [
+    {
+      "id": "wasserdrache",
+      "name": "Wasserdrache",
+      "image": "/assets/eldrador/wasserwelt/01-wasserdrache.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 4,
+      "wounds": 5,
+      "maxWounds": 5,
+      "weapons": [
+        {
+          "name": "Wasserstrahl",
+          "range": 5,
+          "attacks": 2,
+          "ap": 1,
+          "type": "ranged"
+        },
+        {
+          "name": "Peitschschwanz",
+          "range": 1,
+          "attacks": 2,
+          "ap": 1,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "magmawaran",
+      "name": "Magmawaran",
+      "image": "/assets/eldrador/wasserwelt/02-magmawaran.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 4,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Flossenhieb",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "seewolf",
+      "name": "Seewolf",
+      "image": "/assets/eldrador/wasserwelt/03-seewolf.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 5,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Biss",
+          "range": 1,
+          "attacks": 3,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "riesentintenfisch",
+      "name": "Riesentintenfisch",
+      "image": "/assets/eldrador/wasserwelt/04-riesentintenfisch.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 4,
+      "maxWounds": 4,
+      "weapons": [
+        {
+          "name": "Tentakelgriff",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "meeresgreif",
+      "name": "Meeresgreif",
+      "image": "/assets/eldrador/wasserwelt/05-meeresgreif.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 5,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Scharfer Schnabel",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Stoßflug",
+          "range": 4,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "wellenw-chter",
+      "name": "Wellenwächter",
+      "image": "/assets/eldrador/wasserwelt/06-wellenw-chter.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 4,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Dreizack",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    }
+  ]
+}

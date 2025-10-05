@@ -1,0 +1,135 @@
+{
+  "id": "eldrador-dschungelwelt",
+  "name": "Dschungelwelt (Eldrador) – Custom",
+  "faction": "Dschungelwelt",
+  "units": [
+    {
+      "id": "dschungeldrache",
+      "name": "Dschungeldrache",
+      "image": "/assets/eldrador/dschungelwelt/01-dschungeldrache.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 5,
+      "wounds": 5,
+      "maxWounds": 5,
+      "weapons": [
+        {
+          "name": "Säureodem",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Keulenschwanz",
+          "range": 1,
+          "attacks": 2,
+          "ap": 1,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "razor-katze",
+      "name": "Razor-Katze",
+      "image": "/assets/eldrador/dschungelwelt/02-razor-katze.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 5,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Klingentatzen",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "schlingviper",
+      "name": "Schlingviper",
+      "image": "/assets/eldrador/dschungelwelt/03-schlingviper.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 4,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Giftbiss",
+          "range": 1,
+          "attacks": 3,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "dschungelgreif",
+      "name": "Dschungelgreif",
+      "image": "/assets/eldrador/dschungelwelt/04-dschungelgreif.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 5,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Scharfer Schnabel",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Stoßflug",
+          "range": 4,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "urzeitnashorn",
+      "name": "Urzeitnashorn",
+      "image": "/assets/eldrador/dschungelwelt/05-urzeitnashorn.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 5,
+      "maxWounds": 5,
+      "weapons": [
+        {
+          "name": "Hornstoß",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "stammesw-chter",
+      "name": "Stammeswächter",
+      "image": "/assets/eldrador/dschungelwelt/06-stammesw-chter.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 4,
+      "wounds": 3,
+      "maxWounds": 3,
+      "weapons": [
+        {
+          "name": "Speer",
+          "range": 5,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}
