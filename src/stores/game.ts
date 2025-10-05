@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import type { Hex, Unit, Team, DiceRoll, GamePhase } from '@/types/battle'
-import { generateTerrain, TERRAIN_RULES } from '@/utils/terrain'
+import { generateTerrain, TERRAIN_RULES, canEnter, moveCost } from '@/utils/terrain'
 
 export type GameState = {
   size: number
@@ -18,7 +18,6 @@ export type GameState = {
   availableTeams: Team[]
   selectedTeams: [string?, string?]
   selectTeam: (player:0|1, teamId:string) => void
-  deployNext: () => void
 
   regenerate: (size?:number) => void
   startDeploy: () => void
@@ -30,11 +29,15 @@ export type GameState = {
   attack: (attackerId:string, targetId:string, weaponName:string) => void
   endTurn: () => void
 
+  // Alternating activations
   endActivation: () => void
   flagAdvanced: () => void
   startNewRoundIfNeeded: () => void
+
+  // Deployment helpers
   canDeployOn: (hex:Hex) => boolean
   whyCannotDeploy: (hex:Hex) => string | null
+  deployNext: () => void
 }
 
 export const useGame = create<GameState>((set, get) => ({
@@ -78,14 +81,7 @@ export const useGame = create<GameState>((set, get) => ({
     get().regenerate()
   },
 
-  deployNext() {
-  const s = get()
-  if (s.phase !== 'deploy') return
-  set({ currentPlayer: s.currentPlayer === 0 ? 1 : 0, selectedUnitId: undefined })
-},
-
-
-  // fixed-width deployment zones: 3 rows for each side (top/bottom in axial r)
+  // fixed-width deployment zones: 3 rows for each side
   canDeployOn(hex) {
     const rules = TERRAIN_RULES[hex.terrain]
     if (!rules || !rules.deployAllowed) return false
@@ -115,6 +111,14 @@ export const useGame = create<GameState>((set, get) => ({
     return null
   },
 
+  // Let DeployPanel switch player during deployment
+  deployNext() {
+    const s = get()
+    if (s.phase !== 'deploy') return
+    const next = s.currentPlayer === 0 ? 1 : 0
+    set({ currentPlayer: next, selectedUnitId: undefined })
+  },
+
   placeUnit(unitId, hex) {
     if (!get().canDeployOn(hex)) return
     const u = get().units.find(u => u.id === unitId)
@@ -137,12 +141,12 @@ export const useGame = create<GameState>((set, get) => ({
     set({ phase:'playing', currentPlayer: 0, selectedUnitId: undefined, round:1 })
   },
 
-  // TOLERANT: accept owner-prefixed ids *and* base ids during deploy
+  // TOLERANT: accept owner-prefixed ids *and* base ids
   selectUnit(unitId) {
     let u = get().units.find(u => u.id === unitId)
     if (!u) {
       const suffix = '-' + unitId
-      u = get().units.find(x => x.owner === get().currentPlayer && x.id.endsWith(suffix) && !x.position)
+      u = get().units.find(x => x.owner === get().currentPlayer && x.id.endsWith(suffix) && (!!x.position || get().phase==='deploy'))
     }
     if (!u) return
     if (get().phase==='playing' && u.owner!==get().currentPlayer) return
@@ -150,11 +154,79 @@ export const useGame = create<GameState>((set, get) => ({
     set({ selectedUnitId: u.id, selectedWeapon: undefined })
   },
 
-  // movement/attack/end activation kept as in your current build; not changed in this minimal fix
-  moveUnit(unitId, hex) { /* unchanged in this fix */ },
-  attack(attackerId, targetId, weaponName) { /* unchanged in this fix */ },
-  endTurn() { /* unchanged in this fix */ },
-  endActivation(){ /* unchanged in this fix */ },
-  startNewRoundIfNeeded(){ /* unchanged in this fix */ },
-  flagAdvanced(){}
+  moveUnit(unitId, hex) {
+    const state = get()
+    const u = state.units.find(u => u.id === unitId)
+    if (!u || !u.position) return
+
+    // cannot move into invalid/occupied hexes
+    const occupied = state.units.some(x => x.position && x.position.q===hex.q && x.position.r===hex.r)
+    if (occupied) return
+    const toHex = state.grid.find(h => h.q===hex.q && h.r===hex.r)
+    if (!toHex) return
+    if (!canEnter(u, toHex)) return
+
+    // simple cost check (approx; overlays/pathfinder can be added)
+    const dist = Math.round((Math.abs(u.position.q - hex.q) + Math.abs(u.position.q + u.position.r - hex.q - hex.r) + Math.abs(u.position.r - hex.r))/2)
+    const cost = moveCost(u, toHex, toHex)
+    const required = dist * (isFinite(cost) ? cost : 9999)
+    if (required <= u.speed * 2) {
+      u.position = { q: hex.q, r: hex.r }
+      set({ units: [...state.units] })
+    }
+  },
+
+  attack(attackerId, targetId, weaponName) {
+    const state = get()
+    const atk = state.units.find(u => u.id === attackerId)
+    const tgt = state.units.find(u => u.id === targetId)
+    if (!atk || !tgt || !atk.position || !tgt.position) return
+    const weapon = atk.weapons.find(w => w.name === weaponName) || atk.weapons[0]
+    if (!weapon) return
+    const dist = Math.round((Math.abs(atk.position.q - tgt.position.q) + Math.abs(atk.position.q + atk.position.r - tgt.position.q - tgt.position.r) + Math.abs(atk.position.r - tgt.position.r))/2)
+    if (weapon.type==='ranged' && dist > weapon.range) return
+    if (weapon.type==='melee' && dist !== 1) return
+
+    const rollDice = (n:number) => Array.from({length:n}, () => 1 + Math.floor(Math.random()*6))
+    const hitRolls = rollDice(weapon.attacks)
+    const hits = hitRolls.filter(d => d >= atk.quality).length
+    const saveTarget = Math.max(2, Math.min(6, tgt.defense + weapon.ap))
+    const saveRolls = rollDice(hits)
+    const failed = saveRolls.filter(d => d < saveTarget).length
+
+    const newDice: any[] = [
+      { label: `Trefferwurf (${weapon.name})`, dice: hitRolls, success: hits, target: atk.quality },
+      { label: `Rettungswurf (AP ${weapon.ap})`, dice: saveRolls, success: hits - failed, target: saveTarget }
+    ]
+
+    tgt.wounds -= failed
+    let units = state.units
+    if (tgt.wounds <= 0) { units = state.units.filter(u => u.id !== tgt.id) }
+    set({ units: [...units], diceLog: [...state.diceLog, ...newDice], selectedWeapon: weapon.name })
+  },
+
+  endTurn() { get().endActivation() },
+
+  flagAdvanced(){},
+
+  endActivation(){
+    const s = get()
+    const sel = s.units.find(u => u.id===s.selectedUnitId)
+    if (sel){ (sel as any).activated = true }
+    set({ selectedUnitId: undefined })
+    const cur = s.currentPlayer, other = cur===0?1:0
+    const hasOther = s.units.some(u => u.owner===other && (u as any).activated!==true && u.position)
+    const hasCur = s.units.some(u => u.owner===cur && (u as any).activated!==true && u.position)
+    if (hasOther){ set({ currentPlayer: other }) }
+    else if (hasCur){ set({ currentPlayer: cur }) }
+    else { get().startNewRoundIfNeeded() }
+  },
+
+  startNewRoundIfNeeded(){
+    const s = get()
+    const anyUnactivated = s.units.some(u => (u as any).activated!==true && u.position)
+    if (anyUnactivated) return
+    for (const u of s.units){ (u as any).activated = false }
+    set({ round: s.round + 1, currentPlayer: 0, selectedUnitId: undefined })
+  },
 }))
