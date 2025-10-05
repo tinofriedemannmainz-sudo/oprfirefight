@@ -6,7 +6,7 @@
     {
       "id": "eisdrache",
       "name": "Eisdrache",
-      "image": "/assets/eldrador/eiswelt/01-eisdrache.svg",
+      "image": "/assets/armies/eldrador/eiswelt/Eisdrache.webp",
       "quality": 3,
       "defense": 4,
       "speed": 5,
@@ -32,7 +32,7 @@
     {
       "id": "s-belzahntiger",
       "name": "Säbelzahntiger",
-      "image": "/assets/eldrador/eiswelt/02-s-belzahntiger.svg",
+      "image": "/assets/armies/eldrador/eiswelt/S%3Fbelzahntiger.webp",
       "quality": 4,
       "defense": 4,
       "speed": 4,
@@ -58,7 +58,7 @@
     {
       "id": "schneewolf",
       "name": "Schneewolf",
-      "image": "/assets/eldrador/eiswelt/03-schneewolf.svg",
+      "image": "/assets/armies/eldrador/eiswelt/Frostwolf.webp",
       "quality": 4,
       "defense": 5,
       "speed": 5,
@@ -84,7 +84,7 @@
     {
       "id": "eisgreif",
       "name": "Eisgreif",
-      "image": "/assets/eldrador/eiswelt/04-eisgreif.svg",
+      "image": "/assets/armies/eldrador/eiswelt/Eisgreif.webp",
       "quality": 4,
       "defense": 4,
       "speed": 5,
@@ -110,7 +110,7 @@
     {
       "id": "blizzard-b-r",
       "name": "Blizzard-Bär",
-      "image": "/assets/eldrador/eiswelt/05-blizzard-b-r.svg",
+      "image": "/assets/armies/eldrador/eiswelt/Blizzard-B%3Fr.webp",
       "quality": 4,
       "defense": 5,
       "speed": 3,
@@ -136,7 +136,7 @@
     {
       "id": "eisgigant",
       "name": "Eisgigant",
-      "image": "/assets/eldrador/eiswelt/06-eisgigant.svg",
+      "image": "/assets/armies/eldrador/eiswelt/Eisgigant.webp",
       "quality": 4,
       "defense": 4,
       "speed": 3,

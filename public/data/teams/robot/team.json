@@ -1,0 +1,168 @@
+{
+  "id": "4k5amkxoybdiqotm",
+  "name": "Robot Legions – 250pts",
+  "faction": "Robot Legions",
+  "units": [
+    {
+      "id": "xVuwyHf",
+      "name": "Guardian",
+      "image": "/assets/armies/robot/720X720-rl-guardians-render-5.jpg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Atom-Caster",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Void Blade",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "njiIkJi",
+      "name": "Warrior",
+      "image": "/assets/armies/robot/720X720-rl-warriors-render-8.jpg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Reaper Rifle",
+          "range": 18,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "6q8HvOZ",
+      "name": "Flesh-Eater",
+      "image": "/assets/armies/robot/720X720-rl-eaters-render-4.jpg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Metal Claws",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "yoeQi4m",
+      "name": "Bot Swarm",
+      "image": "/assets/armies/robot/720X720-rl-swarm-render-3.jpg",
+      "quality": 6,
+      "defense": 6,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Swarm Attack",
+          "range": 0,
+          "attacks": 3,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "wvgi7_R",
+      "name": "Eternal",
+      "image": "/assets/armies/robot/720X720-rl-eternals-render-10.jpg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Flux Carbine",
+          "range": 18,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "mEX6i0s",
+      "name": "Sniper",
+      "image": "/assets/armies/robot/720X720-rl-snipers-render-2.jpg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "D-Mark",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "lcEWPMS",
+      "name": "Robot Lord",
+      "image": "/assets/armies/robot/720X720-rl-overseer-render-1.jpg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

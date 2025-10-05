@@ -54,10 +54,10 @@
     "unitsPath": "/data/teams/31xjrm9ivdimkjxp/team.json"
   },
   {
-    "id": "4k5amkxoybdiqotm",
-    "name": "4k5amkxoybdiqotm",
-    "faction": "4k5amkxoybdiqotm",
-    "unitsPath": "/data/teams/4k5amkxoybdiqotm/team.json"
+    "id": "Robots",
+    "name": "Robot Legion",
+    "faction": "robotlegion",
+    "unitsPath": "/data/teams/robot/team.json"
   },
   {
     "id": "5wbcv465hacdwvkb",
