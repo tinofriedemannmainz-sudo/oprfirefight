@@ -5,19 +5,15 @@ import HexCell from '@/components/HexCell'
 import UnitSprite from '@/components/UnitSprite'
 import UnitContextMenu from '@/components/UnitContextMenu'
 import HexTextures from '@/components/HexTextures'
+import OverlayLayer from '@/components/OverlayLayer'
+import { reachableCosts } from '@/utils/path'
+import { gridLookup, axialNeighbors, axialDistance, hexKey } from '@/utils/hex'
+import { TERRAIN_RULES } from '@/utils/terrain'
 
 export default function HexGrid(){
   const g = useGame()
   const [selectedHex, setSelectedHex] = useState<Hex|undefined>()
   const [menu, setMenu] = useState<{u:Unit, x:number, y:number}|null>(null)
-
-  const svgRef = useRef<SVGSVGElement|null>(null)
-
-  // --- Zoom & Pan state ---
-  const [zoom, setZoom] = useState(1)
-  const [pan, setPan] = useState({ x: 0, y: 0 })
-  const [isPanning, setIsPanning] = useState(false)
-  const panStart = useRef<{x:number;y:number}|null>(null)
 
   useEffect(()=>{ if(g.grid.length===0){ g.regenerate() } },[])
 
@@ -25,58 +21,102 @@ export default function HexGrid(){
   const w = Math.sqrt(3) * size
   const h = 2 * size
 
-  function hexToPixel(q:number, r:number) {
-    return { x: w * (q + r / 2), y: h * (3 / 4) * r }
-  }
+  function hexToPixel(q:number, r:number) { return { x: w * (q + r/2), y: h * (3/4) * r } }
 
+  // board center/translate to fit
   const positions = g.grid.map(hex => hexToPixel(hex.q, hex.r))
   const minX = positions.length ? Math.min(...positions.map(p => p.x)) : 0
   const maxX = positions.length ? Math.max(...positions.map(p => p.x)) : 0
   const minY = positions.length ? Math.min(...positions.map(p => p.y)) : 0
   const maxY = positions.length ? Math.max(...positions.map(p => p.y)) : 0
+  const width = 1200, height = 800
+  const translateX = (width - (maxX - minX)) / 2 - minX
+  const translateY = (height - (maxY - minY)) / 2 - minY
 
-  const width = 1200
-  const height = 800
-
-  const centerX = (width - (maxX - minX)) / 2 - minX
-  const centerY = (height - (maxY - minY)) / 2 - minY
+  const map = useMemo(()=>gridLookup(g.grid), [g.grid])
 
   const occupantByKey = useMemo(() => {
-    const m = new Map<string, 0|1>()
+    const m = new Map<string, Unit>()
     for (const u of g.units){
       if (!u.position) continue
-      m.set(`${u.position.q},${u.position.r}`, u.owner)
+      m.set(hexKey(u.position.q, u.position.r), u)
     }
     return m
   }, [g.units])
 
-  const canDeployHere = (hex:Hex) => g.canDeployOn(hex)
+  // ====== OVERLAYS when selecting your unit ======
+  const selUnit = g.units.find(u => u.id===g.selectedUnitId)
+  const { moveCosts, runCosts, rangedTargets, chargeTargets } = useMemo(() => {
+    if (!selUnit || !selUnit.position) return { moveCosts:new Map(), runCosts:new Map(), rangedTargets:[], chargeTargets:[] as {unit:Unit, approach:{q:number;r:number}[]}[] }
+    const maxMove = selUnit.speed
+    const maxRun = selUnit.speed * 2
+    const allCosts = reachableCosts(selUnit, g.grid, selUnit.position, maxRun)
+    const move = new Map<string,number>()
+    const run = new Map<string,number>()
+    for (const [k,c] of allCosts){
+      if (k===hexKey(selUnit.position.q, selUnit.position.r)) continue
+      if (c <= maxMove) move.set(k, c)
+      else if (c <= maxRun) run.set(k, c)
+    }
+
+    const enemies = g.units.filter(u => u.owner !== selUnit.owner && u.position) as Unit[]
+
+    // Ranged targets: use first ranged weapon if any
+    const rangedWpn = selUnit.weapons.find(w => w.type==='ranged')
+    const ranged: Unit[] = []
+    if (rangedWpn){
+      for (const e of enemies){
+        const d = axialDistance(selUnit.position, e.position!)
+        if (d <= rangedWpn.range) ranged.push(e)
+      }
+    }
+
+    // Charge targets: if any adjacent approach hex to an enemy is reachable within run budget
+    const charge: {unit:Unit, approach:{q:number;r:number}[]}[] = []
+    for (const e of enemies){
+      const pos = e.position!
+      const adj = axialNeighbors(pos.q, pos.r)
+        .filter(p => {
+          const hh = map.get(hexKey(p.q,p.r))
+          if (!hh) return false
+          if (TERRAIN_RULES[hh.terrain]?.impassable) return false
+          const occ = occupantByKey.get(hexKey(p.q,p.r))
+          if (occ) return false
+          const c = allCosts.get(hexKey(p.q,p.r))
+          return c !== undefined && c <= maxRun
+        })
+      if (adj.length>0) charge.push({ unit:e, approach: adj })
+    }
+
+    return { moveCosts: move, runCosts: run, rangedTargets: ranged, chargeTargets: charge }
+  }, [g.selectedUnitId, g.units, g.grid])
 
   function handleHexClick(hex:Hex){
     setSelectedHex(hex)
-    if (g.phase==='deploy' && g.selectedUnitId){
-      if (!canDeployHere(hex)) return
-      g.placeUnit(g.selectedUnitId, hex)
-    }
-    if (g.phase==='playing' && g.selectedUnitId){
-      g.moveUnit(g.selectedUnitId, hex)
+    if (!selUnit) return
+    if (g.phase!=='playing') return
+    const k = hexKey(hex.q, hex.r)
+    if (moveCosts.has(k) || runCosts.has(k)){
+      g.moveUnit(selUnit.id, hex)
+      // if moved into run area (>speed) we auto-end activation; if move area, allow a shot then end
+      const movedCost = moveCosts.get(k) ?? runCosts.get(k)
+      const wasRun = movedCost!==undefined && selUnit.position && movedCost > selUnit.speed
+      if (wasRun) g.endActivation() // run ends activation
+      else g.flagAdvanced() // allow one ranged attack
     }
   }
 
   function handleUnitClick(u:Unit){
-    if (g.phase==='deploy'){
-      if (u.owner===g.currentPlayer && u.position){
-        g.unplaceUnit(u.id)
-      } else if (u.owner===g.currentPlayer) {
-        g.selectUnit(u.id)
-      }
-    } else if (g.phase==='playing'){
-      if (u.owner===g.currentPlayer) { g.selectUnit(u.id) }
-      else if (g.selectedUnitId){
-        const atk = g.units.find(x => x.id===g.selectedUnitId)!
-        const weapon = atk.weapons[0]
-        g.attack(atk.id, u.id, weapon.name)
-      }
+    if (g.phase!=='playing') return
+    if (u.owner===g.currentPlayer && !u.activated){
+      g.selectUnit(u.id)
+      return
+    }
+
+    // shoot or charge enemies
+    if (!selUnit || !selUnit.position) return
+    if (u.owner !== g.currentPlayer && u.owner !== selUnit.owner){
+      return // spectator click
     }
   }
 
@@ -84,72 +124,26 @@ export default function HexGrid(){
     setMenu({ u, x: e.clientX, y: e.clientY })
   }
 
-  // --- Zoom handlers ---
-  function svgPointFromClient(clientX:number, clientY:number){
-    const svg = svgRef.current
-    if (!svg) return { x: clientX, y: clientY }
-    const pt = svg.createSVGPoint()
-    pt.x = clientX; pt.y = clientY
-    const m = svg.getScreenCTM()
-    if (!m) return { x: clientX, y: clientY }
-    const inv = m.inverse()
-    const loc = pt.matrixTransform(inv)
-    return { x: loc.x, y: loc.y }
+  // Click enemy to shoot if in rangedTargets
+  function onSvgClick(e:React.MouseEvent<SVGSVGElement>){
+    if (!selUnit || !selUnit.position) return
+    const tgt = (e.target as any)?.dataset?.unitId as string | undefined
+    if (!tgt) return
   }
-
-  function onWheel(e: React.WheelEvent<SVGSVGElement>){
-    e.preventDefault()
-    const direction = e.deltaY > 0 ? -1 : 1
-    const factor = 1 + direction * 0.1
-    const newZoom = Math.max(0.5, Math.min(2.5, zoom * factor))
-
-    // Zoom to mouse position: adjust pan so focal point stays fixed
-    const { left, top } = (e.target as Element).getBoundingClientRect()
-    const clientX = e.clientX, clientY = e.clientY
-    const mx = clientX - left, my = clientY - top
-
-    const before = { x: (mx - pan.x - centerX) / zoom, y: (my - pan.y - centerY) / zoom }
-    const after = { x: before.x, y: before.y }
-    const newPan = {
-      x: mx - centerX - after.x * newZoom,
-      y: my - centerY - after.y * newZoom
-    }
-
-    setZoom(newZoom)
-    setPan(newPan)
-  }
-
-  function onMouseDown(e: React.MouseEvent<SVGSVGElement>){
-    if (e.button !== 0) return
-    setIsPanning(true)
-    panStart.current = { x: e.clientX - pan.x, y: e.clientY - pan.y }
-  }
-  function onMouseMove(e: React.MouseEvent<SVGSVGElement>){
-    if (!isPanning || !panStart.current) return
-    const nx = e.clientX - panStart.current.x
-    const ny = e.clientY - panStart.current.y
-    setPan({ x: nx, y: ny })
-  }
-  function onMouseUp(){ setIsPanning(false); panStart.current = null }
-  function onMouseLeave(){ setIsPanning(false); panStart.current = null }
 
   return <>
-    <svg
-      ref={svgRef}
-      width="100%"
-      height="100%"
-      viewBox={`0 0 ${width} ${height}`}
-      preserveAspectRatio="xMidYMid meet"
-      onClick={()=>setMenu(null)}
-      onWheel={onWheel}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      onMouseLeave={onMouseLeave}
-      style={{ background: '#0e1118', touchAction: 'none', userSelect: 'none' }}
-    >
+    <svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
       <HexTextures/>
-      <g transform={`translate(${centerX + pan.x},${centerY + pan.y}) scale(${zoom})`}>
+      <g transform={`translate(${translateX},${translateY})`}>
+        {/* overlays under units */}
+        <OverlayLayer
+          moveCosts={moveCosts}
+          runCosts={runCosts}
+          size={size}
+          grid={g.grid}
+          chargeTargets={chargeTargets}
+          rangedTargets={rangedTargets}
+        />
         {g.grid.map(hx => (
           <HexCell
             key={`${hx.q},${hx.r}`}
@@ -157,8 +151,8 @@ export default function HexGrid(){
             size={size}
             onClick={()=>handleHexClick(hx)}
             selected={selectedHex?.q===hx.q && selectedHex?.r===hx.r}
-            canDeploy={canDeployHere(hx)}
-            occupantOwner={occupantByKey.get(`${hx.q},${hx.r}`)}
+            canDeploy={g.phase==='deploy' ? g.canDeployOn(hx) : false}
+            occupantOwner={occupantByKey.get(hexKey(hx.q,hx.r))?.owner as 0|1|undefined}
           />
         ))}
         {g.units.filter(u => u.position).map(u => (

@@ -3,7 +3,6 @@ import React from 'react'
 import Controls from '@/components/Controls'
 import HexGrid from '@/components/HexGrid'
 import DiceLog from '@/components/DiceLog'
-import Instructions from '@/components/Instructions'
 import DeployPanel from '@/components/DeployPanel'
 
 export default function GamePage(){
@@ -12,7 +11,6 @@ export default function GamePage(){
       <Controls/>
       <HexGrid/>
       <DeployPanel/>
-      <Instructions/>
       <DiceLog/>
     </div>
   )

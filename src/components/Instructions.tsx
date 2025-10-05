@@ -43,7 +43,7 @@ export default function Instructions(){
   }
 
   return (
-    <div style={{position:'fixed', left:12, bottom:12, zIndex:60}}>
+    <div style={{position:'fixed', left:12, top:12, zIndex:60}}>
       <button className="btn" onClick={()=>setOpen(o=>!o)}>
         {open ? 'Anleitung schliessen' : 'Anleitung anzeigen'}
       </button>

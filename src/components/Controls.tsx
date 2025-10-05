@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useGame } from '@/stores/game'
 import type { Team } from '@/types/battle'
 import { loadAllTeams } from '@/services/teamLoader'
-import ArmyForgeImport from '@/components/ArmyForgeImport'
-import ArmyForgeBuilder250 from '@/components/ArmyForgeBuilder250'
+import Instructions from '@/components/Instructions'
 
 export default function Controls(){
   const g = useGame()
@@ -34,8 +33,7 @@ export default function Controls(){
         </div>
         <button className="btn" onClick={()=>g.startDeploy()}>Weiter: Aufstellung</button>
       </div>
-      <ArmyForgeImport/>
-      <ArmyForgeBuilder250/>
+      
     </div>}
 
     {g.phase==='deploy' && <div className="panel toolbar">
@@ -47,5 +45,6 @@ export default function Controls(){
       <span className="tag">Am Zug: Spieler {g.currentPlayer+1}</span>
       <button className="btn" onClick={()=>g.endTurn()}>Zug beenden</button>
     </div>}
+    <Instructions/>
   </div>
 }
