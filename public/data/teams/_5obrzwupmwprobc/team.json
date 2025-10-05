@@ -1,0 +1,187 @@
+{
+  "id": "_5obrzwupmwprobc",
+  "name": "City Runners – 250pts",
+  "faction": "City Runners",
+  "units": [
+    {
+      "id": "Vw3Vvws",
+      "name": "Runner Leader",
+      "image": "/assets/armies/_5obrzwupmwprobc/1-runner-leader.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "z7qDmJs",
+      "name": "Runner Lynx Beast",
+      "image": "/assets/armies/_5obrzwupmwprobc/2-runner-lynx-beast.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Rending Claws",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "-uY2tQ6",
+      "name": "Runner Veteran Gunner",
+      "image": "/assets/armies/_5obrzwupmwprobc/3-runner-veteran-gunner.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "WFdlIdC",
+      "name": "Runner Wild-Maiden",
+      "image": "/assets/armies/_5obrzwupmwprobc/4-runner-wild-maiden.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Toxin Weapon",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "U8_wfrQ",
+      "name": "Runner Champion",
+      "image": "/assets/armies/_5obrzwupmwprobc/5-runner-champion.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "60B4xCR",
+      "name": "Runner Murder-Maiden",
+      "image": "/assets/armies/_5obrzwupmwprobc/6-runner-murder-maiden.svg",
+      "quality": 3,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "CCWS",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "ka_P8jM",
+      "name": "Runner Fighters",
+      "image": "/assets/armies/_5obrzwupmwprobc/7-runner-fighters.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "PLRIppr",
+      "name": "Runner Gunners",
+      "image": "/assets/armies/_5obrzwupmwprobc/8-runner-gunners.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

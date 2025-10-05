@@ -1,0 +1,175 @@
+{
+  "id": "zz3kp5ry7ks6mxcx",
+  "name": "Soul-Snatcher Cults – 250pts",
+  "faction": "Soul-Snatcher Cults",
+  "units": [
+    {
+      "id": "BMa76or",
+      "name": "Cult Leader",
+      "image": "/assets/armies/zz3kp5ry7ks6mxcx/1-cult-leader.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Cult Pistol",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "wg6fbNx",
+      "name": "Neophyte",
+      "image": "/assets/armies/zz3kp5ry7ks6mxcx/2-neophyte.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "USqMvAJ",
+      "name": "Acolyte",
+      "image": "/assets/armies/zz3kp5ry7ks6mxcx/3-acolyte.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Mutant Claws",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "Hos9ia8",
+      "name": "Mutant Brute",
+      "image": "/assets/armies/zz3kp5ry7ks6mxcx/4-mutant-brute.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Pick",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "QhBJKna",
+      "name": "Elite Snatcher",
+      "image": "/assets/armies/zz3kp5ry7ks6mxcx/5-elite-snatcher.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Claws",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "j0Kdw2N",
+      "name": "Minion Biker",
+      "image": "/assets/armies/zz3kp5ry7ks6mxcx/6-minion-biker.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "t2ehUmj",
+      "name": "Minions",
+      "image": "/assets/armies/zz3kp5ry7ks6mxcx/7-minions.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

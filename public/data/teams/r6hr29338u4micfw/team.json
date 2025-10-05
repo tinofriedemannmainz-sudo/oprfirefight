@@ -1,0 +1,168 @@
+{
+  "id": "r6hr29338u4micfw",
+  "name": "Change Disciples – 250pts",
+  "faction": "Change Disciples",
+  "units": [
+    {
+      "id": "SAfjHwck1",
+      "name": "Change Cultist Champion",
+      "image": "/assets/armies/r6hr29338u4micfw/1-change-cultist-champion.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Champion Pistol",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "JKygMD3Fx",
+      "name": "Change Brother",
+      "image": "/assets/armies/r6hr29338u4micfw/2-change-brother.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "cJT8SM-wf",
+      "name": "Mutated Change Brother",
+      "image": "/assets/armies/r6hr29338u4micfw/3-mutated-change-brother.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Claws",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "GxGGi72wp",
+      "name": "Mutated Change Cultists",
+      "image": "/assets/armies/r6hr29338u4micfw/4-mutated-change-cultists.svg",
+      "quality": 5,
+      "defense": 6,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Claws",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "oMlY88z",
+      "name": "Change Birdman Champion",
+      "image": "/assets/armies/r6hr29338u4micfw/5-change-birdman-champion.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Hexed Sword",
+          "range": 0,
+          "attacks": 3,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "vE-Ifpm",
+      "name": "Change Birdmen",
+      "image": "/assets/armies/r6hr29338u4micfw/6-change-birdmen.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Dual CCWs",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "ymDqTZDzg",
+      "name": "Chosen Change Brother",
+      "image": "/assets/armies/r6hr29338u4micfw/7-chosen-change-brother.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

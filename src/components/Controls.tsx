@@ -4,6 +4,7 @@ import { useGame } from '@/stores/game'
 import type { Team } from '@/types/battle'
 import { loadAllTeams } from '@/services/teamLoader'
 import ArmyForgeImport from '@/components/ArmyForgeImport'
+import ArmyForgeBuilder250 from '@/components/ArmyForgeBuilder250'
 
 export default function Controls(){
   const g = useGame()
@@ -15,7 +16,7 @@ export default function Controls(){
   const canStart = g.units.length > 0 && g.units.every(u => u.position)
 
   return <div className="floating">
-    {g.phase==='team-select' && <div className="panel" style={{minWidth: 540}}>
+    {g.phase==='team-select' && <div className="panel" style={{minWidth: 560}}>
       <div className="toolbar" style={{gap:12, flexWrap:'wrap'}}>
         <div>
           <div className="accent" style={{fontSize:12}}>Spieler 1 Team</div>
@@ -34,6 +35,7 @@ export default function Controls(){
         <button className="btn" onClick={()=>g.startDeploy()}>Weiter: Aufstellung</button>
       </div>
       <ArmyForgeImport/>
+      <ArmyForgeBuilder250/>
     </div>}
 
     {g.phase==='deploy' && <div className="panel toolbar">

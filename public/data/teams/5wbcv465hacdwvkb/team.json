@@ -1,0 +1,215 @@
+{
+  "id": "5wbcv465hacdwvkb",
+  "name": "Rebel Guerrillas – 250pts",
+  "faction": "Rebel Guerrillas",
+  "units": [
+    {
+      "id": "yHBMPqu",
+      "name": "Rebel Leader",
+      "image": "/assets/armies/5wbcv465hacdwvkb/1-rebel-leader.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Leader Pistol",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "vNMlF2w",
+      "name": "Pioneer",
+      "image": "/assets/armies/5wbcv465hacdwvkb/2-pioneer.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Shotgun",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "e_dNKSO",
+      "name": "Spotter",
+      "image": "/assets/armies/5wbcv465hacdwvkb/3-spotter.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Carbine",
+          "range": 18,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "RaOE4sP",
+      "name": "Elite",
+      "image": "/assets/armies/5wbcv465hacdwvkb/4-elite.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Carbine",
+          "range": 18,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "qbxSMhe",
+      "name": "Biker",
+      "image": "/assets/armies/5wbcv465hacdwvkb/5-biker.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Burst Pistol",
+          "range": 12,
+          "attacks": 3,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "LX-BhMs",
+      "name": "Strikers",
+      "image": "/assets/armies/5wbcv465hacdwvkb/6-strikers.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "FPwUc8W",
+      "name": "Sniper",
+      "image": "/assets/armies/5wbcv465hacdwvkb/7-sniper.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Sniper Rifle",
+          "range": 30,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "vSXH5yF",
+      "name": "Rebels",
+      "image": "/assets/armies/5wbcv465hacdwvkb/8-rebels.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Carbine",
+          "range": 18,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

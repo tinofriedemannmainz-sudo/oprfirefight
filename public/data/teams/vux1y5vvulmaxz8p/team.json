@@ -1,0 +1,175 @@
+{
+  "id": "vux1y5vvulmaxz8p",
+  "name": "Eternal Dynasty – 250pts",
+  "faction": "Eternal Dynasty",
+  "units": [
+    {
+      "id": "bEeuIws",
+      "name": "Dynasty Leader",
+      "image": "/assets/armies/vux1y5vvulmaxz8p/1-dynasty-leader.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Dynasty Pistol",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "kBJrV-w",
+      "name": "Scout",
+      "image": "/assets/armies/vux1y5vvulmaxz8p/2-scout.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Long Rifle",
+          "range": 30,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "tBFpCN2",
+      "name": "Warrior",
+      "image": "/assets/armies/vux1y5vvulmaxz8p/3-warrior.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Long Rifle",
+          "range": 30,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "CdkWnvx",
+      "name": "Attack Drone",
+      "image": "/assets/armies/vux1y5vvulmaxz8p/4-attack-drone.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Laser Gun",
+          "range": 18,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Taser",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "6S-Xqit",
+      "name": "Ninja",
+      "image": "/assets/armies/vux1y5vvulmaxz8p/5-ninja.svg",
+      "quality": 3,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Swords",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "nT_lDKZ",
+      "name": "Royal Guard",
+      "image": "/assets/armies/vux1y5vvulmaxz8p/6-royal-guard.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Spear-Shot",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Spear",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "e54b888",
+      "name": "Cyber Bird",
+      "image": "/assets/armies/vux1y5vvulmaxz8p/7-cyber-bird.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Swarm Attack",
+          "range": 0,
+          "attacks": 3,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

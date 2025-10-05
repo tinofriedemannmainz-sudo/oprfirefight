@@ -1,0 +1,168 @@
+{
+  "id": "prsajf5ot936qznk",
+  "name": "Wormhole Daemons of War – 250pts",
+  "faction": "Wormhole Daemons of War",
+  "units": [
+    {
+      "id": "je4SFd4R0",
+      "name": "Blood Warrior",
+      "image": "/assets/armies/prsajf5ot936qznk/1-blood-warrior.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Hand Weapon",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "ThF-x1sgF",
+      "name": "War Fury",
+      "image": "/assets/armies/prsajf5ot936qznk/2-war-fury.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Armblade",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "a9fiMV3EI",
+      "name": "Whip-Fury",
+      "image": "/assets/armies/prsajf5ot936qznk/3-whip-fury.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "War Whip",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Claws",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "fEKsgxon9",
+      "name": "Blood Whipper",
+      "image": "/assets/armies/prsajf5ot936qznk/4-blood-whipper.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "War Whip",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Hand Weapon",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "DNVaOqsVr",
+      "name": "Blood Hound",
+      "image": "/assets/armies/prsajf5ot936qznk/5-blood-hound.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Claws",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "ajyGbqKqS",
+      "name": "Fury Champion of War",
+      "image": "/assets/armies/prsajf5ot936qznk/6-fury-champion-of-war.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Axe",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Flame Hammer",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "pk4hciQfn",
+      "name": "Champion of War",
+      "image": "/assets/armies/prsajf5ot936qznk/7-champion-of-war.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Axe",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Flame Hammer",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

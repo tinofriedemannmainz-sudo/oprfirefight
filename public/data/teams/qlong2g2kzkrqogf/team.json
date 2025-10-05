@@ -1,0 +1,187 @@
+{
+  "id": "qlong2g2kzkrqogf",
+  "name": "Mega-Corps – 250pts",
+  "faction": "Mega-Corps",
+  "units": [
+    {
+      "id": "Vw3Vvws",
+      "name": "Corp Leader",
+      "image": "/assets/armies/qlong2g2kzkrqogf/1-corp-leader.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "60B4xCR",
+      "name": "Corp Grav-Techy",
+      "image": "/assets/armies/qlong2g2kzkrqogf/2-corp-grav-techy.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "CCWS",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "U8_wfrQ",
+      "name": "Corp Champion",
+      "image": "/assets/armies/qlong2g2kzkrqogf/3-corp-champion.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "ka_P8jM",
+      "name": "Corp Fighters",
+      "image": "/assets/armies/qlong2g2kzkrqogf/4-corp-fighters.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "-uY2tQ6",
+      "name": "Corp Veteran Gunner",
+      "image": "/assets/armies/qlong2g2kzkrqogf/5-corp-veteran-gunner.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "z7qDmJs",
+      "name": "Corp Cyber-Spider",
+      "image": "/assets/armies/qlong2g2kzkrqogf/6-corp-cyber-spider.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Spider-Laser",
+          "range": 6,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Toxic Fang",
+          "range": 0,
+          "attacks": 3,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "I2Syvun",
+      "name": "Corp Veteran Fighters",
+      "image": "/assets/armies/qlong2g2kzkrqogf/7-corp-veteran-fighters.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "PLRIppr",
+      "name": "Corp Gunners",
+      "image": "/assets/armies/qlong2g2kzkrqogf/8-corp-gunners.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

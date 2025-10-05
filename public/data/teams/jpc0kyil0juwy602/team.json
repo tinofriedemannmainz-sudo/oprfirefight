@@ -1,0 +1,220 @@
+{
+  "id": "jpc0kyil0juwy602",
+  "name": "Human Inquisition – 250pts",
+  "faction": "Human Inquisition",
+  "units": [
+    {
+      "id": "e9dUXdy",
+      "name": "Cyborg Henchman",
+      "image": "/assets/armies/jpc0kyil0juwy602/1-cyborg-henchman.svg",
+      "quality": 5,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Cyborg Arm",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "neX0iHw",
+      "name": "Daemon-Host Henchman",
+      "image": "/assets/armies/jpc0kyil0juwy602/2-daemon-host-henchman.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Daemon Burst",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Claws",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "J8h-wss",
+      "name": "Flagellant Henchman",
+      "image": "/assets/armies/jpc0kyil0juwy602/3-flagellant-henchman.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Dual Arc-Flail",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "TcCp2gD",
+      "name": "Mystic Henchman",
+      "image": "/assets/armies/jpc0kyil0juwy602/4-mystic-henchman.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "dL4b6gF",
+      "name": "Psychic Henchman",
+      "image": "/assets/armies/jpc0kyil0juwy602/5-psychic-henchman.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "PrvT7Rh",
+      "name": "Crusader Henchman",
+      "image": "/assets/armies/jpc0kyil0juwy602/6-crusader-henchman.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Energy Sword",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "Bbj8vAQ",
+      "name": "Cyber-Chimp Henchman",
+      "image": "/assets/armies/jpc0kyil0juwy602/7-cyber-chimp-henchman.svg",
+      "quality": 5,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Smith Gun",
+          "range": 18,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Claws",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "Qdu-BuF",
+      "name": "Private Guard",
+      "image": "/assets/armies/jpc0kyil0juwy602/8-private-guard.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "uoyhK2j",
+      "name": "Acolyte Henchmen",
+      "image": "/assets/armies/jpc0kyil0juwy602/9-acolyte-henchmen.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

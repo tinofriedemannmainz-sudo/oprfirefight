@@ -1,0 +1,194 @@
+{
+  "id": "9qvy1oufoangt2gl",
+  "name": "Wormhole Daemons of Lust – 250pts",
+  "faction": "Wormhole Daemons of Lust",
+  "units": [
+    {
+      "id": "oJkDvTVkl",
+      "name": "Lust Fury",
+      "image": "/assets/armies/9qvy1oufoangt2gl/1-lust-fury.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Armblade",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "IKvQJNvaI",
+      "name": "Shooter-Fury",
+      "image": "/assets/armies/9qvy1oufoangt2gl/2-shooter-fury.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Crossbow",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Claws",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "iLm-1lf9E",
+      "name": "Lust Beast Rider",
+      "image": "/assets/armies/9qvy1oufoangt2gl/3-lust-beast-rider.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Hand Weapon",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Toxin Claws",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "gIJ9ndmjS",
+      "name": "Lust Shooter",
+      "image": "/assets/armies/9qvy1oufoangt2gl/4-lust-shooter.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Crossbow",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Hand Weapon",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "GCslKvVrj",
+      "name": "Snake Swarm",
+      "image": "/assets/armies/9qvy1oufoangt2gl/5-snake-swarm.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Swarm Attack",
+          "range": 0,
+          "attacks": 3,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "CVUJbbEcD",
+      "name": "Fury Champion of Lust",
+      "image": "/assets/armies/9qvy1oufoangt2gl/6-fury-champion-of-lust.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Blade",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Ritual Hammer",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "5iOtr5lvQ",
+      "name": "Lust Warriors",
+      "image": "/assets/armies/9qvy1oufoangt2gl/7-lust-warriors.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Hand Weapon",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "46SlFZLb0",
+      "name": "Champion of Lust",
+      "image": "/assets/armies/9qvy1oufoangt2gl/8-champion-of-lust.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Blade",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Ritual Hammer",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

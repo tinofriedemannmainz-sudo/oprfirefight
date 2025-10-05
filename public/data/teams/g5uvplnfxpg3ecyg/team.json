@@ -1,0 +1,149 @@
+{
+  "id": "g5uvplnfxpg3ecyg",
+  "name": "Shortling Federations – 250pts",
+  "faction": "Shortling Federations",
+  "units": [
+    {
+      "id": "Vw3Vvws",
+      "name": "Shortling Leader",
+      "image": "/assets/armies/g5uvplnfxpg3ecyg/1-shortling-leader.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "U8_wfrQ",
+      "name": "Shortling Champion",
+      "image": "/assets/armies/g5uvplnfxpg3ecyg/2-shortling-champion.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "-uY2tQ6",
+      "name": "Shortling Veteran Gunner",
+      "image": "/assets/armies/g5uvplnfxpg3ecyg/3-shortling-veteran-gunner.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "ka_P8jM",
+      "name": "Shortling Fighters",
+      "image": "/assets/armies/g5uvplnfxpg3ecyg/4-shortling-fighters.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "PLRIppr",
+      "name": "Shortling Gunners",
+      "image": "/assets/armies/g5uvplnfxpg3ecyg/5-shortling-gunners.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "I2Syvun",
+      "name": "Shortling Veteran Fighters",
+      "image": "/assets/armies/g5uvplnfxpg3ecyg/6-shortling-veteran-fighters.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

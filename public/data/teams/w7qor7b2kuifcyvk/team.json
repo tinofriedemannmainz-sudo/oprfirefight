@@ -1,0 +1,173 @@
+{
+  "id": "w7qor7b2kuifcyvk",
+  "name": "Alien Hives – 250pts",
+  "faction": "Alien Hives",
+  "units": [
+    {
+      "id": "6oOZMAA",
+      "name": "Psycho-Grunt",
+      "image": "/assets/armies/w7qor7b2kuifcyvk/1-psycho-grunt.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Razor Claws",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "lWrYpK5",
+      "name": "Spore",
+      "image": "/assets/armies/w7qor7b2kuifcyvk/2-spore.svg",
+      "quality": 6,
+      "defense": 6,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Tendril",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "rv0FY-K",
+      "name": "Hive Swarm",
+      "image": "/assets/armies/w7qor7b2kuifcyvk/3-hive-swarm.svg",
+      "quality": 6,
+      "defense": 6,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Swarm Attack",
+          "range": 0,
+          "attacks": 3,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "_LXFoO9",
+      "name": "Assault Grunts",
+      "image": "/assets/armies/w7qor7b2kuifcyvk/4-assault-grunts.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Razor Claws",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "CMADHYi",
+      "name": "Shooter Grunts",
+      "image": "/assets/armies/w7qor7b2kuifcyvk/5-shooter-grunts.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Bio-Spiner",
+          "range": 6,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Razor Claws",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "19W7XoU",
+      "name": "Soul-Snatcher",
+      "image": "/assets/armies/w7qor7b2kuifcyvk/6-soul-snatcher.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Claws",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "vuuKwqD",
+      "name": "Winged Grunts",
+      "image": "/assets/armies/w7qor7b2kuifcyvk/7-winged-grunts.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Bio-Spiner",
+          "range": 6,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Razor Claws",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "Fvllq03",
+      "name": "Hive Warrior",
+      "image": "/assets/armies/w7qor7b2kuifcyvk/8-hive-warrior.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Razor Claws",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    }
+  ]
+}

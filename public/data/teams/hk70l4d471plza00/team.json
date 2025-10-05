@@ -1,0 +1,213 @@
+{
+  "id": "hk70l4d471plza00",
+  "name": "Ratmen Clans – 250pts",
+  "faction": "Ratmen Clans",
+  "units": [
+    {
+      "id": "TBfyhgl",
+      "name": "Mecha-Beast Rider",
+      "image": "/assets/armies/hk70l4d471plza00/1-mecha-beast-rider.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "BYpNAsE",
+      "name": "Mine-Drone",
+      "image": "/assets/armies/hk70l4d471plza00/2-mine-drone.svg",
+      "quality": 6,
+      "defense": 6,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Bash",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "_ZeOB9W",
+      "name": "Elite Operator",
+      "image": "/assets/armies/hk70l4d471plza00/3-elite-operator.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "NtrYVeL",
+      "name": "Rat Swarm",
+      "image": "/assets/armies/hk70l4d471plza00/4-rat-swarm.svg",
+      "quality": 6,
+      "defense": 6,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Swarm Attack",
+          "range": 0,
+          "attacks": 4,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "UcqGeeC",
+      "name": "Clan Handler",
+      "image": "/assets/armies/hk70l4d471plza00/5-clan-handler.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Master Pistol",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "q315RqV",
+      "name": "Sharpshooter",
+      "image": "/assets/armies/hk70l4d471plza00/6-sharpshooter.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Sniper Carbine",
+          "range": 18,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "E6IcVEg",
+      "name": "Stalkers",
+      "image": "/assets/armies/hk70l4d471plza00/7-stalkers.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Electro-Whip",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "W6abeLL",
+      "name": "Giant Rats",
+      "image": "/assets/armies/hk70l4d471plza00/8-giant-rats.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Rending Claws",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "AAy6wNG",
+      "name": "Operators",
+      "image": "/assets/armies/hk70l4d471plza00/9-operators.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

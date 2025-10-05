@@ -1,0 +1,175 @@
+{
+  "id": "yxjboa8oma9bbdck",
+  "name": "Wolf Brothers – 250pts",
+  "faction": "Wolf Brothers",
+  "units": [
+    {
+      "id": "voP_-gr",
+      "name": "Hunting Wolf",
+      "image": "/assets/armies/yxjboa8oma9bbdck/1-hunting-wolf.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Vicious Bite",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "zu9si2yIr",
+      "name": "Wolf Pathfinder",
+      "image": "/assets/armies/yxjboa8oma9bbdck/2-wolf-pathfinder.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "6ml7p9u",
+      "name": "Werewolf Brother",
+      "image": "/assets/armies/yxjboa8oma9bbdck/3-werewolf-brother.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Wolf Hammer",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "WRmv_CwpY",
+      "name": "Wolf Battle Brother",
+      "image": "/assets/armies/yxjboa8oma9bbdck/4-wolf-battle-brother.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "YNu_Wu-",
+      "name": "Wolf Rooky",
+      "image": "/assets/armies/yxjboa8oma9bbdck/5-wolf-rooky.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Heavy CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "LEifCoZ3_",
+      "name": "Veteran Wolf Battle Brother",
+      "image": "/assets/armies/yxjboa8oma9bbdck/6-veteran-wolf-battle-brother.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "o4qCpNgnF",
+      "name": "Wolf Support Brother",
+      "image": "/assets/armies/yxjboa8oma9bbdck/7-wolf-support-brother.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Flamer",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "id": "k5t0f2xifpmpo28h",
+  "name": "Goblin Reclaimers – 250pts",
+  "faction": "Goblin Reclaimers",
+  "units": [
+    {
+      "id": "RJMV2f5",
+      "name": "Boss",
+      "image": "/assets/armies/k5t0f2xifpmpo28h/1-boss.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Boss Pistol",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "VIoVkOK",
+      "name": "Champ",
+      "image": "/assets/armies/k5t0f2xifpmpo28h/2-champ.svg",
+      "quality": 5,
+      "defense": 6,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Boss Pistol",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "u6NKuTu",
+      "name": "Shooter Mob",
+      "image": "/assets/armies/k5t0f2xifpmpo28h/3-shooter-mob.svg",
+      "quality": 5,
+      "defense": 6,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Scrap Gun",
+          "range": 18,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "2tFZ--L",
+      "name": "Storm Mob",
+      "image": "/assets/armies/k5t0f2xifpmpo28h/4-storm-mob.svg",
+      "quality": 5,
+      "defense": 6,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "F8XwFML",
+      "name": "Boss Champ",
+      "image": "/assets/armies/k5t0f2xifpmpo28h/5-boss-champ.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Boss Pistol",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "jDur5gr",
+      "name": "Commandos",
+      "image": "/assets/armies/k5t0f2xifpmpo28h/6-commandos.svg",
+      "quality": 5,
+      "defense": 6,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Scrap Gun",
+          "range": 18,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "t2iqo8w",
+      "name": "Freaks",
+      "image": "/assets/armies/k5t0f2xifpmpo28h/7-freaks.svg",
+      "quality": 5,
+      "defense": 6,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Toxin Claws",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

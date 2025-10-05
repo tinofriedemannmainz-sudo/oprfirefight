@@ -1,0 +1,220 @@
+{
+  "id": "fk1mkbp8apvltu0z",
+  "name": "Dwarf Guilds – 250pts",
+  "faction": "Dwarf Guilds",
+  "units": [
+    {
+      "id": "nojZ6_b",
+      "name": "Berserker",
+      "image": "/assets/armies/fk1mkbp8apvltu0z/1-berserker.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Great Axe",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "mEzgxJr",
+      "name": "Dwarf Warrior",
+      "image": "/assets/armies/fk1mkbp8apvltu0z/2-dwarf-warrior.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "PmhNMYW",
+      "name": "Elite",
+      "image": "/assets/armies/fk1mkbp8apvltu0z/3-elite.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heat Hammer",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "cDk2wUI",
+      "name": "Iron Veteran",
+      "image": "/assets/armies/fk1mkbp8apvltu0z/4-iron-veteran.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Iron Shotgun",
+          "range": 6,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "I4NB_Rk",
+      "name": "Jetpack Warrior",
+      "image": "/assets/armies/fk1mkbp8apvltu0z/5-jetpack-warrior.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "BMDQBuG",
+      "name": "Miner",
+      "image": "/assets/armies/fk1mkbp8apvltu0z/6-miner.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Iron Pistol",
+          "range": 9,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "WbdkmXl",
+      "name": "Sniper Team",
+      "image": "/assets/armies/fk1mkbp8apvltu0z/7-sniper-team.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Sniper Rifle",
+          "range": 30,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "ILXnjbU",
+      "name": "Dwarf Champion",
+      "image": "/assets/armies/fk1mkbp8apvltu0z/8-dwarf-champion.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "OijrRWq",
+      "name": "Guardians",
+      "image": "/assets/armies/fk1mkbp8apvltu0z/9-guardians.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Bash",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

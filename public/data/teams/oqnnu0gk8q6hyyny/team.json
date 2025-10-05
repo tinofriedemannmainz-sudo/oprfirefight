@@ -1,0 +1,189 @@
+{
+  "id": "oqnnu0gk8q6hyyny",
+  "name": "Prime Brothers – 250pts",
+  "faction": "Prime Brothers",
+  "units": [
+    {
+      "id": "meWSgTo",
+      "name": "Infiltrator",
+      "image": "/assets/armies/oqnnu0gk8q6hyyny/1-infiltrator.svg",
+      "quality": 4,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Marksman Carbine",
+          "range": 18,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "U66szW1",
+      "name": "Raider",
+      "image": "/assets/armies/oqnnu0gk8q6hyyny/2-raider.svg",
+      "quality": 4,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "hvNiOwU",
+      "name": "Assault Prime Brother",
+      "image": "/assets/armies/oqnnu0gk8q6hyyny/3-assault-prime-brother.svg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Heavy CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "PoRVpWT",
+      "name": "Prime Brother",
+      "image": "/assets/armies/oqnnu0gk8q6hyyny/4-prime-brother.svg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Precision Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "3vAqJ_E",
+      "name": "Veteran Prime Brother",
+      "image": "/assets/armies/oqnnu0gk8q6hyyny/5-veteran-prime-brother.svg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Precision Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "81WTJ34",
+      "name": "Desolator",
+      "image": "/assets/armies/oqnnu0gk8q6hyyny/6-desolator.svg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "HE-Launcher",
+          "range": 30,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "NeuN0Gx",
+      "name": "Infernal",
+      "image": "/assets/armies/oqnnu0gk8q6hyyny/7-infernal.svg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Flamer",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

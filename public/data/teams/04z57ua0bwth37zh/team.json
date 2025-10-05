@@ -1,0 +1,208 @@
+{
+  "id": "04z57ua0bwth37zh",
+  "name": "Wormhole Daemons of Change – 250pts",
+  "faction": "Wormhole Daemons of Change",
+  "units": [
+    {
+      "id": "B8c_RolkD",
+      "name": "Change Fury",
+      "image": "/assets/armies/04z57ua0bwth37zh/1-change-fury.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Armblade",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "RDqjbLWt3",
+      "name": "Hex-Fury",
+      "image": "/assets/armies/04z57ua0bwth37zh/2-hex-fury.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Magic Bolt",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Claws",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "xWCvQaatP",
+      "name": "Change Warrior",
+      "image": "/assets/armies/04z57ua0bwth37zh/3-change-warrior.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Fireball",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Hand Weapon",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "N8geKL-HV",
+      "name": "Change Hexer",
+      "image": "/assets/armies/04z57ua0bwth37zh/4-change-hexer.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Magic Bolt",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Hand Weapon",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "9KR5iWpJW",
+      "name": "Changelings",
+      "image": "/assets/armies/04z57ua0bwth37zh/5-changelings.svg",
+      "quality": 6,
+      "defense": 6,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Fireballs",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Claws",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "kuIK2ZSoS",
+      "name": "Lesser Change Horror",
+      "image": "/assets/armies/04z57ua0bwth37zh/6-lesser-change-horror.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Fireball",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Claws",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "jFX10hTHU",
+      "name": "Fury Champion of Change",
+      "image": "/assets/armies/04z57ua0bwth37zh/7-fury-champion-of-change.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Power Hammer",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Staff",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "ftaVST10W",
+      "name": "Change Horror",
+      "image": "/assets/armies/04z57ua0bwth37zh/8-change-horror.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Fireball",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Claws",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    }
+  ]
+}

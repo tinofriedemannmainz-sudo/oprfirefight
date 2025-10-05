@@ -1,0 +1,163 @@
+{
+  "id": "e8mflytiz51kc4n6",
+  "name": "Wolf Prime Brothers – 250pts",
+  "faction": "Wolf Prime Brothers",
+  "units": [
+    {
+      "id": "CXyYAqpeT",
+      "name": "Wolf Infiltrator",
+      "image": "/assets/armies/e8mflytiz51kc4n6/1-wolf-infiltrator.svg",
+      "quality": 4,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Marksman Carbine",
+          "range": 18,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "Smm5y1POw",
+      "name": "Wolf Raider",
+      "image": "/assets/armies/e8mflytiz51kc4n6/2-wolf-raider.svg",
+      "quality": 4,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "BqkYm8Kzf",
+      "name": "Wolf Prime Brother",
+      "image": "/assets/armies/e8mflytiz51kc4n6/3-wolf-prime-brother.svg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Precision Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "Z3E69BzVX",
+      "name": "Veteran Wolf Prime Brother",
+      "image": "/assets/armies/e8mflytiz51kc4n6/4-veteran-wolf-prime-brother.svg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Precision Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "bBo1lKtrn",
+      "name": "Wolf Assault Prime Brother",
+      "image": "/assets/armies/e8mflytiz51kc4n6/5-wolf-assault-prime-brother.svg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Heavy CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "qRSyTJfr8",
+      "name": "Wolf Blaster Prime Brother",
+      "image": "/assets/armies/e8mflytiz51kc4n6/6-wolf-blaster-prime-brother.svg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Plasma Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

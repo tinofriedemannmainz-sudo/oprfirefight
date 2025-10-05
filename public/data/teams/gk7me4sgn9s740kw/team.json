@@ -1,0 +1,189 @@
+{
+  "id": "gk7me4sgn9s740kw",
+  "name": "Dark Prime Brothers – 250pts",
+  "faction": "Dark Prime Brothers",
+  "units": [
+    {
+      "id": "_q3v3KPOV",
+      "name": "Dark Infiltrator",
+      "image": "/assets/armies/gk7me4sgn9s740kw/1-dark-infiltrator.svg",
+      "quality": 4,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Marksman Carbine",
+          "range": 18,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "wC_HRq_CF",
+      "name": "Dark Raider",
+      "image": "/assets/armies/gk7me4sgn9s740kw/2-dark-raider.svg",
+      "quality": 4,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "u0HEYlj2E",
+      "name": "Dark Assault Prime Brother",
+      "image": "/assets/armies/gk7me4sgn9s740kw/3-dark-assault-prime-brother.svg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Heavy CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "CJzQaq_69",
+      "name": "Dark Prime Brother",
+      "image": "/assets/armies/gk7me4sgn9s740kw/4-dark-prime-brother.svg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Precision Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "RTs0GcXqh",
+      "name": "Veteran Dark Prime Brother",
+      "image": "/assets/armies/gk7me4sgn9s740kw/5-veteran-dark-prime-brother.svg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Precision Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "bI3Gs57Qj",
+      "name": "Dark Desolator",
+      "image": "/assets/armies/gk7me4sgn9s740kw/6-dark-desolator.svg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "HE-Launcher",
+          "range": 30,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "xKB6xwEr2",
+      "name": "Dark Infernal",
+      "image": "/assets/armies/gk7me4sgn9s740kw/7-dark-infernal.svg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Flamer",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "id": "ewbra8nv3nq3k27p",
+  "name": "Custodian Brothers – 250pts",
+  "faction": "Custodian Brothers",
+  "units": [
+    {
+      "id": "Z6mGfk5",
+      "name": "Prosecution Sister",
+      "image": "/assets/armies/ewbra8nv3nq3k27p/1-prosecution-sister.svg",
+      "quality": 4,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Prosecution Rifle",
+          "range": 24,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "i8UI-D4",
+      "name": "Vigilant Sister",
+      "image": "/assets/armies/ewbra8nv3nq3k27p/2-vigilant-sister.svg",
+      "quality": 4,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Energy Sword",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "cz1d_6M",
+      "name": "Hunter Sister",
+      "image": "/assets/armies/ewbra8nv3nq3k27p/3-hunter-sister.svg",
+      "quality": 4,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Flamer",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "lFMAUl8",
+      "name": "Great Sister",
+      "image": "/assets/armies/ewbra8nv3nq3k27p/4-great-sister.svg",
+      "quality": 4,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Energy Sword",
+          "range": 0,
+          "attacks": 4,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "zHrtuAb",
+      "name": "Custodian Brother",
+      "image": "/assets/armies/ewbra8nv3nq3k27p/5-custodian-brother.svg",
+      "quality": 3,
+      "defense": 2,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Shot-Mount",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Axe",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

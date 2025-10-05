@@ -1,0 +1,97 @@
+{
+  "id": "rvvb3kdn2x2pqkki",
+  "name": "Watch Brothers – 250pts",
+  "faction": "Watch Brothers",
+  "units": [
+    {
+      "id": "XmCx2rl",
+      "name": "Watch Captain Brother",
+      "image": "/assets/armies/rvvb3kdn2x2pqkki/1-watch-captain-brother.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Energy Hammer",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "Hdob1gk",
+      "name": "Watch Battle Brother",
+      "image": "/assets/armies/rvvb3kdn2x2pqkki/2-watch-battle-brother.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Heavy CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "owizlbE",
+      "name": "Watch Vanguard",
+      "image": "/assets/armies/rvvb3kdn2x2pqkki/3-watch-vanguard.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Heavy CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "VqoCVPT2e",
+      "name": "Watch Destroyer",
+      "image": "/assets/armies/rvvb3kdn2x2pqkki/4-watch-destroyer.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 3,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

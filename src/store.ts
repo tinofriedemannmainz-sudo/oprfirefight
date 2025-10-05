@@ -56,7 +56,10 @@ export const useGame = create<GameState>((set, get) => ({
   availableTeams: [],
   selectedTeams: [],
 
-  loadTeams(teams) { set({ availableTeams: teams }) },
+ loadTeams(teams) {
+  const sorted = [...teams].sort((a, b) => a.name.localeCompare(b.name))
+  set({ availableTeams: sorted })
+},
 
   selectTeam(player, teamId) {
     const tuple = [...get().selectedTeams] as [string?, string?]

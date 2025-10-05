@@ -1,0 +1,175 @@
+{
+  "id": "7el7k3hgy5pb9o9i",
+  "name": "Machine Cult – 250pts",
+  "faction": "Machine Cult",
+  "units": [
+    {
+      "id": "iGyqlfa",
+      "name": "Cult Leader",
+      "image": "/assets/armies/7el7k3hgy5pb9o9i/1-cult-leader.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Leader R-Pistol",
+          "range": 9,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Tech-Sword",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "L6kGWgk",
+      "name": "Cult Ranger",
+      "image": "/assets/armies/7el7k3hgy5pb9o9i/2-cult-ranger.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "R-Fusil",
+          "range": 18,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "XivtB59",
+      "name": "Shock Priest",
+      "image": "/assets/armies/7el7k3hgy5pb9o9i/3-shock-priest.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Shock Staff",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "v6H89UD",
+      "name": "Sect Infiltrator",
+      "image": "/assets/armies/7el7k3hgy5pb9o9i/4-sect-infiltrator.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "F-Blaster",
+          "range": 9,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Taser Sword",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "GGy44eL",
+      "name": "Sect Stalker",
+      "image": "/assets/armies/7el7k3hgy5pb9o9i/5-sect-stalker.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Dual S-Blade",
+          "range": 1,
+          "attacks": 2,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "ykvshtT",
+      "name": "Sky Stalker",
+      "image": "/assets/armies/7el7k3hgy5pb9o9i/6-sky-stalker.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "F-Carbine",
+          "range": 18,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "HGxRxOr",
+      "name": "Raider Cavalry",
+      "image": "/assets/armies/7el7k3hgy5pb9o9i/7-raider-cavalry.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Twin P-Pistol",
+          "range": 9,
+          "attacks": 4,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

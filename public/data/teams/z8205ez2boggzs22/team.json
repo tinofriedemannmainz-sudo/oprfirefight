@@ -1,0 +1,156 @@
+{
+  "id": "z8205ez2boggzs22",
+  "name": "DAO Union – 250pts",
+  "faction": "DAO Union",
+  "units": [
+    {
+      "id": "wbcHuwv",
+      "name": "Grunt Leader",
+      "image": "/assets/armies/z8205ez2boggzs22/1-grunt-leader.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Holy Baton",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "l9y9wn9",
+      "name": "Grunt",
+      "image": "/assets/armies/z8205ez2boggzs22/2-grunt.svg",
+      "quality": 5,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pulse Shotgun",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "7zBLXHS",
+      "name": "Sniper Drone",
+      "image": "/assets/armies/z8205ez2boggzs22/3-sniper-drone.svg",
+      "quality": 5,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pulse Rifle",
+          "range": 30,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Taser",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "fdAp19o",
+      "name": "Spotter",
+      "image": "/assets/armies/z8205ez2boggzs22/4-spotter.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pulse Carbine",
+          "range": 18,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "pBa-dzK",
+      "name": "Gun Drone",
+      "image": "/assets/armies/z8205ez2boggzs22/5-gun-drone.svg",
+      "quality": 5,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Twin Pulse-Gun",
+          "range": 18,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Taser",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "ky_P-X8",
+      "name": "Battle Suit",
+      "image": "/assets/armies/z8205ez2boggzs22/6-battle-suit.svg",
+      "quality": 4,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Suit-Bursts",
+          "range": 18,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Bash",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

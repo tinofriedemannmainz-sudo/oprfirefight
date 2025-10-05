@@ -1,0 +1,130 @@
+{
+  "id": "nyh41t82jugcdq8m",
+  "name": "Elven Jesters – 250pts",
+  "faction": "Elven Jesters",
+  "units": [
+    {
+      "id": "EgHVmFc",
+      "name": "Fool",
+      "image": "/assets/armies/nyh41t82jugcdq8m/1-fool.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Shard Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "d4Z91Se",
+      "name": "Joker",
+      "image": "/assets/armies/nyh41t82jugcdq8m/2-joker.svg",
+      "quality": 3,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Exploding Bola",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "CPnUv7L",
+      "name": "Jester",
+      "image": "/assets/armies/nyh41t82jugcdq8m/3-jester.svg",
+      "quality": 3,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Shard Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "A_o3aHw",
+      "name": "Prankster",
+      "image": "/assets/armies/nyh41t82jugcdq8m/4-prankster.svg",
+      "quality": 3,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Energy Glaive",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "Poir2bw",
+      "name": "Fool Champion",
+      "image": "/assets/armies/nyh41t82jugcdq8m/5-fool-champion.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Master Shard Pistol",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

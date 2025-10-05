@@ -1,0 +1,111 @@
+{
+  "id": "w70ha3o85pa7nigq",
+  "name": "Knight Brothers – 250pts",
+  "faction": "Knight Brothers",
+  "units": [
+    {
+      "id": "KIFgzVA",
+      "name": "Knight Battle Brother",
+      "image": "/assets/armies/w70ha3o85pa7nigq/1-knight-battle-brother.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Assault Storm Rifle",
+          "range": 24,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "I2thtsd",
+      "name": "Knight Purgation Brother",
+      "image": "/assets/armies/w70ha3o85pa7nigq/2-knight-purgation-brother.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Incinerator",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "er4pfLo",
+      "name": "Veteran Knight Battle Brother",
+      "image": "/assets/armies/w70ha3o85pa7nigq/3-veteran-knight-battle-brother.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Incinerator",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "wOdTTeKoD",
+      "name": "Knight Master Brother",
+      "image": "/assets/armies/w70ha3o85pa7nigq/4-knight-master-brother.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Flamer Pistol",
+          "range": 6,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

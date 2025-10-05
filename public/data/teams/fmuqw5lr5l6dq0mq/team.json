@@ -1,0 +1,168 @@
+{
+  "id": "fmuqw5lr5l6dq0mq",
+  "name": "Wormhole Daemons of Plague – 250pts",
+  "faction": "Wormhole Daemons of Plague",
+  "units": [
+    {
+      "id": "_OxfOEtOE",
+      "name": "Plague Warrior",
+      "image": "/assets/armies/fmuqw5lr5l6dq0mq/1-plague-warrior.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Hand Weapon",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        }
+      ]
+    },
+    {
+      "id": "lUNJcJdiv",
+      "name": "Plague Fury",
+      "image": "/assets/armies/fmuqw5lr5l6dq0mq/2-plague-fury.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Armblade",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "KLmnqaY2M",
+      "name": "Sling-Fury",
+      "image": "/assets/armies/fmuqw5lr5l6dq0mq/3-sling-fury.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Plague Sling",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Claws",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "ofbYq2SXy",
+      "name": "Plague Slinger",
+      "image": "/assets/armies/fmuqw5lr5l6dq0mq/4-plague-slinger.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Plague Sling",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Hand Weapon",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "Vl6-oaKYS",
+      "name": "Plague Swarm",
+      "image": "/assets/armies/fmuqw5lr5l6dq0mq/5-plague-swarm.svg",
+      "quality": 6,
+      "defense": 6,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Swarm Attack",
+          "range": 0,
+          "attacks": 3,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "Gyc8X7kHv",
+      "name": "Fury Champion of Plague",
+      "image": "/assets/armies/fmuqw5lr5l6dq0mq/6-fury-champion-of-plague.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Plague Hammer",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Sword",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "OH_Og3K-F",
+      "name": "Champion of Plague",
+      "image": "/assets/armies/fmuqw5lr5l6dq0mq/7-champion-of-plague.svg",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Plague Hammer",
+          "range": 1,
+          "attacks": 1,
+          "ap": 0,
+          "type": "melee"
+        },
+        {
+          "name": "Sword",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

@@ -10,7 +10,11 @@ const terrainColors: Record<TerrainType, string> = {
   ruin: '#2d1f1f'
 }
 
-export default function HexCell({hex, size, selected, canDeploy, onClick}:{hex:Hex; size:number; selected:boolean; canDeploy?:boolean; onClick:()=>void}){
+export default function HexCell({
+  hex, size, selected, canDeploy, occupantOwner, onClick
+}:{
+  hex:Hex; size:number; selected:boolean; canDeploy?:boolean; occupantOwner?:0|1; onClick:()=>void
+}){
   const w = Math.sqrt(3) * size
   const h = 2 * size
   const x = w * (hex.q + hex.r/2)
@@ -23,8 +27,11 @@ export default function HexCell({hex, size, selected, canDeploy, onClick}:{hex:H
     }
     return pts.join(' ')
   }, [x,y,size])
-  const stroke = selected ? '#9BD0FF' : canDeploy ? '#4cc3ff' : '#384760'
-  const strokeWidth = selected ? 3 : canDeploy ? 2 : 1
+
+  const ownerColor = occupantOwner===0 ? '#7aafff' : occupantOwner===1 ? '#ff8a8a' : undefined
+  const stroke = selected ? '#9BD0FF' : ownerColor ?? (canDeploy ? '#4cc3ff' : '#384760')
+  const strokeWidth = ownerColor ? 3.5 : selected ? 3 : canDeploy ? 2 : 1
+
   return <g onClick={onClick} style={{cursor:'pointer'}}>
     <polygon points={points} fill={terrainColors[hex.terrain]} stroke={stroke} strokeWidth={strokeWidth} />
   </g>

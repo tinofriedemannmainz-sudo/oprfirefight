@@ -1,0 +1,168 @@
+{
+  "id": "jlray7cwf8mvw5sn",
+  "name": "Plague Disciples – 250pts",
+  "faction": "Plague Disciples",
+  "units": [
+    {
+      "id": "mJKboiFNI",
+      "name": "Plague Cultist Champion",
+      "image": "/assets/armies/jlray7cwf8mvw5sn/1-plague-cultist-champion.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Champion Pistol",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "SEjql5c20",
+      "name": "Mutated Plague Brother",
+      "image": "/assets/armies/jlray7cwf8mvw5sn/2-mutated-plague-brother.svg",
+      "quality": 3,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Claws",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "yWjHh3Vcy",
+      "name": "Plague Brother",
+      "image": "/assets/armies/jlray7cwf8mvw5sn/3-plague-brother.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "OPRYRYI",
+      "name": "Plague Zombies",
+      "image": "/assets/armies/jlray7cwf8mvw5sn/4-plague-zombies.svg",
+      "quality": 5,
+      "defense": 6,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Claws",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "Xbyw1JOfR",
+      "name": "Mutated Plague Cultists",
+      "image": "/assets/armies/jlray7cwf8mvw5sn/5-mutated-plague-cultists.svg",
+      "quality": 5,
+      "defense": 6,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Claws",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "_-wmzdsnW",
+      "name": "Chosen Plague Brother",
+      "image": "/assets/armies/jlray7cwf8mvw5sn/6-chosen-plague-brother.svg",
+      "quality": 3,
+      "defense": 3,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "IVZevvLdv",
+      "name": "Plague Cultists",
+      "image": "/assets/armies/jlray7cwf8mvw5sn/7-plague-cultists.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

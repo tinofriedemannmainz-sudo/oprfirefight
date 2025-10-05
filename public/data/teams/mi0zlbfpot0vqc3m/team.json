@@ -1,0 +1,109 @@
+{
+  "id": "mi0zlbfpot0vqc3m",
+  "name": "Brute Coalitions – 250pts",
+  "faction": "Brute Coalitions",
+  "units": [
+    {
+      "id": "Vw3Vvws",
+      "name": "Brute Leader",
+      "image": "/assets/armies/mi0zlbfpot0vqc3m/1-brute-leader.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 4,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "ka_P8jM",
+      "name": "Brute Fighter",
+      "image": "/assets/armies/mi0zlbfpot0vqc3m/2-brute-fighter.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "CCWS",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "PLRIppr",
+      "name": "Brute Gunner",
+      "image": "/assets/armies/mi0zlbfpot0vqc3m/3-brute-gunner.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Burst Rifle",
+          "range": 24,
+          "attacks": 3,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "I2Syvun",
+      "name": "Brute Veteran Fighter",
+      "image": "/assets/armies/mi0zlbfpot0vqc3m/4-brute-veteran-fighter.svg",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "CCWS",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "U8_wfrQ",
+      "name": "Brute Champion",
+      "image": "/assets/armies/mi0zlbfpot0vqc3m/5-brute-champion.svg",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}
