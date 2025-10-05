@@ -7,7 +7,7 @@ type OverlayProps = {
   runCosts: Map<string, number>
   size: number
   grid: Hex[]
-  chargeTargets: { unit: Unit, approach: {q:number;r:number}[] }[]
+  chargeTargets: { unit: Unit }[]
   rangedTargets: Unit[]
 }
 
@@ -32,26 +32,26 @@ export default function OverlayLayer({ moveCosts, runCosts, grid, size, chargeTa
       const k = hexKey(h.q,h.r)
       if (!moveCosts.has(k)) return null
       const { points } = hexToPolyPoints(h.q,h.r)
-      return <polygon key={`m-${k}`} points={points} fill="rgba(76,195,255,0.18)" stroke="rgba(76,195,255,0.7)" strokeWidth={1.5} />
+      return <polygon key={`m-${k}`} points={points} fill="rgba(76,195,255,0.20)" stroke="rgba(76,195,255,0.75)" strokeWidth={1.6} />
     })}
     {/* Run area (> speed && <= 2*speed) */}
     {grid.map(h => {
       const k = hexKey(h.q,h.r)
       if (!runCosts.has(k)) return null
       const { points } = hexToPolyPoints(h.q,h.r)
-      return <polygon key={`r-${k}`} points={points} fill="rgba(255,212,106,0.16)" stroke="rgba(255,212,106,0.65)" strokeWidth={1.5} />
+      return <polygon key={`r-${k}`} points={points} fill="rgba(255,212,106,0.18)" stroke="rgba(255,212,106,0.7)" strokeWidth={1.5} />
     })}
     {/* Charge targets (ring around enemy) */}
     {chargeTargets.map(({unit}) => {
       if (!unit.position) return null
       const { x, y } = hexToPolyPoints(unit.position.q, unit.position.r)
-      return <circle key={`c-${unit.id}`} cx={x} cy={y} r={18} fill="none" stroke="rgba(255,110,110,0.85)" strokeWidth={3} />
+      return <circle key={`c-${unit.id}`} cx={x} cy={y} r={18} fill="none" stroke="rgba(255,110,110,0.9)" strokeWidth={3} />
     })}
     {/* Ranged targets (soft red dot) */}
     {rangedTargets.map(u => {
       if (!u.position) return null
       const { x, y } = hexToPolyPoints(u.position.q, u.position.r)
-      return <circle key={`rt-${u.id}`} cx={x} cy={y} r={10} fill="rgba(255,120,120,0.8)" />
+      return <circle key={`rt-${u.id}`} cx={x} cy={y} r={10} fill="rgba(255,120,120,0.85)" />
     })}
   </g>
 }
