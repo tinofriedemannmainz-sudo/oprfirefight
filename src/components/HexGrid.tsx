@@ -13,6 +13,7 @@ import TurnHUD from '@/components/TurnHUD'
 import DiceDialog from '@/components/DiceDialog'
 import CounterAttackDialog from '@/components/CounterAttackDialog'
 import ObjectiveMarkerComponent from '@/components/ObjectiveMarker'
+import ScoreDisplay from '@/components/ScoreDisplay'
 import { reachableCosts } from '@/utils/path'
 import { gridLookup, axialNeighbors, axialDistance, hexKey } from '@/utils/hex'
 import { TERRAIN_RULES } from '@/utils/terrain'
@@ -267,6 +268,7 @@ export default function HexGrid(){
       </g>
     </svg>
     <TurnHUD/>
+    <ScoreDisplay/>
     <ActionBar/>
     {menu && <UnitContextMenu unit={menu.u} x={menu.x} y={menu.y} onClose={()=>setMenu(null)} />}
     <CounterAttackDialog />
