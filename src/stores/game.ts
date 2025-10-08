@@ -1,10 +1,15 @@
-
 import { create } from 'zustand'
-import type { Hex, Unit, Team, DiceRoll, GamePhase } from '@/types/battle'
+import type { Hex, Unit, Team, DiceRoll, GamePhase, Weapon } from '@/types/battle'
 import { generateTerrain, TERRAIN_RULES, canEnter, moveCost } from '@/utils/terrain'
 import { axialDistance, axialNeighbors } from '@/utils/hex'
 
-type ActionMode = 'advance' | 'run' | 'shoot' | 'charge' | undefined
+type ActionMode = 'move' | 'shoot' | undefined
+
+export type AttackData = {
+  attackerId: string
+  targetId: string
+  weaponName: string
+}
 
 export type GameState = {
   size: number
@@ -18,6 +23,7 @@ export type GameState = {
   winners?: 0|1|'draw'
   round: number
   actionMode: ActionMode
+  pendingAttack?: AttackData
 
   loadTeams: (teams: Team[]) => void
   availableTeams: Team[]
@@ -32,9 +38,13 @@ export type GameState = {
   startGame: () => void
   selectUnit: (unitId?:string) => void
   setActionMode: (mode: ActionMode) => void
-  moveUnit: (unitId:string, hex:Hex) => void
+  moveUnit: (unitId:string, hex:Hex, isRun?: boolean) => void
   attack: (attackerId:string, targetId:string, weaponName:string) => void
+  executeAttack: (hits: number, wounds: number) => void
   endTurn: () => void
+  getValidTargets: (unitId: string) => { shootable: Unit[], meleeable: Unit[] }
+  canUnitShoot: (unitId: string) => boolean
+  getAvailableWeapons: (unitId: string) => Weapon[]
 
   endActivation: () => void
   flagAdvanced: () => void
@@ -56,6 +66,7 @@ export const useGame = create<GameState>((set, get) => ({
   selectedTeams: [],
   round: 1,
   actionMode: undefined,
+  pendingAttack: undefined,
 
   loadTeams(teams) {
     const sorted = [...teams].sort((a,b)=>a.name.localeCompare(b.name))
@@ -195,15 +206,27 @@ export const useGame = create<GameState>((set, get) => ({
     if (!u) return
     if (get().phase==='playing' && u.owner!==get().currentPlayer) return
     if (get().phase==='playing' && (u as any).activated) return
+    
+    // Reset unit state when selecting
+    if (get().phase === 'playing') {
+      u.hasMoved = u.hasMoved || false
+      u.hasRun = u.hasRun || false
+      u.usedWeapons = u.usedWeapons || []
+    }
+    
     set({ selectedUnitId: u.id, selectedWeapon: undefined, actionMode: undefined })
   },
 
   setActionMode(mode){ set({ actionMode: mode }) },
 
-  moveUnit(unitId, hex) {
+  moveUnit(unitId, hex, isRun = false) {
     const state = get()
     const u = state.units.find(u => u.id === unitId)
     if (!u || !u.position) return
+    
+    // Check if unit has already moved or shot
+    if (u.hasMoved) return
+    if ((u.usedWeapons?.length || 0) > 0) return // Cannot move after shooting
 
     const occupied = state.units.some(x => x.position && x.position.q===hex.q && x.position.r===hex.r)
     if (occupied) return
@@ -211,12 +234,31 @@ export const useGame = create<GameState>((set, get) => ({
     if (!toHex) return
     if (!canEnter(u, toHex)) return
 
-    const dist = Math.round((Math.abs(u.position.q - hex.q) + Math.abs(u.position.q + u.position.r - hex.q - hex.r) + Math.abs(u.position.r - hex.r))/2)
-    const step = moveCost(u, toHex, toHex)
-    const req = dist * (isFinite(step) ? step : 9999)
-    if (req <= u.speed * 2) {
+    const dist = axialDistance(u.position, hex)
+    const maxMove = isRun ? u.speed * 2 : u.speed
+    
+    if (dist <= maxMove) {
       u.position = { q: hex.q, r: hex.r }
+      u.hasMoved = true
+      u.hasRun = isRun
       set({ units: [...state.units] })
+      
+      // Auto-end activation only if run AND no melee enemies nearby
+      if (isRun) {
+        // Check if there are any enemies in melee range
+        const hasNearbyEnemies = state.units.some(enemy => {
+          if (!enemy.position || enemy.owner === u.owner) return false
+          const enemyDist = axialDistance(hex, enemy.position)
+          return enemyDist === 1
+        })
+        
+        // Check if unit has melee weapons (range 0)
+        const hasMeleeWeapons = u.weapons.some(w => (w.range || 0) === 0)
+        
+        if (!hasNearbyEnemies || !hasMeleeWeapons) {
+          setTimeout(() => get().endActivation(), 500)
+        }
+      }
     }
   },
 
@@ -225,28 +267,57 @@ export const useGame = create<GameState>((set, get) => ({
     const atk = state.units.find(u => u.id === attackerId)
     const tgt = state.units.find(u => u.id === targetId)
     if (!atk || !tgt || !atk.position || !tgt.position) return
+    
+    // Check if weapon already used
+    if (atk.usedWeapons?.includes(weaponName)) return
+    
     const weapon = atk.weapons.find(w => w.name === weaponName) || atk.weapons[0]
     if (!weapon) return
-    const dist = Math.round((Math.abs(atk.position.q - tgt.position.q) + Math.abs(atk.position.q + atk.position.r - tgt.position.q - tgt.position.r) + Math.abs(atk.position.r - tgt.position.r))/2)
-    if (weapon.type==='ranged' && dist > (weapon.range || 0)) return
-    if (weapon.type==='melee' && dist !== 1) return
+    const dist = axialDistance(atk.position, tgt.position)
+    
+    // Determine if weapon is melee (range 0) or ranged (range > 0)
+    const isMelee = (weapon.range || 0) === 0
+    
+    if (isMelee) {
+      // Melee weapons: must be adjacent, can use after running
+      if (dist !== 1) return
+    } else {
+      // Ranged weapons: cannot use if run, must be in range
+      if (atk.hasRun) return // Cannot shoot ranged after running
+      if (dist > (weapon.range || 0)) return
+    }
 
-    const rollDice = (n:number) => Array.from({length:n}, () => 1 + Math.floor(Math.random()*6))
-    const hitRolls = rollDice(weapon.attacks)
-    const hits = hitRolls.filter(d => d >= atk.quality).length
-    const saveTarget = Math.max(2, Math.min(6, tgt.defense + weapon.ap))
-    const saveRolls = rollDice(hits)
-    const failed = saveRolls.filter(d => d < saveTarget).length
+    // Open dice dialog instead of rolling immediately
+    set({ pendingAttack: { attackerId, targetId, weaponName } })
+  },
 
-    const newDice: any[] = [
-      { label: `Trefferwurf (${weapon.name})`, dice: hitRolls, success: hits, target: atk.quality },
-      { label: `Rettungswurf (AP ${weapon.ap})`, dice: saveRolls, success: hits - failed, target: saveTarget }
-    ]
+  executeAttack(hits, wounds) {
+    const state = get()
+    const { pendingAttack } = state
+    if (!pendingAttack) return
 
-    tgt.wounds -= failed
+    const atk = state.units.find(u => u.id === pendingAttack.attackerId)
+    const tgt = state.units.find(u => u.id === pendingAttack.targetId)
+    if (!atk || !tgt) return
+
+    // Apply wounds
+    tgt.wounds -= wounds
     let units = state.units
     if (tgt.wounds <= 0) { units = state.units.filter(u => u.id !== tgt.id) }
-    set({ units: [...units], diceLog: [...state.diceLog, ...newDice], selectedWeapon: weapon.name })
+    
+    // Mark weapon as used
+    if (!atk.usedWeapons) atk.usedWeapons = []
+    atk.usedWeapons.push(pendingAttack.weaponName)
+    
+    set({ units: [...units], pendingAttack: undefined })
+    
+    // Check if all weapons used or no more actions possible
+    const allWeaponsUsed = atk.weapons.every(w => atk.usedWeapons?.includes(w.name))
+    const canStillAct = !atk.hasMoved || !allWeaponsUsed
+    
+    if (!canStillAct || allWeaponsUsed) {
+      setTimeout(() => get().endActivation(), 500)
+    }
   },
 
   endTurn() { get().endActivation() },
@@ -256,7 +327,13 @@ export const useGame = create<GameState>((set, get) => ({
   endActivation(){
     const s = get()
     const sel = s.units.find(u => u.id===s.selectedUnitId)
-    if (sel){ (sel as any).activated = true }
+    if (sel){ 
+      (sel as any).activated = true
+      // Reset per-activation state
+      sel.hasMoved = false
+      sel.hasRun = false
+      sel.usedWeapons = []
+    }
     set({ selectedUnitId: undefined, actionMode: undefined })
     const cur = s.currentPlayer, other = cur===0?1:0
     const hasOther = s.units.some(u => u.owner===other && (u as any).activated!==true && u.position)
@@ -265,12 +342,80 @@ export const useGame = create<GameState>((set, get) => ({
     else if (hasCur){ set({ currentPlayer: cur }) }
     else { get().startNewRoundIfNeeded() }
   },
-
   startNewRoundIfNeeded(){
     const s = get()
     const anyUnactivated = s.units.some(u => (u as any).activated!==true && u.position)
     if (anyUnactivated) return
-    for (const u of s.units){ (u as any).activated = false }
+    for (const u of s.units){ 
+      (u as any).activated = false
+      u.hasMoved = false
+      u.hasRun = false
+      u.usedWeapons = []
+    }
     set({ round: s.round + 1, currentPlayer: 0, selectedUnitId: undefined, actionMode: undefined })
+  },
+
+  getValidTargets(unitId) {
+    const state = get()
+    const u = state.units.find(x => x.id === unitId)
+    if (!u || !u.position) return { shootable: [], meleeable: [] }
+    
+    const shootable: Unit[] = []
+    const meleeable: Unit[] = []
+    
+    for (const target of state.units) {
+      if (!target.position || target.owner === u.owner) continue
+      
+      const dist = axialDistance(u.position, target.position)
+      
+      // Check melee range (adjacent hexes) - range 0 weapons, always possible even after running
+      if (dist === 1) {
+        const hasMeleeWeapons = u.weapons.some(w => (w.range || 0) === 0 && !u.usedWeapons?.includes(w.name))
+        if (hasMeleeWeapons) {
+          meleeable.push(target)
+        }
+      }
+      
+      // Check ranged weapons (range > 0) - only if not run
+      if (!u.hasRun) {
+        for (const weapon of u.weapons) {
+          if ((weapon.range || 0) > 0 && dist <= (weapon.range || 0) && !u.usedWeapons?.includes(weapon.name)) {
+            // TODO: Add cover check here
+            if (!shootable.find(t => t.id === target.id)) {
+              shootable.push(target)
+            }
+            break
+          }
+        }
+      }
+    }
+    
+    return { shootable, meleeable }
+  },
+
+  canUnitShoot(unitId) {
+    const u = get().units.find(x => x.id === unitId)
+    if (!u) return false
+    
+    // Can use melee weapons (range 0) even after running
+    const hasMeleeWeapons = u.weapons.some(w => (w.range || 0) === 0 && !u.usedWeapons?.includes(w.name))
+    if (hasMeleeWeapons) return true
+    
+    // Can use ranged weapons (range > 0) only if not run
+    const hasRangedWeapons = u.weapons.some(w => (w.range || 0) > 0 && !u.usedWeapons?.includes(w.name))
+    return !u.hasRun && hasRangedWeapons
+  },
+
+  getAvailableWeapons(unitId) {
+    const u = get().units.find(x => x.id === unitId)
+    if (!u) return []
+    
+    // If unit has run, only melee weapons (range 0) are available
+    if (u.hasRun) {
+      return u.weapons.filter(w => (w.range || 0) === 0 && !u.usedWeapons?.includes(w.name))
+    }
+    
+    // Otherwise all unused weapons
+    return u.weapons.filter(w => !u.usedWeapons?.includes(w.name))
   },
 }))

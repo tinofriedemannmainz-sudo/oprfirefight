@@ -10,6 +10,7 @@ import OverlayLayer from '@/components/OverlayLayer'
 import DeployOverlay from '@/components/DeployOverlay'
 import ActionBar from '@/components/ActionBar'
 import TurnHUD from '@/components/TurnHUD'
+import DiceDialog from '@/components/DiceDialog'
 import { reachableCosts } from '@/utils/path'
 import { gridLookup, axialNeighbors, axialDistance, hexKey } from '@/utils/hex'
 import { TERRAIN_RULES } from '@/utils/terrain'
@@ -52,8 +53,16 @@ export default function HexGrid(){
   }, [g.units])
 
   const selUnit = g.units.find(u => u.id===g.selectedUnitId)
+  
+  // Calculate valid targets
+  const validTargets = useMemo(() => {
+    if (!g.selectedUnitId || g.phase !== 'playing') return { shootable: [], meleeable: [] }
+    return g.getValidTargets(g.selectedUnitId)
+  }, [g.selectedUnitId, g.units, g.phase])
+  
   const { moveCosts, runCosts } = useMemo(() => {
     if (!selUnit || !selUnit.position) return { moveCosts:new Map(), runCosts:new Map() }
+    if (selUnit.hasMoved || (selUnit.usedWeapons?.length || 0) > 0) return { moveCosts:new Map(), runCosts:new Map() }
     const maxMove = selUnit.speed
     const maxRun = selUnit.speed * 2
     const allCosts = reachableCosts(selUnit, g.grid, selUnit.position, maxRun)
@@ -77,13 +86,10 @@ export default function HexGrid(){
     }
     if (g.phase==='playing' && selUnit){
       const k = `${hex.q},${hex.r}`
-      if (g.actionMode==='advance' && moveCosts.has(k)){
-        g.moveUnit(selUnit.id, hex)
-        return
-      }
-      if (g.actionMode==='run' && (moveCosts.has(k) || runCosts.has(k))){
-        g.moveUnit(selUnit.id, hex)
-        g.endActivation()
+      // Automatisch erkennen ob normal oder rennen basierend auf Distanz
+      const isRun = runCosts.has(k) && !moveCosts.has(k)
+      if (moveCosts.has(k) || runCosts.has(k)){
+        g.moveUnit(selUnit.id, hex, isRun)
         return
       }
     }
@@ -96,6 +102,12 @@ export default function HexGrid(){
     } else if (g.phase==='playing'){
       if (u.owner===g.currentPlayer && !u.activated) {
         g.selectUnit(u.id)
+      } else if (g.selectedUnitId && u.owner !== g.currentPlayer) {
+        // Attack enemy unit
+        const availableWeapons = g.getAvailableWeapons(g.selectedUnitId)
+        if (availableWeapons.length > 0) {
+          g.attack(g.selectedUnitId, u.id, availableWeapons[0].name)
+        }
       }
     }
   }
@@ -108,7 +120,23 @@ export default function HexGrid(){
   }
 
   return <>
-    <svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
+    <svg 
+      width="100%" 
+      height="100%" 
+      viewBox={`0 0 ${width} ${height}`} 
+      preserveAspectRatio="xMidYMid meet"
+      style={{ 
+        transform: 'perspective(2000px) rotateX(25deg)',
+        transformOrigin: 'center center'
+      }}
+    >
+      <defs>
+        {/* Gradient for 3D ground effect */}
+        <linearGradient id="groundGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="rgba(0,0,0,0.3)" />
+          <stop offset="100%" stopColor="rgba(0,0,0,0)" />
+        </linearGradient>
+      </defs>
       <HexTextures/>
       <g transform={`translate(${translateX},${translateY})`}>
         {g.grid.map(hx => (
@@ -127,27 +155,73 @@ export default function HexGrid(){
         {g.phase==='deploy' && <DeployOverlay grid={g.grid} canDeploy={g.canDeployOn} />}
         {g.phase==='playing' && selUnit && (
           <OverlayLayer
-            moveCosts={ (g.actionMode==='run' || g.actionMode==='advance') ? moveCosts : new Map() }
-            runCosts={ g.actionMode==='run' ? runCosts : new Map() }
+            moveCosts={moveCosts}
+            runCosts={runCosts}
             size={size}
             grid={g.grid}
           />
         )}
+        
+        {/* Highlight valid targets */}
+        {g.phase==='playing' && selUnit && validTargets.shootable.map(target => {
+          if (!target.position) return null
+          const terrain = g.grid.find(h => h.q === target.position?.q && h.r === target.position?.r)?.terrain
+          const terrainHeights: Record<string, number> = {
+            open: 0, road: 0, forest: -3, ruin: -2, swamp: 1, water: 2, river: 2, lake: 3, rock: -8, mountain: -15
+          }
+          const heightOffset = terrain ? (terrainHeights[terrain] || 0) : 0
+          const pos = hexToPixel(target.position.q, target.position.r)
+          return <circle key={`shoot-${target.id}`} cx={pos.x} cy={pos.y + heightOffset} r={size*0.9} fill="none" stroke="#ffaa00" strokeWidth={2} opacity={0.7} />
+        })}
+        {g.phase==='playing' && selUnit && validTargets.meleeable.map(target => {
+          if (!target.position) return null
+          const terrain = g.grid.find(h => h.q === target.position?.q && h.r === target.position?.r)?.terrain
+          const terrainHeights: Record<string, number> = {
+            open: 0, road: 0, forest: -3, ruin: -2, swamp: 1, water: 2, river: 2, lake: 3, rock: -8, mountain: -15
+          }
+          const heightOffset = terrain ? (terrainHeights[terrain] || 0) : 0
+          const pos = hexToPixel(target.position.q, target.position.r)
+          return <circle key={`melee-${target.id}`} cx={pos.x} cy={pos.y + heightOffset} r={size*0.9} fill="none" stroke="#ff4444" strokeWidth={2} opacity={0.7} />
+        })}
 
-        {g.units.filter(u => u.position).map(u => (
-          <g key={u.id}>
-            <UnitSprite
-              u={u as Unit}
-              selected={g.selectedUnitId===u.id}
-              onClick={()=>handleUnitClick(u as Unit)}
-            />
-            <ActivatedMarker u={u as Unit} />
-          </g>
-        ))}
+        {g.units.filter(u => u.position).map(u => {
+          const terrain = g.grid.find(h => h.q === u.position?.q && h.r === u.position?.r)?.terrain
+          return (
+            <g key={u.id}>
+              <UnitSprite
+                u={u as Unit}
+                selected={g.selectedUnitId===u.id}
+                onClick={()=>handleUnitClick(u as Unit)}
+                onContext={(e)=>{e.preventDefault(); setMenu({u:u as Unit, x:e.clientX, y:e.clientY})}}
+                terrain={terrain}
+              />
+              <ActivatedMarker u={u as Unit} />
+            </g>
+          )
+        })}
       </g>
     </svg>
     <TurnHUD/>
     <ActionBar/>
     {menu && <UnitContextMenu unit={menu.u} x={menu.x} y={menu.y} onClose={()=>setMenu(null)} />}
+    {g.pendingAttack && (() => {
+      const atk = g.units.find(u => u.id === g.pendingAttack!.attackerId)
+      const tgt = g.units.find(u => u.id === g.pendingAttack!.targetId)
+      const weapon = atk?.weapons.find(w => w.name === g.pendingAttack!.weaponName)
+      if (!atk || !tgt || !weapon) return null
+      
+      return (
+        <DiceDialog
+          attackerName={atk.name}
+          targetName={tgt.name}
+          weaponName={weapon.name}
+          attackerQuality={atk.quality}
+          targetDefense={tgt.defense}
+          weaponAP={weapon.ap}
+          attacks={weapon.attacks}
+          onClose={(hits, wounds) => g.executeAttack(hits, wounds)}
+        />
+      )
+    })()}
   </>
 }

@@ -24,6 +24,9 @@ export type Unit = {
   position?: { q:number; r:number }
   traits?: string[]
   activated?: boolean // NEW: for alternating activations
+  hasMoved?: boolean // Track if unit has moved this activation
+  hasRun?: boolean // Track if unit has run (cannot shoot)
+  usedWeapons?: string[] // Track which weapons have been used this activation
 }
 
 export type TerrainType =
