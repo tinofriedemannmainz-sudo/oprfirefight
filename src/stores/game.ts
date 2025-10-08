@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { Hex, Unit, Team, DiceRoll, GamePhase, Weapon } from '@/types/battle'
+import type { Hex, Unit, Team, DiceRoll, GamePhase, Weapon, ObjectiveMarker } from '@/types/battle'
 import { generateTerrain, TERRAIN_RULES, canEnter, moveCost } from '@/utils/terrain'
 import { axialDistance, axialNeighbors } from '@/utils/hex'
 
@@ -31,6 +31,8 @@ export type GameState = {
   actionMode: ActionMode
   pendingAttack?: AttackData
   counterAttackPrompt?: CounterAttackPrompt
+  objectives: ObjectiveMarker[]
+  objectiveScores: [number, number] // [player0Score, player1Score]
 
   loadTeams: (teams: Team[]) => void
   availableTeams: Team[]
@@ -62,6 +64,10 @@ export type GameState = {
   canDeployOn: (hex:Hex) => boolean
   whyCannotDeploy: (hex:Hex) => string | null
   deployNext: () => void
+
+  placeObjectives: () => ObjectiveMarker[]
+  updateObjectiveControl: () => void
+  scoreObjectives: () => void
 }
 
 export const useGame = create<GameState>((set, get) => ({
@@ -77,6 +83,8 @@ export const useGame = create<GameState>((set, get) => ({
   actionMode: undefined,
   pendingAttack: undefined,
   counterAttackPrompt: undefined,
+  objectives: [],
+  objectiveScores: [0, 0],
 
   loadTeams(teams) {
     const sorted = [...teams].sort((a,b)=>a.name.localeCompare(b.name))
@@ -204,7 +212,99 @@ export const useGame = create<GameState>((set, get) => ({
   startGame() {
     if (!get().units.every(u => u.position)) return
     for (const u of get().units){ (u as any).activated = false }
-    set({ phase:'playing', currentPlayer: 0, selectedUnitId: undefined, round:1, actionMode: undefined })
+    
+    // Place objective markers
+    const objectives = get().placeObjectives()
+    
+    set({ phase:'playing', currentPlayer: 0, selectedUnitId: undefined, round:1, actionMode: undefined, objectives, objectiveScores: [0, 0] })
+  },
+
+  placeObjectives(): ObjectiveMarker[] {
+    const { grid, size, units } = get()
+    const rows = Math.max(2, Math.min(4, Math.floor(size/3)))
+    const topLimit = -size + (rows - 1)
+    const bottomLimit = size - (rows - 1)
+    
+    // Filter valid hexes: not in deployment zones, deployable terrain
+    const validHexes = grid.filter(hex => {
+      const rules = TERRAIN_RULES[hex.terrain]
+      if (!rules || !rules.deployAllowed) return false
+      if (hex.r <= topLimit || hex.r >= bottomLimit) return false
+      return true
+    })
+    
+    if (validHexes.length === 0) return []
+    
+    const objectives: ObjectiveMarker[] = []
+    const numObjectives = Math.min(5, Math.max(3, Math.floor(validHexes.length / 10)))
+    let attempts = 0
+    const maxAttempts = 100
+    
+    while (objectives.length < numObjectives && attempts < maxAttempts) {
+      attempts++
+      const candidate = validHexes[Math.floor(Math.random() * validHexes.length)]
+      
+      // Check minimum distance from other objectives (at least 3 hexes)
+      const tooClose = objectives.some(obj => 
+        axialDistance(candidate, obj.position) < 3
+      )
+      
+      if (!tooClose) {
+        objectives.push({
+          id: objectives.length + 1,
+          position: { q: candidate.q, r: candidate.r },
+          contested: false
+        })
+      }
+    }
+    
+    return objectives
+  },
+
+  updateObjectiveControl() {
+    const { units, objectives } = get()
+    
+    objectives.forEach(obj => {
+      // Find units within 1 hex of objective (adjacent or on it)
+      const nearbyUnits = units.filter(u => {
+        if (!u.position) return false
+        const dist = axialDistance(u.position, obj.position)
+        return dist <= 1
+      })
+      
+      const player0Units = nearbyUnits.filter(u => u.owner === 0).length
+      const player1Units = nearbyUnits.filter(u => u.owner === 1).length
+      
+      if (player0Units > 0 && player1Units > 0) {
+        // Contested
+        obj.contested = true
+        obj.controlledBy = undefined
+      } else if (player0Units > 0) {
+        obj.contested = false
+        obj.controlledBy = 0
+      } else if (player1Units > 0) {
+        obj.contested = false
+        obj.controlledBy = 1
+      } else {
+        obj.contested = false
+        // Keep previous control if no one nearby
+      }
+    })
+    
+    set({ objectives: [...objectives] })
+  },
+
+  scoreObjectives() {
+    const { objectives, objectiveScores } = get()
+    const newScores: [number, number] = [...objectiveScores]
+    
+    objectives.forEach(obj => {
+      if (!obj.contested && obj.controlledBy !== undefined) {
+        newScores[obj.controlledBy]++
+      }
+    })
+    
+    set({ objectiveScores: newScores })
   },
 
   selectUnit(unitId) {
@@ -252,6 +352,9 @@ export const useGame = create<GameState>((set, get) => ({
       u.hasMoved = true
       u.hasRun = isRun
       set({ units: [...state.units] })
+      
+      // Update objective control after movement
+      get().updateObjectiveControl()
       
       // Auto-end activation only if run AND no melee enemies nearby
       if (isRun) {
@@ -429,6 +532,22 @@ export const useGame = create<GameState>((set, get) => ({
     const s = get()
     const anyUnactivated = s.units.some(u => (u as any).activated!==true && u.position)
     if (anyUnactivated) return
+    
+    // Update objective control and score at end of round
+    get().updateObjectiveControl()
+    get().scoreObjectives()
+    
+    // Check for game end after 4 rounds
+    if (s.round >= 4) {
+      const [score0, score1] = s.objectiveScores
+      let winner: 0 | 1 | 'draw'
+      if (score0 > score1) winner = 0
+      else if (score1 > score0) winner = 1
+      else winner = 'draw'
+      set({ phase: 'gameover', winners: winner })
+      return
+    }
+    
     for (const u of s.units){ 
       (u as any).activated = false
       u.hasMoved = false

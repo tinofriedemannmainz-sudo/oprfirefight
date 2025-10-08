@@ -12,6 +12,7 @@ import ActionBar from '@/components/ActionBar'
 import TurnHUD from '@/components/TurnHUD'
 import DiceDialog from '@/components/DiceDialog'
 import CounterAttackDialog from '@/components/CounterAttackDialog'
+import ObjectiveMarkerComponent from '@/components/ObjectiveMarker'
 import { reachableCosts } from '@/utils/path'
 import { gridLookup, axialNeighbors, axialDistance, hexKey } from '@/utils/hex'
 import { TERRAIN_RULES } from '@/utils/terrain'
@@ -166,6 +167,16 @@ export default function HexGrid(){
             selected={selectedHex?.q===hx.q && selectedHex?.r===hx.r}
             canDeploy={g.phase==='deploy' ? g.canDeployOn(hx) : false}
             occupantOwner={occupantByKey.get(`${hx.q},${hx.r}`)?.owner as 0|1|undefined}
+          />
+        ))}
+
+        {/* Objective Markers */}
+        {g.phase === 'playing' && g.objectives.map(obj => (
+          <ObjectiveMarkerComponent
+            key={obj.id}
+            marker={obj}
+            size={size}
+            hexToPixel={hexToPixel}
           />
         ))}
 

@@ -53,3 +53,10 @@ export type DiceRoll = {
   success: number
   target: number
 }
+
+export type ObjectiveMarker = {
+  id: number
+  position: { q: number; r: number }
+  controlledBy?: 0 | 1 // which player controls it
+  contested: boolean // true if both players have units nearby
+}

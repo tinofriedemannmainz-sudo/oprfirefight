@@ -52,7 +52,12 @@ export default function UnitSprite({
       style={{ cursor: 'pointer' }}
     >
       {/* Position at hex center, then apply perspective transform */}
-      <g transform={`translate(${x}, ${y + hexBottomY})`}>
+      <g 
+        transform={`translate(${x}, ${y + hexBottomY})`}
+        style={{
+          transition: 'transform 0.5s ease-in-out',
+        }}
+      >
         {/* Shadow for depth */}
         <ellipse
           cx={0}
