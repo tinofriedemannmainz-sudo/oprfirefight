@@ -6,7 +6,7 @@
     {
       "id": "_nVdDbE",
       "name": "Novice Leader",
-      "image": "/assets/armies/7oi8zeiqfamiur21/1-novice-leader.svg",
+      "image": "/assets/armies/sisters/720X720-bs-novice-superior-render-3.jpg",
       "quality": 5,
       "defense": 5,
       "speed": 3,
@@ -25,7 +25,7 @@
     {
       "id": "R3sC7UX",
       "name": "Fanatic Sister",
-      "image": "/assets/armies/7oi8zeiqfamiur21/2-fanatic-sister.svg",
+      "image": "/assets/armies/sisters/720X720-bs-fanatics-render-7.jpg",
       "quality": 5,
       "defense": 5,
       "speed": 3,
@@ -44,7 +44,7 @@
     {
       "id": "VHKN-IZ",
       "name": "Vanguard Sister",
-      "image": "/assets/armies/7oi8zeiqfamiur21/3-vanguard-sister.svg",
+      "image": "/assets/armies/sisters/720X720-bs-vanguard-render-14.jpg",
       "quality": 4,
       "defense": 4,
       "speed": 3,
@@ -70,7 +70,7 @@
     {
       "id": "0Bc4px2",
       "name": "Warrior Sister",
-      "image": "/assets/armies/7oi8zeiqfamiur21/4-warrior-sister.svg",
+      "image": "/assets/armies/sisters/720X720-bs-warriors-render-20.jpg",
       "quality": 4,
       "defense": 4,
       "speed": 3,
@@ -96,7 +96,7 @@
     {
       "id": "_MWEPTm",
       "name": "Celestial Warrior Sister",
-      "image": "/assets/armies/7oi8zeiqfamiur21/5-celestial-warrior-sister.svg",
+      "image": "/assets/armies/sisters/720X720-bs-celestials-render-17.jpg",
       "quality": 4,
       "defense": 4,
       "speed": 3,
@@ -122,7 +122,7 @@
     {
       "id": "fi5ZHtl",
       "name": "Novice Sisters",
-      "image": "/assets/armies/7oi8zeiqfamiur21/6-novice-sisters.svg",
+      "image": "/assets/armies/sisters/720X720-bs-novices-render-19.jpg",
       "quality": 5,
       "defense": 5,
       "speed": 3,
@@ -141,10 +141,10 @@
     {
       "id": "qgESKb_",
       "name": "Pistoleer Sister",
-      "image": "/assets/armies/7oi8zeiqfamiur21/7-pistoleer-sister.svg",
+      "image": "/assets/armies/sisters/720X720-bs-pistoleers-render-7-1.jpg",
       "quality": 4,
       "defense": 4,
-      "speed": 3,
+      "speed": 5,
       "wounds": 2,
       "maxWounds": 2,
       "weapons": [
@@ -167,7 +167,7 @@
     {
       "id": "zCo2G8c",
       "name": "Protector Sister",
-      "image": "/assets/armies/7oi8zeiqfamiur21/8-protector-sister.svg",
+      "image": "/assets/armies/sisters/720X720-bs-sacrosant-render-3.jpg",
       "quality": 4,
       "defense": 4,
       "speed": 3,
@@ -193,7 +193,7 @@
     {
       "id": "2TXWi3B",
       "name": "High Sister",
-      "image": "/assets/armies/7oi8zeiqfamiur21/9-high-sister.svg",
+      "image": "/assets/armies/sisters/720X720-bs-priestess-render-1.jpg",
       "quality": 4,
       "defense": 4,
       "speed": 3,
