@@ -22,7 +22,7 @@
         },
         {
           "name": "Dornenschwanz",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 1,
           "type": "melee"
@@ -41,14 +41,14 @@
       "weapons": [
         {
           "name": "Feuer-Pranken",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
         },
         {
           "name": "Flammenschweif",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
@@ -67,14 +67,14 @@
       "weapons": [
         {
           "name": "Doppelte Bisse",
-          "range": 1,
+          "range": 0,
           "attacks": 3,
           "ap": 0,
           "type": "melee"
         },
         {
           "name": "Flammenschweif",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
@@ -93,7 +93,7 @@
       "weapons": [
         {
           "name": "Scharfer Schnabel",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
@@ -119,14 +119,14 @@
       "weapons": [
         {
           "name": "Mächtige Fäuste",
-          "range": 1,
+          "range": 0,
           "attacks": 3,
           "ap": 1,
           "type": "melee"
         },
         {
           "name": "Lava-Axt",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
@@ -145,7 +145,7 @@
       "weapons": [
         {
           "name": "Feuerfäuste",
-          "range": 1,
+          "range": 0,
           "attacks": 3,
           "ap": 1,
           "type": "melee"

@@ -22,7 +22,7 @@
         },
         {
           "name": "Peitschschwanz",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 1,
           "type": "melee"
@@ -41,7 +41,7 @@
       "weapons": [
         {
           "name": "Flossenhieb",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
@@ -60,7 +60,7 @@
       "weapons": [
         {
           "name": "Biss",
-          "range": 1,
+          "range": 0,
           "attacks": 3,
           "ap": 0,
           "type": "melee"
@@ -79,7 +79,7 @@
       "weapons": [
         {
           "name": "Tentakelgriff",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
@@ -98,7 +98,7 @@
       "weapons": [
         {
           "name": "Scharfer Schnabel",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
@@ -124,7 +124,7 @@
       "weapons": [
         {
           "name": "Dreizack",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"

@@ -15,14 +15,14 @@
       "weapons": [
         {
           "name": "Kristall-Hörner",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
         },
         {
           "name": "Kristallkeule",
-          "range": 1,
+          "range": 0,
           "attacks": 3,
           "ap": 1,
           "type": "melee"
@@ -41,14 +41,14 @@
       "weapons": [
         {
           "name": "Gewaltige Pranken",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
         },
         {
           "name": "Brüllen",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
@@ -67,7 +67,7 @@
       "weapons": [
         {
           "name": "Doppelkeule",
-          "range": 1,
+          "range": 0,
           "attacks": 3,
           "ap": 1,
           "type": "melee"
@@ -86,14 +86,14 @@
       "weapons": [
         {
           "name": "Reißzähne",
-          "range": 1,
+          "range": 0,
           "attacks": 3,
           "ap": 0,
           "type": "melee"
         },
         {
           "name": "Kristall-Hörner",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
@@ -112,7 +112,7 @@
       "weapons": [
         {
           "name": "Steinfäuste",
-          "range": 1,
+          "range": 0,
           "attacks": 3,
           "ap": 1,
           "type": "melee"
@@ -131,7 +131,7 @@
       "weapons": [
         {
           "name": "Reißzähne",
-          "range": 1,
+          "range": 0,
           "attacks": 3,
           "ap": 0,
           "type": "melee"

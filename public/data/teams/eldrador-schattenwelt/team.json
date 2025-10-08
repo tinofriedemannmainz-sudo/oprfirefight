@@ -15,14 +15,14 @@
       "weapons": [
         {
           "name": "Schattenodem",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
         },
         {
           "name": "Peitschschwanz",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 1,
           "type": "melee"
@@ -41,7 +41,7 @@
       "weapons": [
         {
           "name": "Nachtkrallen",
-          "range": 1,
+          "range": 0,
           "attacks": 3,
           "ap": 0,
           "type": "melee"
@@ -60,14 +60,14 @@
       "weapons": [
         {
           "name": "Schrei",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
         },
         {
           "name": "Schnabelhieb",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
@@ -86,7 +86,7 @@
       "weapons": [
         {
           "name": "Wuchtschlag",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
@@ -105,7 +105,7 @@
       "weapons": [
         {
           "name": "Seelenkälte",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"
