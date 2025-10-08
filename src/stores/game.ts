@@ -356,21 +356,32 @@ export const useGame = create<GameState>((set, get) => ({
       // Update objective control after movement
       get().updateObjectiveControl()
       
-      // Auto-end activation only if run AND no melee enemies nearby
-      if (isRun) {
-        // Check if there are any enemies in melee range
-        const hasNearbyEnemies = state.units.some(enemy => {
-          if (!enemy.position || enemy.owner === u.owner) return false
-          const enemyDist = axialDistance(hex, enemy.position)
-          return enemyDist === 1
-        })
+      // Check if unit has any valid targets after moving
+      const hasValidTargets = state.units.some(enemy => {
+        if (!enemy.position || enemy.owner === u.owner) return false
+        const enemyDist = axialDistance(hex, enemy.position)
         
-        // Check if unit has melee weapons (range 0)
-        const hasMeleeWeapons = u.weapons.some(w => (w.range || 0) === 0)
-        
-        if (!hasNearbyEnemies || !hasMeleeWeapons) {
-          setTimeout(() => get().endActivation(), 500)
+        // Check melee range
+        if (enemyDist === 1) {
+          const hasMeleeWeapons = u.weapons.some(w => (w.range || 0) === 0)
+          if (hasMeleeWeapons) return true
         }
+        
+        // Check ranged weapons (only if not running)
+        if (!isRun) {
+          for (const weapon of u.weapons) {
+            if (weapon.range && weapon.range > 0 && enemyDist <= weapon.range) {
+              return true
+            }
+          }
+        }
+        
+        return false
+      })
+      
+      // Auto-end activation if no valid targets
+      if (!hasValidTargets) {
+        setTimeout(() => get().endActivation(), 500)
       }
     }
   },

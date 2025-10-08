@@ -15,19 +15,19 @@ export default function DeployPanel(){
   const canStart = g.units.length > 0 && g.units.every(u => u.position)
 
   return (
-    <div style={{position:'fixed', right:12, bottom:12, zIndex:60, maxWidth:520}}>
-      <div style={{display:'flex', gap:8, flexWrap:'wrap'}}>
+    <div style={{position:'fixed', right:12, top:12, zIndex:60, maxWidth:520}}>
+      <div style={{display:'flex', gap:8, flexWrap:'wrap', justifyContent:'flex-end'}}>
         <button className="btn" onClick={()=>setOpen(o=>!o)}>
-          {open ? 'Aufstell-Liste schliessen' : 'Aufstell-Liste oeffnen'}
+          {open ? '❌ Liste' : '📋 Liste'}
         </button>
         <button className="btn" onClick={()=>g.autoDeployUnits()} title="Alle Einheiten automatisch platzieren">
-          Automatische Aufstellung
+          🤖 Auto
         </button>
         <button className="btn" onClick={()=>g.deployNext()} title="Zum anderen Spieler wechseln">
-          Fertig mit Aufstellung (zu Spieler {other+1})
+          ➡️ Spieler {other+1}
         </button>
         <button className="btn" onClick={()=>g.startGame()} disabled={!canStart} title={!canStart ? 'Erst muessen alle Einheiten beider Spieler platziert werden.' : ''}>
-          Spiel starten
+          ▶️ Start
         </button>
       </div>
       {open && (

@@ -12,6 +12,9 @@ export default function ObjectiveMarkerComponent({
 }) {
   const pos = hexToPixel(marker.position.q, marker.position.r);
   const markerSize = size * 0.6;
+  const hoverHeight = -30; // Height above ground (negative = up)
+  const controlRadius = size * 1.5; // Control zone radius
+  const beamWidth = controlRadius * 2; // Light cone covers entire control zone
 
   // Color based on control status
   let fillColor = '#4a5568'; // neutral gray
@@ -29,8 +32,58 @@ export default function ObjectiveMarkerComponent({
   }
 
   return (
-    <g transform={`translate(${pos.x}, ${pos.y})`}>
-      {/* Control zone circle */}
+    <g transform={`translate(${pos.x}, ${pos.y})`} style={{ pointerEvents: 'none' }}>
+      {/* Light cone from marker to ground */}
+      <defs>
+        <linearGradient id={`beam-${marker.id}`} x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor={glowColor} stopOpacity={0.8} />
+          <stop offset="50%" stopColor={glowColor} stopOpacity={0.4} />
+          <stop offset="100%" stopColor={glowColor} stopOpacity={0.05} />
+        </linearGradient>
+        <radialGradient id={`groundGlow-${marker.id}`}>
+          <stop offset="0%" stopColor={glowColor} stopOpacity={0.6} />
+          <stop offset="70%" stopColor={glowColor} stopOpacity={0.2} />
+          <stop offset="100%" stopColor={glowColor} stopOpacity={0} />
+        </radialGradient>
+      </defs>
+      
+      {/* Cone-shaped light beam covering control zone */}
+      <polygon
+        points={`${-markerSize * 0.4},${hoverHeight} ${markerSize * 0.4},${hoverHeight} ${beamWidth / 2},0 ${-beamWidth / 2},0`}
+        fill={`url(#beam-${marker.id})`}
+        opacity={0.7}
+        style={{
+          animation: 'glowPulse 3s ease-in-out infinite',
+        }}
+      />
+      
+      {/* Stronger ground glow where light hits */}
+      <circle
+        cx={0}
+        cy={0}
+        r={controlRadius}
+        fill={`url(#groundGlow-${marker.id})`}
+        opacity={0.8}
+        style={{
+          animation: 'glowPulse 3s ease-in-out infinite',
+        }}
+      />
+      
+      {/* Additional bright center spot */}
+      <ellipse
+        cx={0}
+        cy={0}
+        rx={controlRadius * 0.6}
+        ry={controlRadius * 0.3}
+        fill={glowColor}
+        opacity={0.5}
+        filter="blur(8px)"
+        style={{
+          animation: 'glowPulse 2.5s ease-in-out infinite',
+        }}
+      />
+
+      {/* Control zone circle on ground */}
       <circle
         cx={0}
         cy={0}
@@ -39,24 +92,27 @@ export default function ObjectiveMarkerComponent({
         stroke={glowColor}
         strokeWidth={2}
         strokeDasharray="8 4"
-        opacity={0.4}
+        opacity={0.3}
         style={{
           animation: 'glowPulse 2s ease-in-out infinite',
         }}
       />
 
-      {/* Outer glow */}
-      <circle
-        cx={0}
-        cy={0}
-        r={markerSize + 4}
-        fill={glowColor}
-        opacity={0.3}
-        filter="blur(4px)"
-      />
-
-      {/* Main hexagonal marker */}
-      <g>
+      {/* Main hexagonal marker - floating in the air */}
+      <g transform={`translate(0, ${hoverHeight})`}>
+        {/* Outer glow */}
+        <circle
+          cx={0}
+          cy={0}
+          r={markerSize + 6}
+          fill={glowColor}
+          opacity={0.2}
+          filter="blur(8px)"
+          style={{
+            animation: 'glowPulse 2s ease-in-out infinite',
+          }}
+        />
+        
         {/* Hexagon background */}
         <polygon
           points={Array.from({ length: 6 }, (_, i) => {
@@ -69,7 +125,7 @@ export default function ObjectiveMarkerComponent({
           stroke={glowColor}
           strokeWidth={2}
           style={{
-            filter: `drop-shadow(0 0 8px ${glowColor})`,
+            filter: `drop-shadow(0 4px 12px ${glowColor})`,
           }}
         />
 
@@ -128,34 +184,34 @@ export default function ObjectiveMarkerComponent({
             animation: 'spin 8s linear infinite',
           }}
         />
-      </g>
 
-      {/* Status indicator */}
-      {marker.contested && (
-        <g transform={`translate(0, ${-markerSize - 8})`}>
-          <rect
-            x={-15}
-            y={-6}
-            width={30}
-            height={12}
-            fill="#d97706"
-            stroke="#f59e0b"
-            strokeWidth={1}
-            rx={6}
-          />
-          <text
-            x={0}
-            y={0}
-            textAnchor="middle"
-            dominantBaseline="central"
-            fill="#fff"
-            fontSize={8}
-            fontWeight="bold"
-          >
-            !
-          </text>
-        </g>
-      )}
+        {/* Status indicator */}
+        {marker.contested && (
+          <g transform={`translate(0, ${-markerSize - 8})`}>
+            <rect
+              x={-15}
+              y={-6}
+              width={30}
+              height={12}
+              fill="#d97706"
+              stroke="#f59e0b"
+              strokeWidth={1}
+              rx={6}
+            />
+            <text
+              x={0}
+              y={0}
+              textAnchor="middle"
+              dominantBaseline="central"
+              fill="#fff"
+              fontSize={8}
+              fontWeight="bold"
+            >
+              !
+            </text>
+          </g>
+        )}
+      </g>
     </g>
   );
 }

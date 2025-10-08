@@ -146,7 +146,7 @@ export default function HexGrid(){
       viewBox={`0 0 ${fieldWidth} ${fieldHeight}`} 
       preserveAspectRatio="xMidYMid meet"
       style={{ 
-        transform: 'perspective(2000px) rotateX(25deg)',
+        transform: 'perspective(1500px) rotateX(45deg)',
         transformOrigin: 'center center'
       }}
     >
