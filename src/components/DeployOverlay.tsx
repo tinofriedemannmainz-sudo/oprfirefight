@@ -17,11 +17,11 @@ export default function DeployOverlay({ grid, canDeploy }:{ grid:Hex[]; canDeplo
     return { points: pts.join(' ') }
   }
 
-  return <g>
+  return <g pointerEvents="none">
     {grid.map(hx => {
       if (!canDeploy(hx)) return null
       const { points } = hexToPolyPoints(hx.q,hx.r)
-      return <polygon key={`d-${hx.q},${hx.r}`} points={points} fill="rgba(76,195,255,0.12)" stroke="rgba(76,195,255,0.55)" strokeWidth={1.5} />
+      return <polygon key={`d-${hx.q},${hx.r}`} points={points} fill="rgba(76,195,255,0.18)" stroke="rgba(76,195,255,0.75)" strokeWidth={2} />
     })}
   </g>
 }

@@ -8,11 +8,11 @@ type OverlayProps = {
   runCosts: Map<string, number>
   size: number
   grid: Hex[]
-  chargeTargets: { unit: Unit }[]
-  rangedTargets: Unit[]
+  chargeTargets?: { unit: Unit }[]
+  rangedTargets?: Unit[]
 }
 
-export default function OverlayLayer({ moveCosts, runCosts, grid, size, chargeTargets, rangedTargets }: OverlayProps){
+export default function OverlayLayer({ moveCosts, runCosts, grid, size, chargeTargets = [], rangedTargets = [] }: OverlayProps){
   const w = Math.sqrt(3) * size
   const h = 2 * size
 
@@ -28,27 +28,45 @@ export default function OverlayLayer({ moveCosts, runCosts, grid, size, chargeTa
   }
 
   return <g pointerEvents="none">
-    {grid.map(h => {
-      const k = hexKey(h.q,h.r)
-      if (!moveCosts.has(k)) return null
-      const { points } = hexToPolyPoints(h.q,h.r)
-      return <polygon key={`m-${k}`} points={points} fill="rgba(76,195,255,0.22)" stroke="rgba(76,195,255,0.8)" strokeWidth={1.8} />
-    })}
+    <defs>
+      <filter id="moveGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="2" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+      <filter id="runGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="2.2" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+
     {grid.map(h => {
       const k = hexKey(h.q,h.r)
       if (!runCosts.has(k)) return null
-      const { points } = hexToPolyPoints(h.q,h.r)
-      return <polygon key={`r-${k}`} points={points} fill="rgba(255,212,106,0.2)" stroke="rgba(255,212,106,0.75)" strokeWidth={1.6} />
+      const { x, y, points } = hexToPolyPoints(h.q,h.r)
+      return (
+        <g key={`r-${k}`} filter="url(#runGlow)">
+          <polygon points={points} fill="rgba(255, 185, 56, 0.35)" stroke="rgba(255, 185, 56, 0.95)" strokeWidth={3} />
+          <circle cx={x} cy={y} r={4} fill="rgba(255,185,56,0.95)" />
+        </g>
+      )
     })}
-    {chargeTargets.map(({unit}) => {
-      if (!unit.position) return null
-      const { x, y } = hexToPolyPoints(unit.position.q, unit.position.r)
-      return <circle key={`c-${unit.id}`} cx={x} cy={y} r={18} fill="none" stroke="rgba(255,110,110,0.95)" strokeWidth={3} />
-    })}
-    {rangedTargets.map(u => {
-      if (!u.position) return null
-      const { x, y } = hexToPolyPoints(u.position.q, u.position.r)
-      return <circle key={`rt-${u.id}`} cx={x} cy={y} r={10} fill="rgba(255,120,120,0.9)" />
+
+    {grid.map(h => {
+      const k = hexKey(h.q,h.r)
+      if (!moveCosts.has(k)) return null
+      const { x, y, points } = hexToPolyPoints(h.q,h.r)
+      return (
+        <g key={`m-${k}`} filter="url(#moveGlow)">
+          <polygon points={points} fill="rgba(56, 190, 255, 0.45)" stroke="rgba(56, 190, 255, 1)" strokeWidth={3.2} />
+          <circle cx={x} cy={y} r={4} fill="rgba(56,190,255,1)" />
+        </g>
+      )
     })}
   </g>
 }
