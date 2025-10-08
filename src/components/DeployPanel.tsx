@@ -16,9 +16,12 @@ export default function DeployPanel(){
 
   return (
     <div style={{position:'fixed', right:12, bottom:12, zIndex:60, maxWidth:520}}>
-      <div style={{display:'flex', gap:8}}>
+      <div style={{display:'flex', gap:8, flexWrap:'wrap'}}>
         <button className="btn" onClick={()=>setOpen(o=>!o)}>
           {open ? 'Aufstell-Liste schliessen' : 'Aufstell-Liste oeffnen'}
+        </button>
+        <button className="btn" onClick={()=>g.autoDeployUnits()} title="Alle Einheiten automatisch platzieren">
+          Automatische Aufstellung
         </button>
         <button className="btn" onClick={()=>g.deployNext()} title="Zum anderen Spieler wechseln">
           Fertig mit Aufstellung (zu Spieler {other+1})

@@ -26,6 +26,7 @@ export type GameState = {
 
   regenerate: (size?:number) => void
   startDeploy: () => void
+  autoDeployUnits: () => void
   placeUnit: (unitId:string, hex:Hex) => void
   unplaceUnit: (unitId:string) => void
   startGame: () => void
@@ -120,6 +121,47 @@ export const useGame = create<GameState>((set, get) => ({
     if (s.phase !== 'deploy') return
     const next = s.currentPlayer === 0 ? 1 : 0
     set({ currentPlayer: next, selectedUnitId: undefined })
+  },
+
+  autoDeployUnits() {
+    const { units, grid, size } = get()
+    const rows = Math.max(2, Math.min(4, Math.floor(size/3)))
+    const topLimit = -size + (rows - 1)
+    const bottomLimit = size - (rows - 1)
+
+    // Get valid deployment hexes for each player
+    const validHexesP1 = grid.filter(h => {
+      const rules = TERRAIN_RULES[h.terrain]
+      return rules && rules.deployAllowed && h.r <= topLimit
+    })
+    const validHexesP2 = grid.filter(h => {
+      const rules = TERRAIN_RULES[h.terrain]
+      return rules && rules.deployAllowed && h.r >= bottomLimit
+    })
+
+    // Deploy each unit
+    let p1Index = 0
+    let p2Index = 0
+
+    units.forEach(unit => {
+      if (unit.owner === 0 && p1Index < validHexesP1.length) {
+        const hex = validHexesP1[p1Index]
+        const occupied = units.some(u => u.position && u.position.q === hex.q && u.position.r === hex.r && u.id !== unit.id)
+        if (!occupied) {
+          unit.position = { q: hex.q, r: hex.r }
+          p1Index++
+        }
+      } else if (unit.owner === 1 && p2Index < validHexesP2.length) {
+        const hex = validHexesP2[p2Index]
+        const occupied = units.some(u => u.position && u.position.q === hex.q && u.position.r === hex.r && u.id !== unit.id)
+        if (!occupied) {
+          unit.position = { q: hex.q, r: hex.r }
+          p2Index++
+        }
+      }
+    })
+
+    set({ units: [...units] })
   },
 
   placeUnit(unitId, hex) {
