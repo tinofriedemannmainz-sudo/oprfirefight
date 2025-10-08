@@ -27,6 +27,8 @@ export type Unit = {
   hasMoved?: boolean // Track if unit has moved this activation
   hasRun?: boolean // Track if unit has run (cannot shoot)
   usedWeapons?: string[] // Track which weapons have been used this activation
+  hasAttackedInMelee?: boolean // Track if unit has attacked in melee this round (full strength)
+  isExhausted?: boolean // Track if unit is exhausted (hits only on 6)
 }
 
 export type TerrainType =

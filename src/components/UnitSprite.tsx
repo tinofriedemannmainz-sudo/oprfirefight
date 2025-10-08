@@ -38,7 +38,7 @@ export default function UnitSprite({
 
   // Position unit so bottom edge is at the two bottom corners of the hex
   // Tilt more forward for stronger 3D effect
-  const tiltAngle = 40; // Increased tilt for more dramatic 3D effect
+  const tiltAngle = 35; // Increased tilt for more dramatic 3D effect
   const scaleY = Math.cos((tiltAngle * Math.PI) / 180); // Compress height due to perspective
   const hexBottomY = size * 0.5; // Distance from hex center to bottom edge
 

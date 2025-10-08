@@ -9,6 +9,12 @@ export type AttackData = {
   attackerId: string
   targetId: string
   weaponName: string
+  isCounterAttack?: boolean
+}
+
+export type CounterAttackPrompt = {
+  defenderId: string
+  attackerId: string
 }
 
 export type GameState = {
@@ -24,6 +30,7 @@ export type GameState = {
   round: number
   actionMode: ActionMode
   pendingAttack?: AttackData
+  counterAttackPrompt?: CounterAttackPrompt
 
   loadTeams: (teams: Team[]) => void
   availableTeams: Team[]
@@ -39,8 +46,10 @@ export type GameState = {
   selectUnit: (unitId?:string) => void
   setActionMode: (mode: ActionMode) => void
   moveUnit: (unitId:string, hex:Hex, isRun?: boolean) => void
-  attack: (attackerId:string, targetId:string, weaponName:string) => void
+  attack: (attackerId:string, targetId:string, weaponName:string, isCounterAttack?: boolean) => void
   executeAttack: (hits: number, wounds: number) => void
+  acceptCounterAttack: () => void
+  declineCounterAttack: () => void
   endTurn: () => void
   getValidTargets: (unitId: string) => { shootable: Unit[], meleeable: Unit[] }
   canUnitShoot: (unitId: string) => boolean
@@ -67,6 +76,7 @@ export const useGame = create<GameState>((set, get) => ({
   round: 1,
   actionMode: undefined,
   pendingAttack: undefined,
+  counterAttackPrompt: undefined,
 
   loadTeams(teams) {
     const sorted = [...teams].sort((a,b)=>a.name.localeCompare(b.name))
@@ -262,14 +272,14 @@ export const useGame = create<GameState>((set, get) => ({
     }
   },
 
-  attack(attackerId, targetId, weaponName) {
+  attack(attackerId, targetId, weaponName, isCounterAttack = false) {
     const state = get()
     const atk = state.units.find(u => u.id === attackerId)
     const tgt = state.units.find(u => u.id === targetId)
     if (!atk || !tgt || !atk.position || !tgt.position) return
     
-    // Check if weapon already used
-    if (atk.usedWeapons?.includes(weaponName)) return
+    // Check if weapon already used (only for non-counter attacks)
+    if (!isCounterAttack && atk.usedWeapons?.includes(weaponName)) return
     
     const weapon = atk.weapons.find(w => w.name === weaponName) || atk.weapons[0]
     if (!weapon) return
@@ -288,7 +298,7 @@ export const useGame = create<GameState>((set, get) => ({
     }
 
     // Open dice dialog instead of rolling immediately
-    set({ pendingAttack: { attackerId, targetId, weaponName } })
+    set({ pendingAttack: { attackerId, targetId, weaponName, isCounterAttack } })
   },
 
   executeAttack(hits, wounds) {
@@ -300,23 +310,96 @@ export const useGame = create<GameState>((set, get) => ({
     const tgt = state.units.find(u => u.id === pendingAttack.targetId)
     if (!atk || !tgt) return
 
+    const weapon = atk.weapons.find(w => w.name === pendingAttack.weaponName)
+    const isMelee = weapon && (weapon.range || 0) === 0
+    const isCounterAttack = pendingAttack.isCounterAttack
+
     // Apply wounds
     tgt.wounds -= wounds
     let units = state.units
-    if (tgt.wounds <= 0) { units = state.units.filter(u => u.id !== tgt.id) }
+    const targetDied = tgt.wounds <= 0
+    if (targetDied) { 
+      units = state.units.filter(u => u.id !== tgt.id) 
+    }
     
-    // Mark weapon as used
-    if (!atk.usedWeapons) atk.usedWeapons = []
-    atk.usedWeapons.push(pendingAttack.weaponName)
+    // Mark weapon as used (only for non-counter attacks)
+    if (!isCounterAttack) {
+      if (!atk.usedWeapons) atk.usedWeapons = []
+      atk.usedWeapons.push(pendingAttack.weaponName)
+      
+      // Mark as having attacked in melee (for exhaustion tracking)
+      if (isMelee) {
+        atk.hasAttackedInMelee = true
+        // If already exhausted, stays exhausted. Otherwise becomes exhausted after first melee attack
+        if (!atk.isExhausted) {
+          atk.isExhausted = true
+        }
+      }
+    }
     
     set({ units: [...units], pendingAttack: undefined })
     
-    // Check if all weapons used or no more actions possible
-    const allWeaponsUsed = atk.weapons.every(w => atk.usedWeapons?.includes(w.name))
-    const canStillAct = !atk.hasMoved || !allWeaponsUsed
+    // Counter-attack prompt: If this was a melee attack and target is still alive and has melee weapons
+    if (isMelee && !isCounterAttack && !targetDied && tgt.wounds > 0) {
+      const targetHasMeleeWeapons = tgt.weapons.some(w => (w.range || 0) === 0)
+      if (targetHasMeleeWeapons) {
+        // Show counter-attack prompt
+        set({ counterAttackPrompt: { defenderId: tgt.id, attackerId: atk.id } })
+        return // Don't end activation yet, wait for player decision
+      }
+    }
     
-    if (!canStillAct || allWeaponsUsed) {
-      setTimeout(() => get().endActivation(), 500)
+    // Check if all weapons used or no more actions possible (only for non-counter attacks)
+    if (!isCounterAttack) {
+      const allWeaponsUsed = atk.weapons.every(w => atk.usedWeapons?.includes(w.name))
+      const canStillAct = !atk.hasMoved || !allWeaponsUsed
+      
+      if (!canStillAct || allWeaponsUsed) {
+        setTimeout(() => get().endActivation(), 500)
+      }
+    }
+  },
+
+  acceptCounterAttack() {
+    const state = get()
+    const prompt = state.counterAttackPrompt
+    if (!prompt) return
+
+    const defender = state.units.find(u => u.id === prompt.defenderId)
+    const attacker = state.units.find(u => u.id === prompt.attackerId)
+    if (!defender || !attacker) return
+
+    // Find first melee weapon
+    const meleeWeapon = defender.weapons.find(w => (w.range || 0) === 0)
+    if (!meleeWeapon) return
+
+    // Clear prompt and trigger counter-attack
+    set({ counterAttackPrompt: undefined })
+    
+    // Mark defender as having attacked in melee if not already
+    if (!defender.hasAttackedInMelee) {
+      defender.hasAttackedInMelee = true
+      defender.isExhausted = true
+    }
+    
+    setTimeout(() => {
+      get().attack(defender.id, attacker.id, meleeWeapon.name, true)
+    }, 300)
+  },
+
+  declineCounterAttack() {
+    set({ counterAttackPrompt: undefined })
+    
+    // Check if activation should end
+    const state = get()
+    const atk = state.units.find(u => u.id === state.selectedUnitId)
+    if (atk) {
+      const allWeaponsUsed = atk.weapons.every(w => atk.usedWeapons?.includes(w.name))
+      const canStillAct = !atk.hasMoved || !allWeaponsUsed
+      
+      if (!canStillAct || allWeaponsUsed) {
+        setTimeout(() => get().endActivation(), 500)
+      }
     }
   },
 
@@ -351,6 +434,9 @@ export const useGame = create<GameState>((set, get) => ({
       u.hasMoved = false
       u.hasRun = false
       u.usedWeapons = []
+      // Reset melee exhaustion at start of new round
+      u.hasAttackedInMelee = false
+      u.isExhausted = false
     }
     set({ round: s.round + 1, currentPlayer: 0, selectedUnitId: undefined, actionMode: undefined })
   },

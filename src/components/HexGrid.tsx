@@ -11,6 +11,7 @@ import DeployOverlay from '@/components/DeployOverlay'
 import ActionBar from '@/components/ActionBar'
 import TurnHUD from '@/components/TurnHUD'
 import DiceDialog from '@/components/DiceDialog'
+import CounterAttackDialog from '@/components/CounterAttackDialog'
 import { reachableCosts } from '@/utils/path'
 import { gridLookup, axialNeighbors, axialDistance, hexKey } from '@/utils/hex'
 import { TERRAIN_RULES } from '@/utils/terrain'
@@ -32,14 +33,31 @@ export default function HexGrid(){
     return { cx: x + size*Math.cos(ang), cy: y + size*Math.sin(ang) }
   }
 
-  const positions = g.grid.map(hex => hexToPixel(hex.q, hex.r))
+  // Calculate bounds including terrain heights
+  const terrainHeights: Record<string, number> = {
+    open: 0, road: 0, forest: -3, ruin: -2, swamp: 1, water: 2, river: 2, lake: 3, rock: -8, mountain: -15
+  }
+  
+  const positions = g.grid.map(hex => {
+    const terrain = hex.terrain
+    const heightOffset = terrainHeights[terrain] || 0
+    const pos = hexToPixel(hex.q, hex.r)
+    return { x: pos.x, y: pos.y + heightOffset }
+  })
+  
   const minX = positions.length ? Math.min(...positions.map(p => p.x)) : 0
   const maxX = positions.length ? Math.max(...positions.map(p => p.x)) : 0
   const minY = positions.length ? Math.min(...positions.map(p => p.y)) : 0
   const maxY = positions.length ? Math.max(...positions.map(p => p.y)) : 0
-  const width = 1200, height = 800
-  const translateX = (width - (maxX - minX)) / 2 - minX
-  const translateY = (height - (maxY - minY)) / 2 - minY
+  
+  // Add padding around the field
+  const padding = size * 3
+  const fieldWidth = maxX - minX + padding * 2
+  const fieldHeight = maxY - minY + padding * 2
+  
+  // Center the field
+  const translateX = -minX + padding
+  const translateY = -minY + padding
 
   const map = useMemo(()=>gridLookup(g.grid), [g.grid])
 
@@ -123,7 +141,7 @@ export default function HexGrid(){
     <svg 
       width="100%" 
       height="100%" 
-      viewBox={`0 0 ${width} ${height}`} 
+      viewBox={`0 0 ${fieldWidth} ${fieldHeight}`} 
       preserveAspectRatio="xMidYMid meet"
       style={{ 
         transform: 'perspective(2000px) rotateX(25deg)',
@@ -162,7 +180,7 @@ export default function HexGrid(){
           />
         )}
         
-        {/* Highlight valid targets */}
+        {/* Highlight valid targets with colored hex overlays */}
         {g.phase==='playing' && selUnit && validTargets.shootable.map(target => {
           if (!target.position) return null
           const terrain = g.grid.find(h => h.q === target.position?.q && h.r === target.position?.r)?.terrain
@@ -171,7 +189,25 @@ export default function HexGrid(){
           }
           const heightOffset = terrain ? (terrainHeights[terrain] || 0) : 0
           const pos = hexToPixel(target.position.q, target.position.r)
-          return <circle key={`shoot-${target.id}`} cx={pos.x} cy={pos.y + heightOffset} r={size*0.9} fill="none" stroke="#ffaa00" strokeWidth={2} opacity={0.7} />
+          
+          // Create hex polygon points
+          const hexPoints = []
+          for (let i = 0; i < 6; i++) {
+            const angle = (Math.PI / 3) * i + Math.PI / 6
+            hexPoints.push(`${pos.x + size * Math.cos(angle)},${pos.y + heightOffset + size * Math.sin(angle)}`)
+          }
+          
+          return (
+            <g key={`shoot-${target.id}`}>
+              <polygon 
+                points={hexPoints.join(' ')} 
+                fill="rgba(255, 170, 0, 0.35)" 
+                stroke="rgba(255, 170, 0, 1)" 
+                strokeWidth={3}
+              />
+              <circle cx={pos.x} cy={pos.y + heightOffset} r={5} fill="rgba(255, 170, 0, 1)" />
+            </g>
+          )
         })}
         {g.phase==='playing' && selUnit && validTargets.meleeable.map(target => {
           if (!target.position) return null
@@ -181,7 +217,25 @@ export default function HexGrid(){
           }
           const heightOffset = terrain ? (terrainHeights[terrain] || 0) : 0
           const pos = hexToPixel(target.position.q, target.position.r)
-          return <circle key={`melee-${target.id}`} cx={pos.x} cy={pos.y + heightOffset} r={size*0.9} fill="none" stroke="#ff4444" strokeWidth={2} opacity={0.7} />
+          
+          // Create hex polygon points
+          const hexPoints = []
+          for (let i = 0; i < 6; i++) {
+            const angle = (Math.PI / 3) * i + Math.PI / 6
+            hexPoints.push(`${pos.x + size * Math.cos(angle)},${pos.y + heightOffset + size * Math.sin(angle)}`)
+          }
+          
+          return (
+            <g key={`melee-${target.id}`}>
+              <polygon 
+                points={hexPoints.join(' ')} 
+                fill="rgba(255, 50, 200, 0.4)" 
+                stroke="rgba(255, 50, 200, 1)" 
+                strokeWidth={4}
+              />
+              <circle cx={pos.x} cy={pos.y + heightOffset} r={6} fill="rgba(255, 50, 200, 1)" />
+            </g>
+          )
         })}
 
         {g.units.filter(u => u.position).map(u => {
@@ -204,6 +258,7 @@ export default function HexGrid(){
     <TurnHUD/>
     <ActionBar/>
     {menu && <UnitContextMenu unit={menu.u} x={menu.x} y={menu.y} onClose={()=>setMenu(null)} />}
+    <CounterAttackDialog />
     {g.pendingAttack && (() => {
       const atk = g.units.find(u => u.id === g.pendingAttack!.attackerId)
       const tgt = g.units.find(u => u.id === g.pendingAttack!.targetId)
@@ -219,6 +274,8 @@ export default function HexGrid(){
           targetDefense={tgt.defense}
           weaponAP={weapon.ap}
           attacks={weapon.attacks}
+          isExhausted={atk.isExhausted}
+          isCounterAttack={g.pendingAttack.isCounterAttack}
           onClose={(hits, wounds) => g.executeAttack(hits, wounds)}
         />
       )

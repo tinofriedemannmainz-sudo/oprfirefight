@@ -8,6 +8,8 @@ type DiceDialogProps = {
   targetDefense: number
   weaponAP: number
   attacks: number
+  isExhausted?: boolean
+  isCounterAttack?: boolean
   onClose: (hits: number, wounds: number) => void
 }
 
@@ -19,6 +21,8 @@ export default function DiceDialog({
   targetDefense,
   weaponAP,
   attacks,
+  isExhausted,
+  isCounterAttack,
   onClose
 }: DiceDialogProps) {
   const [phase, setPhase] = useState<'ready' | 'hit-rolling' | 'hit-result' | 'save-rolling' | 'save-result' | 'done'>('ready')
@@ -35,7 +39,9 @@ export default function DiceDialog({
     setPhase('hit-rolling')
     const rolls = rollDice(attacks)
     setHitRolls(rolls)
-    const successCount = rolls.filter(d => d >= attackerQuality).length
+    // If exhausted, only 6s hit. Otherwise use normal quality
+    const hitThreshold = isExhausted ? 6 : attackerQuality
+    const successCount = rolls.filter(d => d >= hitThreshold).length
     setHits(successCount)
     
     setTimeout(() => {
@@ -109,6 +115,7 @@ export default function DiceDialog({
   }
 
   const saveTarget = Math.max(2, Math.min(6, targetDefense + weaponAP))
+  const hitThreshold = isExhausted ? 6 : attackerQuality
 
   return (
     <div style={{
@@ -134,11 +141,16 @@ export default function DiceDialog({
       }}>
         <div style={{ marginBottom: 24 }}>
           <h2 style={{ color: '#cfe3ff', fontSize: 24, marginBottom: 8 }}>
-            {weaponName}
+            {weaponName} {isCounterAttack && '(Zurückschlagen)'}
           </h2>
           <div style={{ color: '#9ca3af', fontSize: 14 }}>
             {attackerName} greift {targetName} an
           </div>
+          {isExhausted && (
+            <div style={{ color: '#ff8a8a', fontSize: 13, marginTop: 4 }}>
+              ⚠️ Erschöpft - trifft nur auf 6
+            </div>
+          )}
         </div>
 
         {phase === 'ready' && (
@@ -146,7 +158,7 @@ export default function DiceDialog({
             <div style={{ marginBottom: 24, color: '#cfe3ff' }}>
               <div style={{ fontSize: 16, marginBottom: 12 }}>Trefferwurf:</div>
               <div style={{ fontSize: 14, color: '#9ca3af' }}>
-                Würfle {attacks} Würfel. Erfolg bei {attackerQuality}+
+                Würfle {attacks} Würfel. Erfolg bei {hitThreshold}+
               </div>
             </div>
             <button
@@ -172,10 +184,10 @@ export default function DiceDialog({
         {(phase === 'hit-rolling' || phase === 'hit-result') && (
           <div>
             <div style={{ marginBottom: 16, color: '#cfe3ff', fontSize: 16 }}>
-              Trefferwurf (Ziel: {attackerQuality}+)
+              Trefferwurf (Ziel: {hitThreshold}+)
             </div>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 24 }}>
-              {hitRolls.map((roll, i) => renderDie(roll, roll >= attackerQuality, i))}
+              {hitRolls.map((roll, i) => renderDie(roll, roll >= hitThreshold, i))}
             </div>
             {phase === 'hit-result' && (
               <div>

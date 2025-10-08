@@ -43,9 +43,9 @@ export default function Instructions(){
   }
 
   return (
-    <div style={{position:'fixed', left:12, top:12, zIndex:60}}>
+    <div style={{position:'fixed', right:12, top:12, zIndex:60}}>
       <button className="btn" onClick={()=>setOpen(o=>!o)}>
-        {open ? 'Anleitung schliessen' : 'Anleitung anzeigen'}
+        {open ? 'Anleitung schließen' : 'Anleitung anzeigen'}
       </button>
       {open && (
         <div className="panel" style={{marginTop:8, maxWidth:420}}>
