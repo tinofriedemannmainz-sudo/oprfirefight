@@ -53,6 +53,7 @@ export type GameState = {
   acceptCounterAttack: () => void
   declineCounterAttack: () => void
   endTurn: () => void
+  skipTurn: () => void
   getValidTargets: (unitId: string) => { shootable: Unit[], meleeable: Unit[] }
   canUnitShoot: (unitId: string) => boolean
   getAvailableWeapons: (unitId: string) => Weapon[]
@@ -441,13 +442,16 @@ export const useGame = create<GameState>((set, get) => ({
       if (!atk.usedWeapons) atk.usedWeapons = []
       atk.usedWeapons.push(pendingAttack.weaponName)
       
-      // Mark as having attacked in melee (for exhaustion tracking)
+      // Exhaustion logic for melee:
+      // - If unit has already attacked in melee in a PREVIOUS activation, it becomes exhausted
+      // - Mark that this unit attacked in melee THIS activation (for future activations)
       if (isMelee) {
-        atk.hasAttackedInMelee = true
-        // If already exhausted, stays exhausted. Otherwise becomes exhausted after first melee attack
-        if (!atk.isExhausted) {
+        // Check if unit already attacked in melee in a previous activation
+        if (atk.hasAttackedInMelee) {
           atk.isExhausted = true
         }
+        // Mark that unit attacked in melee (will persist until end of round)
+        atk.hasAttackedInMelee = true
       }
     }
     
@@ -490,10 +494,11 @@ export const useGame = create<GameState>((set, get) => ({
     // Clear prompt and trigger counter-attack
     set({ counterAttackPrompt: undefined })
     
-    // Mark defender as having attacked in melee if not already
+    // Counter-attacks during the same activation don't cause exhaustion
+    // The hasAttackedInMelee flag will be checked in the NEXT activation
+    // Just mark that this unit attacked in melee (for future activations)
     if (!defender.hasAttackedInMelee) {
       defender.hasAttackedInMelee = true
-      defender.isExhausted = true
     }
     
     setTimeout(() => {
@@ -518,6 +523,22 @@ export const useGame = create<GameState>((set, get) => ({
   },
 
   endTurn() { get().endActivation() },
+
+  skipTurn() {
+    const s = get()
+    // Switch to the other player
+    const other = s.currentPlayer === 0 ? 1 : 0
+    
+    // Check if other player has units left to activate
+    const hasOther = s.units.some(u => u.owner === other && !u.activated && u.position)
+    
+    if (hasOther) {
+      set({ currentPlayer: other, selectedUnitId: undefined, actionMode: undefined })
+    } else {
+      // If other player has no units left, start new round
+      get().startNewRoundIfNeeded()
+    }
+  },
 
   flagAdvanced(){},
 

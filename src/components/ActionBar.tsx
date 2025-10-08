@@ -6,7 +6,24 @@ export default function ActionBar(){
   const g = useGame()
   const u = g.units.find(x => x.id===g.selectedUnitId)
 
-  if (g.phase!=='playing' || !u || u.owner!==g.currentPlayer || u.activated) return null
+  // Show skip turn button even when no unit is selected
+  if (g.phase!=='playing') return null
+  
+  // If no unit selected or unit not owned by current player, show only skip button
+  if (!u || u.owner!==g.currentPlayer || u.activated) {
+    return (
+      <div style={{ position:'absolute', left:12, bottom:12, background:'rgba(10,14,22,0.95)', border:'1px solid #2a3a54', borderRadius:10, padding:8, zIndex: 51 }}>
+        <button onClick={()=>g.skipTurn()} className="abtn" style={{ background:'#2a1f1f', borderColor:'#5a3a3a' }}>
+          ⏭️ Zug überspringen
+        </button>
+        <style>{`
+          .abtn { background:#1e2638; color:#cfe3ff; border:1px solid #34415d; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:12px }
+          .abtn:disabled { opacity:0.5; cursor:not-allowed }
+          .abtn:hover:not(:disabled) { background:#26304a }
+        `}</style>
+      </div>
+    )
+  }
 
   const canMove = !u.hasMoved && (u.usedWeapons?.length || 0) === 0
   const canShoot = g.canUnitShoot(u.id)
@@ -39,6 +56,9 @@ export default function ActionBar(){
       )}
       <div style={{ width:'100%', height:1, background:'#2a3a54' }} />
       {btn('Aktivierung beenden', ()=>g.endActivation())}
+      <button onClick={()=>g.skipTurn()} className="abtn" style={{ background:'#2a1f1f', borderColor:'#5a3a3a', marginTop: 4 }}>
+        ⏭️ Zug überspringen
+      </button>
       <style>{`
         .abtn { background:#1e2638; color:#cfe3ff; border:1px solid #34415d; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:12px }
         .abtn:disabled { opacity:0.5; cursor:not-allowed }
