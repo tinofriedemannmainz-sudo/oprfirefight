@@ -1,9 +1,11 @@
 
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useGame } from '@/stores/game'
+import { ViewContext } from './GameView'
 
 export default function Instructions(){
   const g = useGame()
+  const { use3D, setUse3D } = useContext(ViewContext)
   const size = g.size
   const topZone = `r <= -${Math.floor(size/2)}`
   const bottomZone = `r >= ${Math.floor(size/2)}`
@@ -95,9 +97,14 @@ export default function Instructions(){
           </div>
         </div>
       )}
-      <button className="btn" onClick={()=>setOpen(o=>!o)} style={{width:'100%'}}>
-        {open ? '❌ Anleitung schließen' : '📖 Anleitung anzeigen'}
-      </button>
+      <div style={{display:'flex', gap:8}}>
+        <button className="btn" onClick={()=>setUse3D(!use3D)} style={{flex:1}}>
+          {use3D ? '📐 2D' : '🎮 3D'}
+        </button>
+        <button className="btn" onClick={()=>setOpen(o=>!o)} style={{flex:1}}>
+          {open ? '❌ Schließen' : '📖 Anleitung'}
+        </button>
+      </div>
     </div>
   )
 }
