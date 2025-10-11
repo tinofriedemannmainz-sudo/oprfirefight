@@ -17,6 +17,8 @@ export function canEnter(unit:Unit, hex:Hex): boolean {
   const rules = TERRAIN_RULES[hex.terrain]
   if (!rules) return true
   if (rules.impassable) return false
+  // Buildings block movement
+  if (hex.hasBuilding) return false
   return true
 }
 

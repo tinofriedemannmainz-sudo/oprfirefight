@@ -195,8 +195,11 @@ function Grid() {
   const [moveMode, setMoveMode] = useState<'normal' | 'run' | undefined>();
   
   useEffect(() => {
+    console.log('🎮 App mounted - grid length:', g.grid.length);
     if (g.grid.length === 0) {
+      console.log('🔄 Calling regenerate()...');
       g.regenerate();
+      console.log('✅ Regenerate called - new grid length:', g.grid.length);
     }
   }, []);
 

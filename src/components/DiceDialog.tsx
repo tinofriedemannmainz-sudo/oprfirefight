@@ -95,19 +95,19 @@ export default function DiceDialog({
       <div
         key={index}
         style={{
-          width: 60,
-          height: 60,
+          width: 50,
+          height: 50,
           background: color,
-          borderRadius: 8,
+          borderRadius: 6,
           position: 'relative',
-          boxShadow: success ? '0 4px 12px rgba(0,0,0,0.4)' : '0 2px 6px rgba(0,0,0,0.3)',
+          boxShadow: success ? '0 3px 8px rgba(0,0,0,0.4)' : '0 2px 4px rgba(0,0,0,0.3)',
           border: success ? '2px solid rgba(255,255,255,0.3)' : '2px solid rgba(0,0,0,0.2)',
           animation: phase.includes('rolling') ? 'roll 0.5s ease-out' : 'none'
         }}
       >
-        <svg width="60" height="60" style={{ position: 'absolute', top: 0, left: 0 }}>
+        <svg width="50" height="50" style={{ position: 'absolute', top: 0, left: 0 }}>
           {dotPositions[value].map(([x, y], i) => (
-            <circle key={i} cx={x + '%'} cy={y + '%'} r="5" fill="white" />
+            <circle key={i} cx={x + '%'} cy={y + '%'} r="4" fill="white" />
           ))}
         </svg>
       </div>
@@ -124,19 +124,22 @@ export default function DiceDialog({
       left: 0,
       right: 0,
       bottom: 0,
-      background: 'rgba(0,0,0,0.85)',
+      background: 'rgba(0,0,0,0.75)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 1000
+      zIndex: 1000,
+      padding: '20px'
     }}>
       <div style={{
         background: 'linear-gradient(135deg, #1a2332 0%, #0f1620 100%)',
         border: '2px solid #2a3a54',
-        borderRadius: 16,
-        padding: 32,
-        minWidth: 500,
-        maxWidth: 700,
+        borderRadius: 12,
+        padding: '20px',
+        width: '100%',
+        maxWidth: '450px',
+        maxHeight: '90vh',
+        overflowY: 'auto',
         boxShadow: '0 20px 60px rgba(0,0,0,0.5)'
       }}>
         <div style={{ marginBottom: 24 }}>

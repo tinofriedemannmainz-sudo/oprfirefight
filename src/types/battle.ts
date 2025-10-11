@@ -38,6 +38,7 @@ export type Hex = {
   q:number
   r:number
   terrain: TerrainType
+  hasBuilding?: boolean  // Marks hexes with buildings (provides cover, blocks deployment/movement)
 }
 
 export type Team = {

@@ -52,5 +52,11 @@
     "name": "Blessed Sisters",
     "faction": "Blessed Sisters",
     "unitsPath": "/data/teams/sisters/team.json"
+  },
+  {
+    "id": "human",
+    "name": "Human Defence Force",
+    "faction": "HDF",
+    "unitsPath": "/data/teams/human/team.json"
   }
 ]

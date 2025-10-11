@@ -67,7 +67,7 @@
       "weapons": [
         {
           "name": "Metal Claws",
-          "range": 1,
+          "range": 0,
           "attacks": 2,
           "ap": 0,
           "type": "melee"

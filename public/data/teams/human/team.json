@@ -1,0 +1,241 @@
+{
+  "id": "z65fgu0l29i4lnlu",
+  "name": "Human Defense Force – 250pts",
+  "faction": "Human Defense Force",
+  "units": [
+    {
+      "id": "3Tk4911",
+      "name": "Company Leader",
+      "image": "/assets/armies/human/720X720-hdf-company-leader-render-3.png",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Master Pistol",
+          "range": 12,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 2,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "kTKbTVs",
+      "name": "GRUNT Robot",
+      "image": "/assets/armies/human/720X720-hdf-grunts-render-3.png",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "SScXOqX",
+      "name": "Veteran",
+      "image": "/assets/armies/human/720X720-hdf-veterans-render-12.png",
+      "quality": 4,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "UoYLgB-",
+      "name": "Combat Biker",
+      "image": "/assets/armies/human/720X720-hdf-biker-render-7.png",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Pistol",
+          "range": 12,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "Heavy Lance",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "97ShHAa",
+      "name": "Recruits",
+      "image": "/assets/armies/human/720X720-hdf-recruits-render-9.png",
+      "quality": 6,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "SG9cgFZ",
+      "name": "Sapper",
+      "image": "/assets/armies/human/720X720-hdf-sappers-render-30.png",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Grenade Launcher",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "Xuu-drz",
+      "name": "Storm Trooper",
+      "image": "/assets/armies/human/720X720-hdf-storm-trooper-render-21.png",
+      "quality": 4,
+      "defense": 4,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Heavy Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "_nbz3zj",
+      "name": "Infantry Squad",
+      "image": "/assets/armies/human/720X720-hdf-infantry-render-20.png",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Rifle",
+          "range": 24,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    },
+    {
+      "id": "95wirM-",
+      "name": "Sniper",
+      "image": "/assets/armies/human/720X720-hdf-snipers-render-7.png",
+      "quality": 5,
+      "defense": 5,
+      "speed": 3,
+      "wounds": 2,
+      "maxWounds": 2,
+      "weapons": [
+        {
+          "name": "Sniper Rifle",
+          "range": 30,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        },
+        {
+          "name": "CCW",
+          "range": 0,
+          "attacks": 1,
+          "ap": 0,
+          "type": "ranged"
+        }
+      ]
+    }
+  ]
+}

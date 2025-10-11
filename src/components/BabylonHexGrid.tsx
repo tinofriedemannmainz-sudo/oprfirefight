@@ -6,34 +6,8 @@ import UnitContextMenu from '@/components/UnitContextMenu';
 import DiceDialog from '@/components/DiceDialog';
 import CounterAttackDialog from '@/components/CounterAttackDialog';
 import { reachableCosts } from '@/utils/path';
-
-// Grim Dark terrain colors - industrial wasteland (brighter for visibility)
-const TERRAIN_COLORS: Record<TerrainType, Color3> = {
-  open: new Color3(0.35, 0.32, 0.28),    // Ash wasteland
-  road: new Color3(0.25, 0.25, 0.25),    // Dark asphalt
-  forest: new Color3(0.25, 0.3, 0.22),   // Dead forest
-  ruin: new Color3(0.4, 0.35, 0.3),      // Rusted metal/concrete
-  swamp: new Color3(0.3, 0.35, 0.25),    // Toxic sludge
-  water: new Color3(0.25, 0.3, 0.35),    // Polluted water
-  river: new Color3(0.28, 0.32, 0.38),   // Contaminated river
-  lake: new Color3(0.22, 0.25, 0.3),     // Dark toxic lake
-  rock: new Color3(0.45, 0.42, 0.4),     // Industrial rubble
-  mountain: new Color3(0.35, 0.33, 0.32), // Dark mountains
-};
-
-// Height offsets for terrain (positive = higher, negative = lower/water)
-const TERRAIN_HEIGHTS: Record<TerrainType, number> = {
-  open: 0.3,      // Base ground level
-  road: 0.3,      // Same as open
-  forest: 0.5,    // Slightly elevated
-  ruin: 0.4,      // Slightly elevated
-  swamp: 0.1,     // Lower than ground
-  water: -0.2,    // Below ground (depression)
-  river: -0.2,    // Below ground
-  lake: -0.3,     // Deeper depression
-  rock: 1.0,      // Elevated
-  mountain: 2.0,  // Very elevated
-};
+import { axialDistance } from '@/utils/hex';
+import { WORLD_THEMES, type ThemeConfig } from '@/utils/worldThemes';
 
 export default function BabylonHexGrid() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -44,43 +18,104 @@ export default function BabylonHexGrid() {
   const objectiveMeshesRef = useRef<Map<number, Mesh>>(new Map());
   const movementIndicatorsRef = useRef<Mesh[]>([]);
   const terrainObjectsRef = useRef<Mesh[]>([]);
+  const targetCrosshairsRef = useRef<Mesh[]>([]);
+  const selectedUnitIdRef = useRef<string | undefined>(undefined);
+  const phaseRef = useRef<typeof g.phase>(g.phase);
   const [menu, setMenu] = useState<{u:Unit, x:number, y:number}|null>(null);
   const [selectedHex, setSelectedHex] = useState<Hex|undefined>();
+  
+  // Keep refs in sync with state
+  useEffect(() => {
+    selectedUnitIdRef.current = g.selectedUnitId;
+    phaseRef.current = g.phase;
+  }, [g.selectedUnitId, g.phase]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
 
+    // Get current theme configuration
+    const theme = WORLD_THEMES[g.worldTheme];
+    
     // Create engine and scene
     const engine = new Engine(canvasRef.current, true);
     const scene = new Scene(engine);
-    scene.clearColor = new Color4(0.08, 0.08, 0.12, 1); // Dark but visible background
+    scene.clearColor = new Color4(theme.backgroundColor.r, theme.backgroundColor.g, theme.backgroundColor.b, 1);
     scene.fogMode = Scene.FOGMODE_EXP2;
-    scene.fogDensity = 0.005; // Less fog for better visibility
-    scene.fogColor = new Color3(0.15, 0.15, 0.18);
+    scene.fogDensity = theme.fogDensity;
+    scene.fogColor = theme.fogColor;
     sceneRef.current = scene;
 
-    // Setup camera - isometric view
+    // Setup camera - isometric view with better zoom limits
     const camera = new ArcRotateCamera(
       'camera',
       Math.PI / 4,      // Alpha (horizontal rotation)
       Math.PI / 3,      // Beta (vertical angle) - 60 degrees for isometric
-      50,               // Radius (distance from target)
+      40,               // Radius (distance from target) - closer default
       Vector3.Zero(),   // Target
       scene
     );
     camera.attachControl(canvasRef.current, true);
-    camera.lowerRadiusLimit = 20;
-    camera.upperRadiusLimit = 100;
+    camera.lowerRadiusLimit = 8;  // Allow much closer zoom
+    camera.upperRadiusLimit = 80; // Slightly less far zoom
     camera.lowerBetaLimit = Math.PI / 6;  // Don't go too flat
     camera.upperBetaLimit = Math.PI / 2.2; // Don't go too vertical
+    camera.wheelPrecision = 20; // Smoother zoom (lower = faster zoom)
+    camera.panningSensibility = 50; // Adjust panning speed
 
     // Grim Dark Lighting - balanced for visibility
+    // Ambient light - adjusted based on theme
     const ambientLight = new HemisphericLight('ambient', new Vector3(0, 1, 0), scene);
-    ambientLight.intensity = 0.5; // Increased for better visibility
-    ambientLight.groundColor = new Color3(0.15, 0.15, 0.18);
-    ambientLight.diffuse = new Color3(0.5, 0.5, 0.55);
+    ambientLight.intensity = theme.ambientIntensity;
+    ambientLight.groundColor = theme.ambientColor.scale(0.4);
+    ambientLight.diffuse = theme.ambientColor;
 
-    // Dramatic spotlight from above (like searchlight)
+    // Theme-specific lighting colors
+    let spotColor1, spotColor2, pointColor1, pointColor2;
+    let spotIntensity1, spotIntensity2, pointIntensity1, pointIntensity2;
+    
+    if (theme.terrainColors.water.r > 0.6) {
+      // Lava world - red/orange lighting
+      spotColor1 = new Color3(1.0, 0.4, 0.2); // Red-orange
+      spotColor2 = new Color3(1.0, 0.6, 0.3); // Orange
+      pointColor1 = new Color3(1.0, 0.3, 0.1); // Deep red glow
+      pointColor2 = new Color3(1.0, 0.5, 0.2); // Orange glow
+      spotIntensity1 = 1.5;
+      spotIntensity2 = 1.3;
+      pointIntensity1 = 0.6;
+      pointIntensity2 = 0.5;
+    } else if (theme.terrainColors.water.b > 0.6) {
+      // Ice world - cold blue lighting
+      spotColor1 = new Color3(0.7, 0.8, 1.0); // Cold blue
+      spotColor2 = new Color3(0.8, 0.9, 1.0); // Icy white
+      pointColor1 = new Color3(0.5, 0.7, 1.0); // Blue glow
+      pointColor2 = new Color3(0.6, 0.8, 1.0); // Cyan glow
+      spotIntensity1 = 1.4;
+      spotIntensity2 = 1.2;
+      pointIntensity1 = 0.4;
+      pointIntensity2 = 0.4;
+    } else if (theme.ambientIntensity > 0.7) {
+      // Bright world (Grassland) - warm natural light
+      spotColor1 = new Color3(1.0, 0.95, 0.8); // Warm sunlight
+      spotColor2 = new Color3(0.95, 0.9, 0.75); // Golden light
+      pointColor1 = new Color3(1.0, 0.9, 0.7); // Warm glow
+      pointColor2 = new Color3(0.9, 0.85, 0.7); // Soft glow
+      spotIntensity1 = 1.6;
+      spotIntensity2 = 1.4;
+      pointIntensity1 = 0.3;
+      pointIntensity2 = 0.3;
+    } else {
+      // Dark world (Grim Dark, Jungle) - cold industrial
+      spotColor1 = new Color3(0.9, 0.95, 1.0); // Cold blue-white
+      spotColor2 = new Color3(1.0, 0.95, 0.8); // Warm industrial
+      pointColor1 = new Color3(1.0, 0.5, 0.2); // Orange fire
+      pointColor2 = new Color3(0.3, 0.9, 1.0); // Blue energy
+      spotIntensity1 = 1.2;
+      spotIntensity2 = 1.0;
+      pointIntensity1 = 0.4;
+      pointIntensity2 = 0.35;
+    }
+
+    // Dramatic spotlight from above
     const spotlight1 = new SpotLight(
       'spotlight1',
       new Vector3(-10, 20, -10),
@@ -89,8 +124,8 @@ export default function BabylonHexGrid() {
       2,
       scene
     );
-    spotlight1.intensity = 1.2; // Brighter
-    spotlight1.diffuse = new Color3(0.9, 0.95, 1.0); // Cold blue-white light
+    spotlight1.intensity = spotIntensity1;
+    spotlight1.diffuse = spotColor1;
 
     // Second spotlight from different angle
     const spotlight2 = new SpotLight(
@@ -101,18 +136,18 @@ export default function BabylonHexGrid() {
       2,
       scene
     );
-    spotlight2.intensity = 1.0; // Brighter
-    spotlight2.diffuse = new Color3(1.0, 0.95, 0.8); // Warm industrial light
+    spotlight2.intensity = spotIntensity2;
+    spotlight2.diffuse = spotColor2;
 
-    // Point lights for atmosphere (like fires/explosions in distance)
+    // Point lights for atmosphere
     const pointLight1 = new PointLight('fire1', new Vector3(-20, 5, -20), scene);
-    pointLight1.intensity = 0.4; // Slightly brighter
-    pointLight1.diffuse = new Color3(1.0, 0.5, 0.2); // Orange fire glow
+    pointLight1.intensity = pointIntensity1;
+    pointLight1.diffuse = pointColor1;
     pointLight1.range = 35;
 
     const pointLight2 = new PointLight('fire2', new Vector3(25, 4, 20), scene);
-    pointLight2.intensity = 0.35; // Slightly brighter
-    pointLight2.diffuse = new Color3(0.3, 0.9, 1.0); // Blue energy glow
+    pointLight2.intensity = pointIntensity2;
+    pointLight2.diffuse = pointColor2;
     pointLight2.range = 30;
 
     // Render loop
@@ -122,21 +157,30 @@ export default function BabylonHexGrid() {
 
     // Handle resize
     const handleResize = () => {
-      engine.resize();
+      if (engine) {
+        engine.resize();
+      }
     };
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      scene.dispose();
-      engine.dispose();
+      if (sceneRef.current) {
+        sceneRef.current.dispose();
+      }
+      if (engine) {
+        engine.dispose();
+      }
     };
-  }, []);
+  }, [g.worldTheme]); // Re-create scene when theme changes
 
   // Create hex meshes when grid changes
   useEffect(() => {
-    if (!sceneRef.current || g.grid.length === 0) return;
-
+    console.log('🔍 Hex mesh effect triggered - scene:', !!sceneRef.current, 'grid length:', g.grid.length);
+    if (!sceneRef.current || g.grid.length === 0) {
+      console.warn('⚠️ Skipping hex mesh creation - scene:', !!sceneRef.current, 'grid:', g.grid.length);
+      return;
+    }
     const scene = sceneRef.current;
     const hexSize = 1; // Size of each hex in 3D space
 
@@ -144,13 +188,23 @@ export default function BabylonHexGrid() {
     hexMeshesRef.current.forEach(mesh => mesh.dispose());
     hexMeshesRef.current.clear();
 
+    // Get theme once for this effect
+    const theme = WORLD_THEMES[g.worldTheme];
+
     // Create hex meshes with click interaction
+    console.log('🎲 Creating hex meshes - grid size:', g.grid.length, 'grid sample:', g.grid.slice(0, 3));
+    if (g.grid.length === 0) {
+      console.error('❌ Grid is empty! Cannot create hex meshes.');
+      return;
+    }
+    
     g.grid.forEach((hex) => {
       const hexMesh = createHexMesh(hex, hexSize, scene, (clickedHex) => {
         handleHexClick(clickedHex);
-      });
+      }, theme);
       hexMeshesRef.current.set(`${hex.q},${hex.r}`, hexMesh);
     });
+    console.log('✅ Created', hexMeshesRef.current.size, 'hex meshes');
 
     // Add 3D terrain objects (buildings, debris, mountains)
     terrainObjectsRef.current.forEach(mesh => mesh.dispose());
@@ -159,12 +213,32 @@ export default function BabylonHexGrid() {
     // Track building positions to prevent overlap
     const buildingPositions: Set<string> = new Set();
     
+    // Mark hexes with units as occupied (initial deployment)
+    g.units.filter(u => u.position).forEach(u => {
+      buildingPositions.add(`${u.position!.q},${u.position!.r}`);
+    });
+    
+    // Mark hexes with objectives as occupied
+    g.objectives.forEach(obj => {
+      buildingPositions.add(`${obj.position.q},${obj.position.r}`);
+      // Also mark neighbors to keep area clear
+      const neighbors = [
+        [obj.position.q + 1, obj.position.r],
+        [obj.position.q - 1, obj.position.r],
+        [obj.position.q, obj.position.r + 1],
+        [obj.position.q, obj.position.r - 1],
+        [obj.position.q + 1, obj.position.r - 1],
+        [obj.position.q - 1, obj.position.r + 1]
+      ];
+      neighbors.forEach(([q, r]) => buildingPositions.add(`${q},${r}`));
+    });
+    
     g.grid.forEach((hex) => {
-      const objects = createTerrainObjects(hex, hexSize, scene, buildingPositions);
+      const objects = createTerrainObjects(hex, hexSize, scene, buildingPositions, theme);
       terrainObjectsRef.current.push(...objects);
     });
 
-  }, [g.grid]);
+  }, [g.grid, g.worldTheme]);
 
   // Create/update unit meshes when units change OR phase changes
   useEffect(() => {
@@ -178,11 +252,12 @@ export default function BabylonHexGrid() {
     unitMeshesRef.current.clear();
 
     // Create unit meshes
+    const theme = WORLD_THEMES[g.worldTheme];
     g.units.filter(u => u.position).forEach((unit) => {
       const isSelected = unit.id === g.selectedUnitId;
       const unitMesh = createUnitMesh(unit, hexSize, scene, isSelected, (clickedUnit, event) => {
         handleUnitClick(clickedUnit, event);
-      });
+      }, theme);
       unitMeshesRef.current.set(unit.id, unitMesh);
       
       // Make hex under this unit non-pickable to prevent conflicts
@@ -199,7 +274,7 @@ export default function BabylonHexGrid() {
       hexMesh.isPickable = !hasUnit;
     });
 
-  }, [g.units, g.selectedUnitId, g.phase]); // Added g.phase to dependencies!
+  }, [g.units, g.selectedUnitId, g.phase, g.worldTheme]);
 
   // Create/update objective markers
   useEffect(() => {
@@ -213,12 +288,13 @@ export default function BabylonHexGrid() {
     objectiveMeshesRef.current.clear();
 
     // Create objective markers
+    const theme = WORLD_THEMES[g.worldTheme];
     g.objectives.forEach((obj) => {
-      const objMesh = createObjectiveMesh(obj, hexSize, scene);
+      const objMesh = createObjectiveMesh(obj, hexSize, scene, theme);
       objectiveMeshesRef.current.set(obj.id, objMesh);
     });
 
-  }, [g.objectives, g.phase]);
+  }, [g.objectives, g.phase, g.worldTheme]);
 
   // Highlight hexes for movement/deployment and show movement indicators
   useEffect(() => {
@@ -258,6 +334,8 @@ export default function BabylonHexGrid() {
         const allCosts = reachableCosts(selUnit, g.grid, selUnit.position, maxRun);
         console.log('Reachable hexes:', allCosts.size);
         
+        const theme = WORLD_THEMES[g.worldTheme];
+        
         for (const [hexKey, cost] of allCosts) {
           const [qStr, rStr] = hexKey.split(',');
           const q = parseInt(qStr);
@@ -269,7 +347,7 @@ export default function BabylonHexGrid() {
           const targetHex = g.grid.find(h => h.q === q && h.r === r);
           if (!targetHex) continue;
           
-          const terrainHeight = TERRAIN_HEIGHTS[targetHex.terrain];
+          const terrainHeight = theme.terrainHeights[targetHex.terrain];
           const baseThickness = 0.5;
           
           // Calculate hex top Y position (same logic as in createHexMesh)
@@ -294,6 +372,7 @@ export default function BabylonHexGrid() {
           );
           indicator.position = new Vector3(x, hexTopY + 0.05, z); // Just above hex top
           indicator.rotation.y = Math.PI / 6;
+          indicator.isPickable = false; // Don't block hex clicks!
           
           const mat = new StandardMaterial(`move-mat-${hexKey}`, scene);
           if (cost <= maxMove) {
@@ -312,13 +391,157 @@ export default function BabylonHexGrid() {
       }
     }
     
-  }, [g.phase, g.selectedUnitId, g.currentPlayer, g.units, g.grid]);
+  }, [g.phase, g.selectedUnitId, g.currentPlayer, g.units, g.grid, g.worldTheme]);
+
+  // Show crosshairs over ranged targets
+  useEffect(() => {
+    if (!sceneRef.current) return;
+    const scene = sceneRef.current;
+    const hexSize = 1;
+    
+    // Clear old crosshairs
+    targetCrosshairsRef.current.forEach(mesh => mesh.dispose());
+    targetCrosshairsRef.current = [];
+    
+    // Only show during playing phase with selected unit
+    if (g.phase !== 'playing' || !g.selectedUnitId) return;
+    
+    const selectedUnit = g.units.find(u => u.id === g.selectedUnitId);
+    if (!selectedUnit || !selectedUnit.position || selectedUnit.hasRun) return;
+    
+    // Get ranged weapons
+    const rangedWeapons = selectedUnit.weapons.filter(w => 
+      (w.range || 0) > 0 && !selectedUnit.usedWeapons?.includes(w.name)
+    );
+    
+    if (rangedWeapons.length === 0) return;
+    
+    // Find all enemy units in range
+    const enemies = g.units.filter(u => 
+      u.owner !== selectedUnit.owner && 
+      u.position &&
+      u.wounds > 0
+    );
+    
+    enemies.forEach(enemy => {
+      if (!enemy.position || !selectedUnit.position) return;
+      
+      const dist = axialDistance(selectedUnit.position, enemy.position);
+      
+      // Check if any ranged weapon can reach
+      const canShoot = rangedWeapons.some(w => dist <= (w.range || 0));
+      if (!canShoot) return;
+      
+      // Check line of sight and cover
+      const targetHex = g.grid.find(h => h.q === enemy.position!.q && h.r === enemy.position!.r);
+      if (!targetHex) return;
+      
+      // Calculate cover modifier (terrain-based + buildings)
+      const inCover = targetHex.terrain === 'forest' || targetHex.terrain === 'ruin' || targetHex.terrain === 'rock' || targetHex.hasBuilding;
+      
+      // Create crosshair
+      const w = Math.sqrt(3) * hexSize;
+      const h = 2 * hexSize;
+      const x = w * (enemy.position.q + enemy.position.r / 2);
+      const z = h * (3 / 4) * enemy.position.r;
+      
+      const theme = WORLD_THEMES[g.worldTheme];
+      const terrainHeight = theme.terrainHeights[targetHex.terrain];
+      const baseThickness = 0.5;
+      let hexTopY: number;
+      if (terrainHeight < 0) {
+        const thickness = baseThickness + terrainHeight;
+        hexTopY = terrainHeight / 2 + thickness / 2;
+      } else {
+        hexTopY = baseThickness + terrainHeight;
+      }
+      
+      // Create crosshair plane
+      const crosshair = MeshBuilder.CreatePlane(
+        `crosshair-${enemy.id}`,
+        { size: 1.2 },
+        scene
+      );
+      crosshair.position = new Vector3(x, hexTopY + 2.5, z);
+      crosshair.billboardMode = Mesh.BILLBOARDMODE_ALL;
+      
+      // Create crosshair texture
+      const crosshairTexture = new DynamicTexture(`crosshair-tex-${enemy.id}`, 256, scene);
+      const ctx = crosshairTexture.getContext() as CanvasRenderingContext2D;
+      
+      // Draw crosshair
+      const centerX = 128;
+      const centerY = 128;
+      const radius = 80;
+      
+      // Background circle (semi-transparent)
+      ctx.fillStyle = inCover ? 'rgba(255, 165, 0, 0.3)' : 'rgba(255, 0, 0, 0.3)';
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Crosshair lines
+      ctx.strokeStyle = inCover ? '#FFA500' : '#FF0000'; // Orange if in cover, red otherwise
+      ctx.lineWidth = 6;
+      
+      // Vertical line
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY - radius);
+      ctx.lineTo(centerX, centerY - 20);
+      ctx.stroke();
+      
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY + 20);
+      ctx.lineTo(centerX, centerY + radius);
+      ctx.stroke();
+      
+      // Horizontal line
+      ctx.beginPath();
+      ctx.moveTo(centerX - radius, centerY);
+      ctx.lineTo(centerX - 20, centerY);
+      ctx.stroke();
+      
+      ctx.beginPath();
+      ctx.moveTo(centerX + 20, centerY);
+      ctx.lineTo(centerX + radius, centerY);
+      ctx.stroke();
+      
+      // Center dot
+      ctx.fillStyle = inCover ? '#FFA500' : '#FF0000';
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Cover indicator (shield icon if in cover)
+      if (inCover) {
+        ctx.fillStyle = '#FFA500';
+        ctx.font = 'bold 60px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🛡️', centerX, centerY - radius - 30);
+      }
+      
+      crosshairTexture.update();
+      
+      const crosshairMat = new StandardMaterial(`crosshair-mat-${enemy.id}`, scene);
+      crosshairMat.diffuseTexture = crosshairTexture;
+      crosshairMat.emissiveTexture = crosshairTexture;
+      crosshairMat.emissiveColor = new Color3(1, 1, 1);
+      crosshairMat.opacityTexture = crosshairTexture;
+      crosshairMat.backFaceCulling = false;
+      crosshair.material = crosshairMat;
+      
+      targetCrosshairsRef.current.push(crosshair);
+    });
+    
+  }, [g.phase, g.selectedUnitId, g.units, g.grid, g.worldTheme]);
 
   // Handle hex click
   function handleHexClick(hex: Hex) {
-    console.log('handleHexClick called:', hex.q, hex.r, 'phase:', g.phase, 'selectedUnitId:', g.selectedUnitId);
+    const currentPhase = phaseRef.current;
+    console.log('handleHexClick called:', hex.q, hex.r, 'phase:', currentPhase, 'selectedUnitId:', selectedUnitIdRef.current);
     setSelectedHex(hex);
-    if (g.phase === 'deploy') {
+    if (currentPhase === 'deploy') {
       console.log('Deploy phase - selectedUnitId:', g.selectedUnitId);
       if (!g.selectedUnitId) {
         console.log('No unit selected');
@@ -332,17 +555,26 @@ export default function BabylonHexGrid() {
       g.placeUnit(g.selectedUnitId, hex);
       return;
     }
-    if (g.phase === 'playing') {
-      if (!g.selectedUnitId) {
-        console.log('No unit selected for movement');
+    if (currentPhase === 'playing') {
+      // Use ref instead of state to avoid async issues
+      const selectedId = selectedUnitIdRef.current;
+      if (!selectedId) {
+        console.log('No unit selected for movement (ref)');
         return;
       }
-      const selUnit = g.units.find(u => u.id === g.selectedUnitId);
-      console.log('Playing phase - selected unit:', selUnit?.name, 'ID:', g.selectedUnitId);
+      const selUnit = g.units.find(u => u.id === selectedId);
+      console.log('Playing phase - selected unit:', selUnit?.name, 'ID:', selectedId);
       if (selUnit && selUnit.position) {
-        // Try to move to this hex
-        console.log('Attempting to move unit to:', hex.q, hex.r);
-        g.moveUnit(selUnit.id, hex, false); // TODO: detect run vs walk
+        // Calculate distance to determine if we need to run
+        const dq = hex.q - selUnit.position.q;
+        const dr = hex.r - selUnit.position.r;
+        const distance = (Math.abs(dq) + Math.abs(dr) + Math.abs(dq + dr)) / 2;
+        
+        const maxWalk = selUnit.speed;
+        const needsRun = distance > maxWalk;
+        
+        console.log('Attempting to move unit to:', hex.q, hex.r, 'distance:', distance, 'needsRun:', needsRun);
+        g.moveUnit(selUnit.id, hex, needsRun);
       } else {
         console.log('Unit not found or has no position');
       }
@@ -408,15 +640,24 @@ export default function BabylonHexGrid() {
 
   return (
     <>
-      <canvas
-        ref={canvasRef}
-        style={{
-          width: '100%',
-          height: '100%',
-          display: 'block',
-          touchAction: 'none',
-        }}
-      />
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 1, // Behind UI elements (which have zIndex 50+)
+      }}>
+        <canvas
+          ref={canvasRef}
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'block',
+            touchAction: 'none',
+          }}
+        />
+      </div>
       {menu && <UnitContextMenu unit={menu.u} x={menu.x} y={menu.y} onClose={()=>setMenu(null)} />}
       <CounterAttackDialog />
       {g.pendingAttack && (() => {
@@ -445,12 +686,12 @@ export default function BabylonHexGrid() {
 }
 
 // Helper function to create a single hex mesh
-function createHexMesh(hex: Hex, size: number, scene: Scene, onClick: (hex: Hex) => void): Mesh {
+function createHexMesh(hex: Hex, size: number, scene: Scene, onClick: (hex: Hex) => void, theme: ThemeConfig): Mesh {
   const w = Math.sqrt(3) * size;
   const h = 2 * size;
   const x = w * (hex.q + hex.r / 2);
   const z = h * (3 / 4) * hex.r; // Using Z for the hex grid plane
-  const heightOffset = TERRAIN_HEIGHTS[hex.terrain];
+  const heightOffset = theme.terrainHeights[hex.terrain];
 
   // Create hexagon using cylinder with 6 sides
   // Thickness represents the height of the terrain
@@ -485,10 +726,132 @@ function createHexMesh(hex: Hex, size: number, scene: Scene, onClick: (hex: Hex)
   hex3D.position = new Vector3(x, yPosition, z);
   hex3D.rotation.y = Math.PI / 6; // Rotate to align flat side
 
-  // Material
+  // Material with procedural textures
   const material = new StandardMaterial(`mat-${hex.q}-${hex.r}`, scene);
-  material.diffuseColor = TERRAIN_COLORS[hex.terrain];
+  material.diffuseColor = theme.terrainColors[hex.terrain];
   material.specularColor = new Color3(0.1, 0.1, 0.1);
+  
+  // Check if Minecraft world - USE SAME DETECTION AS BUILDINGS!
+  const isMinecraftWorld = (theme.terrainColors.open.g > 0.6 && theme.ambientIntensity > 0.85 && theme.terrainColors.water.b < 0.8) || 
+                           (theme.terrainColors.open.r > 0.65 && theme.terrainColors.water.b > 0.75 && theme.ambientIntensity > 0.8 && theme.ambientIntensity < 0.9);
+  
+  // Add Minecraft block textures
+  if (isMinecraftWorld && (hex.terrain === 'open' || hex.terrain === 'road' || hex.terrain === 'forest')) {
+    const blockTexture = new DynamicTexture(`block-tex-${hex.q}-${hex.r}`, 128, scene);
+    const ctx = blockTexture.getContext() as CanvasRenderingContext2D;
+    
+    if (hex.terrain === 'open') {
+      // Grass block top
+      ctx.fillStyle = '#7CBD6B';
+      ctx.fillRect(0, 0, 128, 128);
+      // Add pixel noise for Minecraft look
+      for (let i = 0; i < 200; i++) {
+        const brightness = Math.random() * 40 - 20;
+        ctx.fillStyle = `rgb(${123 + brightness}, ${189 + brightness}, ${107 + brightness})`;
+        ctx.fillRect(Math.random() * 128, Math.random() * 128, 4, 4);
+      }
+    } else if (hex.terrain === 'road') {
+      // Dirt/gravel
+      ctx.fillStyle = '#8B7355';
+      ctx.fillRect(0, 0, 128, 128);
+      for (let i = 0; i < 200; i++) {
+        const brightness = Math.random() * 30 - 15;
+        ctx.fillStyle = `rgb(${139 + brightness}, ${115 + brightness}, ${85 + brightness})`;
+        ctx.fillRect(Math.random() * 128, Math.random() * 128, 4, 4);
+      }
+    } else if (hex.terrain === 'forest') {
+      // Grass with darker shade
+      ctx.fillStyle = '#6BA861';
+      ctx.fillRect(0, 0, 128, 128);
+      for (let i = 0; i < 200; i++) {
+        const brightness = Math.random() * 30 - 15;
+        ctx.fillStyle = `rgb(${107 + brightness}, ${168 + brightness}, ${97 + brightness})`;
+        ctx.fillRect(Math.random() * 128, Math.random() * 128, 4, 4);
+      }
+    }
+    
+    blockTexture.update();
+    material.diffuseTexture = blockTexture;
+  }
+  
+  // Add procedural textures for certain terrains
+  if (hex.terrain === 'water' || hex.terrain === 'lake' || hex.terrain === 'river') {
+    // Water/Lava texture - changes based on theme
+    const waterTexture = new DynamicTexture(`water-tex-${hex.q}-${hex.r}`, 128, scene);
+    const ctx = waterTexture.getContext() as CanvasRenderingContext2D;
+    
+    // Theme-specific colors
+    let color1, color2, waveColor, specular, emissive;
+    
+    if (theme.terrainColors.water.r > 0.6) {
+      // Lava world - glowing orange/red
+      color1 = '#ff4500';
+      color2 = '#ff8c00';
+      waveColor = 'rgba(255, 200, 100, 0.6)';
+      specular = new Color3(0.8, 0.4, 0.2);
+      emissive = new Color3(0.5, 0.2, 0.1);
+    } else if (theme.terrainColors.water.b > 0.6) {
+      // Ice world - frozen blue
+      color1 = '#c0d8e8';
+      color2 = '#e0f0ff';
+      waveColor = 'rgba(200, 220, 240, 0.4)';
+      specular = new Color3(0.6, 0.7, 0.8);
+      emissive = new Color3(0.05, 0.08, 0.12);
+    } else {
+      // Default water - dark blue/green
+      color1 = '#1a2530';
+      color2 = '#243540';
+      waveColor = 'rgba(60, 80, 100, 0.4)';
+      specular = new Color3(0.3, 0.4, 0.5);
+      emissive = new Color3(0.03, 0.05, 0.08);
+    }
+    
+    const gradient = ctx.createLinearGradient(0, 0, 128, 128);
+    gradient.addColorStop(0, color1);
+    gradient.addColorStop(0.5, color2);
+    gradient.addColorStop(1, color1);
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 128, 128);
+    
+    // Wave lines
+    ctx.strokeStyle = waveColor;
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 8; i++) {
+      ctx.beginPath();
+      const y = (i / 8) * 128;
+      ctx.moveTo(0, y);
+      for (let x = 0; x < 128; x += 8) {
+        const wave = Math.sin((x + i * 20) * 0.08) * 3;
+        ctx.lineTo(x, y + wave);
+      }
+      ctx.stroke();
+    }
+    
+    waterTexture.update();
+    material.diffuseTexture = waterTexture;
+    material.specularColor = specular;
+    material.emissiveColor = emissive;
+  } else if (hex.terrain === 'open') {
+    // Grass/ground texture
+    const groundTexture = new DynamicTexture(`ground-tex-${hex.q}-${hex.r}`, 128, scene);
+    const ctx = groundTexture.getContext() as CanvasRenderingContext2D;
+    
+    ctx.fillStyle = '#3a3530';
+    ctx.fillRect(0, 0, 128, 128);
+    
+    // Add dirt patches
+    for (let i = 0; i < 100; i++) {
+      const x = Math.random() * 128;
+      const y = Math.random() * 128;
+      const size = Math.random() * 2 + 1;
+      const brightness = Math.random() * 20 - 10;
+      ctx.fillStyle = `rgba(${50 + brightness}, ${45 + brightness}, ${40 + brightness}, 0.4)`;
+      ctx.fillRect(x, y, size, size);
+    }
+    
+    groundTexture.update();
+    material.diffuseTexture = groundTexture;
+  }
   
   // Add slight variation for visual interest
   const variation = (Math.sin(hex.q * 12.9898 + hex.r * 78.233) * 0.5 + 0.5) * 0.1;
@@ -519,7 +882,8 @@ function createUnitMesh(
   hexSize: number, 
   scene: Scene,
   isSelected: boolean,
-  onClick: (unit: Unit, event?: PointerEvent) => void
+  onClick: (unit: Unit, event?: PointerEvent) => void,
+  theme: ThemeConfig
 ): Mesh {
   const w = Math.sqrt(3) * hexSize;
   const h = 2 * hexSize;
@@ -527,7 +891,7 @@ function createUnitMesh(
   const z = h * (3 / 4) * unit.position!.r;
   
   // Get the terrain height at this position
-  const terrainHeight = TERRAIN_HEIGHTS['open']; // TODO: Get actual terrain from grid
+  const terrainHeight = theme.terrainHeights['open']; // TODO: Get actual terrain from grid
   const baseThickness = 0.5;
   
   // Calculate hex top position (same logic as in createHexMesh)
@@ -542,8 +906,9 @@ function createUnitMesh(
   }
 
   // Create unit as two planes (front and back) for proper texture orientation
-  const unitHeight = 1.2;
-  const unitWidth = 1.0;
+  // Keep square aspect ratio for proper image display
+  const unitWidth = 1.6; // Full hex width (hex size is ~1.732)
+  const unitHeight = 1.6; // Same as width for square aspect ratio
   
   // Create a parent mesh to hold both planes
   const unitMesh = new Mesh(`unit-${unit.id}`, scene);
@@ -555,40 +920,44 @@ function createUnitMesh(
     ? new Color3(0.2, 0.4, 0.8)  // Blue for player 0
     : new Color3(0.8, 0.2, 0.2); // Red for player 1
 
-  // Create a dynamic texture for the front and back faces with unit image
-  const faceTexture = new DynamicTexture(`unit-texture-${unit.id}`, 512, scene, false);
+  // Create a dynamic texture for the front and back faces with unit image - HIGHER RESOLUTION
+  const faceTexture = new DynamicTexture(`unit-texture-${unit.id}`, 1024, scene, false);
   const ctx = faceTexture.getContext() as CanvasRenderingContext2D;
   
   // Create material for the card first
   const cardMaterial = new StandardMaterial(`unit-card-${unit.id}`, scene);
   cardMaterial.diffuseTexture = faceTexture;
-  cardMaterial.diffuseColor = new Color3(1, 1, 1);
-  cardMaterial.specularColor = new Color3(0.3, 0.3, 0.3);
+  cardMaterial.diffuseColor = new Color3(2.5, 2.5, 2.5); // Very bright
+  cardMaterial.specularColor = new Color3(1.0, 1.0, 1.0); // Very reflective
   cardMaterial.backFaceCulling = false; // Show both sides
-  if (isSelected) {
-    cardMaterial.emissiveColor = playerColor.scale(0.5);
-  } else {
-    cardMaterial.emissiveColor = playerColor.scale(0.15);
-  }
+  // Add emissive to make cards self-illuminated
+  cardMaterial.emissiveTexture = faceTexture;
+  cardMaterial.emissiveColor = new Color3(0.6, 0.6, 0.6); // Self-illuminated
   
-  // Fill background with player color immediately
-  ctx.fillStyle = unit.owner === 0 ? '#1e3a8a' : '#7f1d1d';
-  ctx.fillRect(0, 0, 512, 512);
+  // Fill background with LIGHTER player color
+  ctx.fillStyle = unit.owner === 0 ? '#3b5998' : '#b85450'; // Much lighter colors
+  ctx.fillRect(0, 0, 1024, 1024);
   
   // Add border/frame
   ctx.strokeStyle = unit.owner === 0 ? '#3b82f6' : '#ef4444';
-  ctx.lineWidth = 8;
-  ctx.strokeRect(4, 4, 504, 504);
+  ctx.lineWidth = 16;
+  ctx.strokeRect(8, 8, 1008, 1008);
   
-  // Add health bar at bottom
-  const barHeight = 40;
-  const barY = 512 - barHeight - 10;
+  // Add health bar on RIGHT side (vertical)
+  const barWidth = 100;
+  const barX = 1024 - barWidth - 20;
+  const barHeight = 800;
+  const barY = 112;
+  
+  // Background
   ctx.fillStyle = '#0a0c12';
-  ctx.fillRect(20, barY, 472, barHeight);
+  ctx.fillRect(barX, barY, barWidth, barHeight);
   
+  // Health bar (fills from bottom to top)
   const healthPercent = unit.wounds / unit.maxWounds;
+  const filledHeight = barHeight * healthPercent;
   ctx.fillStyle = unit.owner === 0 ? '#3b82f6' : '#ef4444';
-  ctx.fillRect(24, barY + 4, 464 * healthPercent, barHeight - 8);
+  ctx.fillRect(barX + 8, barY + barHeight - filledHeight - 8, barWidth - 16, filledHeight);
   
   faceTexture.update();
   
@@ -597,25 +966,34 @@ function createUnitMesh(
   img.crossOrigin = 'anonymous';
   img.onload = () => {
     // Clear and redraw everything with image
-    ctx.fillStyle = unit.owner === 0 ? '#1e3a8a' : '#7f1d1d';
-    ctx.fillRect(0, 0, 512, 512);
+    ctx.fillStyle = unit.owner === 0 ? '#3b5998' : '#b85450';
+    ctx.fillRect(0, 0, 1024, 1024);
     
-    // Draw image in center
-    const imgSize = 400;
-    const offset = (512 - imgSize) / 2;
+    // Draw image in center (larger for better quality)
+    const imgSize = 800;
+    const offset = (1024 - imgSize) / 2;
     ctx.drawImage(img, offset, offset, imgSize, imgSize);
     
     // Add border/frame
     ctx.strokeStyle = unit.owner === 0 ? '#3b82f6' : '#ef4444';
-    ctx.lineWidth = 8;
-    ctx.strokeRect(4, 4, 504, 504);
+    ctx.lineWidth = 16;
+    ctx.strokeRect(8, 8, 1008, 1008);
     
-    // Add health bar at bottom
+    // Add health bar on RIGHT side (vertical)
+    const barWidth = 100;
+    const barX = 1024 - barWidth - 20;
+    const barHeight = 800;
+    const barY = 112;
+    
+    // Background
     ctx.fillStyle = '#0a0c12';
-    ctx.fillRect(20, barY, 472, barHeight);
+    ctx.fillRect(barX, barY, barWidth, barHeight);
     
+    // Health bar (fills from bottom to top)
+    const healthPercent = unit.wounds / unit.maxWounds;
+    const filledHeight = barHeight * healthPercent;
     ctx.fillStyle = unit.owner === 0 ? '#3b82f6' : '#ef4444';
-    ctx.fillRect(24, barY + 4, 464 * healthPercent, barHeight - 8);
+    ctx.fillRect(barX + 8, barY + barHeight - filledHeight - 8, barWidth - 16, filledHeight);
     
     faceTexture.update();
   };
@@ -637,8 +1015,9 @@ function createUnitMesh(
   
   // Create side material (for the thin edges)
   const sideMaterial = new StandardMaterial(`unit-side-${unit.id}`, scene);
-  sideMaterial.diffuseColor = playerColor;
-  sideMaterial.emissiveColor = playerColor.scale(0.2);
+  sideMaterial.diffuseColor = playerColor.scale(2.0); // Brighter player color
+  sideMaterial.emissiveColor = playerColor.scale(0.8); // Strong glow
+  sideMaterial.specularColor = new Color3(1.0, 1.0, 1.0); // Very reflective
   cardBox.material = sideMaterial;
 
   // Create front plane (larger than box to sit on top)
@@ -649,6 +1028,7 @@ function createUnitMesh(
   );
   // Position plane at center height, slightly in front
   frontPlane.position = new Vector3(0, unitHeight / 2, cardDepth / 2 + 0.001);
+  cardMaterial.specularColor = new Color3(0.5, 0.5, 0.5); // Make more reflective
   frontPlane.material = cardMaterial;
   frontPlane.parent = unitMesh;
 
@@ -663,6 +1043,150 @@ function createUnitMesh(
   backPlane.rotation.y = Math.PI; // Rotate 180 degrees so texture is right way up
   backPlane.material = cardMaterial;
   backPlane.parent = unitMesh;
+
+  // Add connecting pole from top-right corner to health circle
+  const poleHeight = 0.5;
+  const pole = MeshBuilder.CreateCylinder(
+    `health-pole-${unit.id}`,
+    { height: poleHeight, diameter: 0.05, tessellation: 8 },
+    scene
+  );
+  pole.position = new Vector3(unitWidth / 2, unitHeight + poleHeight / 2, 0);
+  pole.parent = unitMesh;
+  
+  // Check if unit is activated for pole color
+  const isActivated = (unit as any).activated;
+  
+  const poleMat = new StandardMaterial(`pole-mat-${unit.id}`, scene);
+  if (isActivated) {
+    poleMat.diffuseColor = new Color3(0.4, 0.4, 0.4); // Gray for used units
+    poleMat.emissiveColor = new Color3(0.2, 0.2, 0.2);
+  } else {
+    poleMat.diffuseColor = playerColor.scale(1.5); // Player color for ready units
+    poleMat.emissiveColor = playerColor.scale(0.5);
+  }
+  pole.material = poleMat;
+  
+  // Add health number circle - connected to pole (as a plane facing camera)
+  const healthCircle = MeshBuilder.CreatePlane(
+    `health-circle-${unit.id}`,
+    { size: 0.8 },
+    scene
+  );
+  healthCircle.position = new Vector3(unitWidth / 2, unitHeight + poleHeight + 0.4, 0);
+  healthCircle.billboardMode = Mesh.BILLBOARDMODE_ALL; // Always face camera
+  healthCircle.parent = unitMesh;
+  
+  // Create texture for health number
+  const healthTexture = new DynamicTexture(`health-tex-${unit.id}`, 256, scene);
+  const hCtx = healthTexture.getContext() as CanvasRenderingContext2D;
+  
+  // Draw circle background - GRAY if activated, player color if ready
+  if (isActivated) {
+    hCtx.fillStyle = '#666666'; // Gray for used units
+  } else {
+    hCtx.fillStyle = unit.owner === 0 ? '#3b82f6' : '#ef4444'; // Player color for ready units
+  }
+  hCtx.beginPath();
+  hCtx.arc(128, 128, 120, 0, Math.PI * 2);
+  hCtx.fill();
+  
+  // White border
+  hCtx.strokeStyle = 'white';
+  hCtx.lineWidth = 8;
+  hCtx.stroke();
+  
+  // Health number
+  hCtx.fillStyle = 'white';
+  hCtx.font = 'bold 140px Arial';
+  hCtx.textAlign = 'center';
+  hCtx.textBaseline = 'middle';
+  hCtx.fillText(`${unit.wounds}`, 128, 128);
+  
+  healthTexture.update();
+  
+  const healthMat = new StandardMaterial(`health-mat-${unit.id}`, scene);
+  healthMat.diffuseTexture = healthTexture;
+  healthMat.emissiveTexture = healthTexture;
+  healthMat.emissiveColor = new Color3(1.0, 1.0, 1.0); // Very bright
+  healthMat.backFaceCulling = false;
+  healthCircle.material = healthMat;
+
+  // Add activation indicator if unit is activated - LARGE overlay
+  if ((unit as any).activated) {
+    const indicatorSize = unitWidth * 0.9; // Cover most of the card
+    const indicator = MeshBuilder.CreatePlane(
+      `activated-${unit.id}`,
+      { width: indicatorSize, height: unitHeight * 0.9 },
+      scene
+    );
+    // Position in center of card, slightly in front
+    indicator.position = new Vector3(0, unitHeight / 2, cardDepth / 2 + 0.003);
+    indicator.parent = unitMesh;
+    indicator.isPickable = false;
+    
+    // Create semi-transparent dark overlay with USED text
+    const indicatorTexture = new DynamicTexture(`activated-tex-${unit.id}`, 512, scene);
+    const iCtx = indicatorTexture.getContext() as CanvasRenderingContext2D;
+    
+    // Dark semi-transparent background
+    iCtx.fillStyle = 'rgba(20, 20, 20, 0.75)';
+    iCtx.fillRect(0, 0, 512, 512);
+    
+    // Large USED text
+    iCtx.fillStyle = '#ff4444';
+    iCtx.font = 'bold 120px Arial';
+    iCtx.textAlign = 'center';
+    iCtx.textBaseline = 'middle';
+    iCtx.fillText('USED', 256, 256);
+    
+    // Add X symbol
+    iCtx.strokeStyle = '#ff4444';
+    iCtx.lineWidth = 20;
+    iCtx.beginPath();
+    iCtx.moveTo(100, 100);
+    iCtx.lineTo(412, 412);
+    iCtx.moveTo(412, 100);
+    iCtx.lineTo(100, 412);
+    iCtx.stroke();
+    
+    indicatorTexture.update();
+    
+    const indicatorMat = new StandardMaterial(`activated-mat-${unit.id}`, scene);
+    indicatorMat.diffuseTexture = indicatorTexture;
+    indicatorMat.emissiveColor = new Color3(0.8, 0.2, 0.2); // Red glow
+    indicatorMat.opacityTexture = indicatorTexture;
+    indicator.material = indicatorMat;
+  }
+
+  // Add spotlight for unit - from above to illuminate both unit and hex
+  const unitSpotlight = new SpotLight(
+    `unit-spotlight-${unit.id}`,
+    new Vector3(0, unitHeight + 2, 0),
+    new Vector3(0, -1, 0),
+    Math.PI / 3,
+    2,
+    scene
+  );
+  
+  // Player colors: Player 0 = Blue, Player 1 = Red
+  if (unit.owner === 0) {
+    unitSpotlight.diffuse = new Color3(0.6, 0.9, 1.0); // Very bright Blue
+    unitSpotlight.specular = new Color3(0.4, 0.6, 0.9);
+  } else {
+    unitSpotlight.diffuse = new Color3(1.0, 0.6, 0.6); // Very bright Red
+    unitSpotlight.specular = new Color3(0.9, 0.4, 0.4);
+  }
+  
+  // Dim the light if unit is activated (can't be used this round)
+  if ((unit as any).activated) {
+    unitSpotlight.intensity = 1.5; // Dim but still visible
+  } else {
+    unitSpotlight.intensity = 6.0; // Very bright spotlight
+  }
+  
+  unitSpotlight.range = 15; // Large range
+  unitSpotlight.parent = unitMesh; // Attach to unit so it moves with it
 
   // Enable picking on all child meshes
   unitMesh.metadata = { unit };
@@ -705,7 +1229,8 @@ function createUnitMesh(
 function createObjectiveMesh(
   objective: import('@/types/battle').ObjectiveMarker,
   hexSize: number,
-  scene: Scene
+  scene: Scene,
+  theme: ThemeConfig
 ): Mesh {
   const w = Math.sqrt(3) * hexSize;
   const h = 2 * hexSize;
@@ -713,7 +1238,7 @@ function createObjectiveMesh(
   const z = h * (3 / 4) * objective.position.r;
   
   // Get hex top position
-  const terrainHeight = TERRAIN_HEIGHTS['open']; // TODO: Get actual terrain
+  const terrainHeight = theme.terrainHeights['open']; // TODO: Get actual terrain
   const baseThickness = 0.5;
   
   // Calculate hex top position (same logic as in createHexMesh)
@@ -744,6 +1269,7 @@ function createObjectiveMesh(
 
   marker.position = new Vector3(x, hexTopY + floatHeight, z);
   marker.rotation.y = Math.PI / 6;
+  marker.isPickable = false; // Don't block hex clicks
 
   // Add floating animation
   const floatAnim = new Animation(
@@ -810,6 +1336,7 @@ function createObjectiveMesh(
   );
   textPlane.position = new Vector3(0, 0, 0); // Relative to parent (marker)
   textPlane.billboardMode = Mesh.BILLBOARDMODE_ALL; // Always face camera
+  textPlane.isPickable = false; // Don't block hex clicks
 
   const textTexture = new DynamicTexture(`obj-text-tex-${objective.id}`, 256, scene);
   const textMaterial = new StandardMaterial(`obj-text-mat-${objective.id}`, scene);
@@ -846,6 +1373,7 @@ function createObjectiveMesh(
     scene
   );
   beam.position = new Vector3(x, hexTopY + floatHeight - beamHeight / 2, z);
+  beam.isPickable = false; // Don't block hex clicks
   
   const beamMat = new StandardMaterial(`obj-beam-mat-${objective.id}`, scene);
   
@@ -870,13 +1398,13 @@ function createObjectiveMesh(
 }
 
 // Helper function to create 3D terrain objects (buildings, debris, mountains)
-function createTerrainObjects(hex: Hex, hexSize: number, scene: Scene, buildingPositions: Set<string>): Mesh[] {
+function createTerrainObjects(hex: Hex, hexSize: number, scene: Scene, buildingPositions: Set<string>, theme: ThemeConfig): Mesh[] {
   const objects: Mesh[] = [];
   const w = Math.sqrt(3) * hexSize;
   const h = 2 * hexSize;
   const x = w * (hex.q + hex.r / 2);
   const z = h * (3 / 4) * hex.r;
-  const terrainHeight = TERRAIN_HEIGHTS[hex.terrain];
+  const terrainHeight = theme.terrainHeights[hex.terrain];
   const baseThickness = 0.5;
   
   let hexTopY: number;
@@ -901,8 +1429,12 @@ function createTerrainObjects(hex: Hex, hexSize: number, scene: Scene, buildingP
     return false;
   };
 
-  // Mountains: Create rocky formations
-  if (hex.terrain === 'mountain') {
+  // Mountains: Create rocky formations (skip for Minecraft worlds)
+  // Use SAME detection as buildings!
+  const isMinecraftWorld = (theme.terrainColors.open.g > 0.6 && theme.ambientIntensity > 0.85 && theme.terrainColors.water.b < 0.8) || 
+                           (theme.terrainColors.open.r > 0.65 && theme.terrainColors.water.b > 0.75 && theme.ambientIntensity > 0.8 && theme.ambientIntensity < 0.9);
+  
+  if (hex.terrain === 'mountain' && !isMinecraftWorld) {
     const numRocks = Math.floor(Math.random() * 3) + 2;
     for (let i = 0; i < numRocks; i++) {
       const offsetX = (Math.random() - 0.5) * hexSize * 0.8;
@@ -953,16 +1485,57 @@ function createTerrainObjects(hex: Hex, hexSize: number, scene: Scene, buildingP
     }
   }
 
-  // Ruins: Industrial buildings - larger structures spanning multiple hexes
-  // Only spawn on land (not water) and not too close to other buildings
+  // Theme-specific structures
   const hexKey = `${hex.q},${hex.r}`;
-  const canPlaceBuilding = 
-    (hex.terrain === 'ruin' || (hex.terrain === 'open' && Math.random() < 0.08)) &&
-    terrainHeight >= 0 && // Only on land, not in water
-    !buildingPositions.has(hexKey) &&
-    !isNearWater(hex.q, hex.r);
   
-  if (canPlaceBuilding) {
+  // Determine structure type based on theme - CHECK MINECRAFT FIRST!
+  // Minecraft Village: green grass (g > 0.6) + bright (ambient > 0.85) + NOT too blue water
+  const isMinecraftVillage = theme.terrainColors.open.g > 0.6 && theme.ambientIntensity > 0.85 && theme.terrainColors.water.b < 0.8;
+  // Minecraft Island: sandy (r > 0.65) + ocean water (b > 0.75) + moderate brightness
+  const isMinecraftIsland = theme.terrainColors.open.r > 0.65 && theme.terrainColors.water.b > 0.75 && theme.ambientIntensity > 0.8 && theme.ambientIntensity < 0.9;
+  const isLavaWorld = theme.terrainColors.water.r > 0.6;
+  // Ice World: very bright + blue water + white terrain (high r, g, b)
+  const isIceWorld = theme.terrainColors.open.r > 0.6 && theme.terrainColors.open.g > 0.7 && theme.terrainColors.open.b > 0.8;
+  const isGrassland = theme.ambientIntensity > 0.7 && !isMinecraftVillage && !isMinecraftIsland && !isIceWorld; // Grassland but not Minecraft
+  const isJungle = hex.terrain === 'forest' || (theme.ambientIntensity < 0.7 && !isLavaWorld && !isIceWorld && !isMinecraftVillage && !isMinecraftIsland);
+  
+  // Debug: Log once per grid generation
+  if (hex.q === 0 && hex.r === 0) {
+    console.log('🏘️ Theme detection:', {
+      isMinecraftVillage,
+      isMinecraftIsland,
+      isLavaWorld,
+      isIceWorld,
+      isGrassland,
+      openG: theme.terrainColors.open.g,
+      ambient: theme.ambientIntensity,
+      openR: theme.terrainColors.open.r,
+      waterB: theme.terrainColors.water.b
+    });
+  }
+  
+  // Lower spawn rate for Minecraft villages
+  const spawnChance = (isMinecraftVillage || isMinecraftIsland) ? 0.12 : 0.08;
+  
+  // In Minecraft worlds, place structures on open, road AND ruin terrain (no mountains)
+  const canPlaceStructure = 
+    ((isMinecraftVillage || isMinecraftIsland) ? 
+      (hex.terrain === 'open' || hex.terrain === 'ruin' || hex.terrain === 'road') && Math.random() < spawnChance :
+      (hex.terrain === 'ruin' || (hex.terrain === 'open' && Math.random() < spawnChance))
+    ) &&
+    terrainHeight >= 0 && // Only on land, not in water (shipwrecks are on land in Minecraft)
+    !buildingPositions.has(hexKey) &&
+    !(isMinecraftIsland ? false : isNearWater(hex.q, hex.r)); // Allow near water for island shipwrecks
+  
+  // Debug: Log when placing structures
+  if (canPlaceStructure && (hex.q === 0 || hex.q === 1) && hex.r === 0) {
+    console.log('🏠 Placing structure on hex', hex.q, hex.r, '- isMinecraftVillage:', isMinecraftVillage);
+  }
+  
+  if (canPlaceStructure) {
+    // Mark this hex as having a building (blocks movement/deployment, provides cover)
+    hex.hasBuilding = true;
+    
     // Mark this position and neighbors as occupied
     buildingPositions.add(hexKey);
     buildingPositions.add(`${hex.q + 1},${hex.r}`);
@@ -970,21 +1543,542 @@ function createTerrainObjects(hex: Hex, hexSize: number, scene: Scene, buildingP
     buildingPositions.add(`${hex.q},${hex.r + 1}`);
     buildingPositions.add(`${hex.q},${hex.r - 1}`);
     
-    // Larger buildings
-    const buildingHeight = Math.random() * 3 + 2.5;
-    const buildingWidth = Math.random() * 1.5 + 1.5; // Much wider
-    const buildingDepth = Math.random() * 1.5 + 1.5; // Much deeper
+    let building: Mesh;
+    let buildingHeight: number = 0;
+    let buildingWidth: number = 0;
+    let buildingDepth: number = 0;
+    let skipDefaultTexture = false;
     
-    const building = MeshBuilder.CreateBox(
-      `building-${hex.q}-${hex.r}`,
-      { width: buildingWidth, height: buildingHeight, depth: buildingDepth },
-      scene
-    );
-    building.position = new Vector3(x, hexTopY + buildingHeight / 2, z);
-    building.rotation.y = Math.random() * Math.PI * 2;
+    // CHECK MINECRAFT FIRST before other themes!
+    if (isMinecraftVillage) {
+      // MINECRAFT VILLAGE HOUSE - detailed with stone base, white walls, wood beams
+      buildingHeight = Math.random() * 1.8 + 1.5;
+      buildingWidth = Math.random() * 1.8 + 1.5;
+      buildingDepth = buildingWidth * 0.85;
+      
+      // Stone foundation/base
+      const baseHeight = 0.3;
+      const base = MeshBuilder.CreateBox(
+        `mc-base-${hex.q}-${hex.r}`,
+        { width: buildingWidth + 0.1, height: baseHeight, depth: buildingDepth + 0.1 },
+        scene
+      );
+      base.position = new Vector3(x, hexTopY + baseHeight / 2, z);
+      
+      const baseMat = new StandardMaterial(`mc-base-mat-${hex.q}-${hex.r}`, scene);
+      const baseTexture = new DynamicTexture(`mc-base-tex-${hex.q}-${hex.r}`, 128, scene);
+      const bCtx = baseTexture.getContext() as CanvasRenderingContext2D;
+      
+      // Cobblestone texture
+      bCtx.fillStyle = '#7A7A7A';
+      bCtx.fillRect(0, 0, 128, 128);
+      for (let i = 0; i < 20; i++) {
+        bCtx.fillStyle = i % 2 === 0 ? '#6A6A6A' : '#8A8A8A';
+        bCtx.fillRect(Math.random() * 128, Math.random() * 128, 16, 16);
+      }
+      baseTexture.update();
+      baseMat.diffuseTexture = baseTexture;
+      base.material = baseMat;
+      objects.push(base);
+      
+      // Main house body (white/beige plaster)
+      building = MeshBuilder.CreateBox(
+        `mc-house-${hex.q}-${hex.r}`,
+        { width: buildingWidth, height: buildingHeight, depth: buildingDepth },
+        scene
+      );
+      building.position = new Vector3(x, hexTopY + baseHeight + buildingHeight / 2, z);
+      
+      const houseMat = new StandardMaterial(`mc-house-mat-${hex.q}-${hex.r}`, scene);
+      const houseTexture = new DynamicTexture(`mc-house-tex-${hex.q}-${hex.r}`, 512, scene);
+      const hCtx = houseTexture.getContext() as CanvasRenderingContext2D;
+      
+      // White/beige plaster background
+      hCtx.fillStyle = '#E8D4B8';
+      hCtx.fillRect(0, 0, 512, 512);
+      
+      // Dark oak wood beams (vertical)
+      const beamWidth = 40;
+      const beamColor = '#5C4033';
+      for (let i = 0; i < 4; i++) {
+        const beamX = i * 128 + 20;
+        hCtx.fillStyle = beamColor;
+        hCtx.fillRect(beamX, 0, beamWidth, 512);
+        // Wood grain
+        for (let j = 0; j < 10; j++) {
+          hCtx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+          hCtx.lineWidth = 2;
+          hCtx.beginPath();
+          hCtx.moveTo(beamX, j * 51);
+          hCtx.lineTo(beamX + beamWidth, j * 51);
+          hCtx.stroke();
+        }
+      }
+      
+      // Horizontal beams
+      for (let i = 0; i < 3; i++) {
+        const beamY = i * 170 + 20;
+        hCtx.fillStyle = beamColor;
+        hCtx.fillRect(0, beamY, 512, beamWidth);
+      }
+      
+      // Window (dark)
+      hCtx.fillStyle = '#3A3A3A';
+      hCtx.fillRect(200, 180, 100, 120);
+      hCtx.strokeStyle = beamColor;
+      hCtx.lineWidth = 8;
+      hCtx.strokeRect(200, 180, 100, 120);
+      
+      houseTexture.update();
+      houseMat.diffuseTexture = houseTexture;
+      houseMat.diffuseColor = new Color3(1, 1, 1);
+      building.material = houseMat;
+      objects.push(building);
+      
+      // Oak plank roof (flat, blocky Minecraft style)
+      const roofHeight = 0.3;
+      const roofWidth = buildingWidth + 0.4;
+      const roofDepth = buildingDepth + 0.4;
+      
+      const roof = MeshBuilder.CreateBox(
+        `mc-roof-${hex.q}-${hex.r}`,
+        { width: roofWidth, height: roofHeight, depth: roofDepth },
+        scene
+      );
+      roof.position = new Vector3(x, hexTopY + baseHeight + buildingHeight + roofHeight / 2, z);
+      
+      const roofMat = new StandardMaterial(`mc-roof-mat-${hex.q}-${hex.r}`, scene);
+      const roofTexture = new DynamicTexture(`mc-roof-tex-${hex.q}-${hex.r}`, 256, scene);
+      const rCtx = roofTexture.getContext() as CanvasRenderingContext2D;
+      
+      // Oak planks (horizontal strips)
+      rCtx.fillStyle = '#9C7F4E';
+      rCtx.fillRect(0, 0, 256, 256);
+      for (let i = 0; i < 16; i++) {
+        const stripY = i * 16;
+        rCtx.fillStyle = i % 2 === 0 ? '#8B6F47' : '#A68C5A';
+        rCtx.fillRect(0, stripY, 256, 16);
+        rCtx.strokeStyle = '#6B5437';
+        rCtx.lineWidth = 1;
+        rCtx.strokeRect(0, stripY, 256, 16);
+      }
+      roofTexture.update();
+      roofMat.diffuseTexture = roofTexture;
+      roofMat.diffuseColor = new Color3(1, 1, 1);
+      roof.material = roofMat;
+      objects.push(roof);
+      
+      // Chimney (cobblestone)
+      if (Math.random() < 0.6) {
+        const chimney = MeshBuilder.CreateBox(
+          `chimney-${hex.q}-${hex.r}`,
+          { width: 0.3, height: 0.8, depth: 0.3 },
+          scene
+        );
+        chimney.position = new Vector3(x + buildingWidth * 0.3, hexTopY + baseHeight + buildingHeight + roofHeight * 0.6 + 0.4, z);
+        chimney.material = baseMat;
+        objects.push(chimney);
+      }
+      
+      skipDefaultTexture = true;
+    } else if (isLavaWorld) {
+      // VOLCANO - detailed with rocky texture
+      buildingHeight = Math.random() * 4 + 3;
+      const volcanoBase = Math.random() * 2 + 2;
+      building = MeshBuilder.CreateCylinder(
+        `volcano-${hex.q}-${hex.r}`,
+        { height: buildingHeight, diameterTop: volcanoBase * 0.2, diameterBottom: volcanoBase, tessellation: 12 },
+        scene
+      );
+      building.position = new Vector3(x, hexTopY + buildingHeight / 2, z);
+      building.rotation.y = Math.random() * Math.PI;
+      
+      // Create lava texture
+      const volcanoTexture = new DynamicTexture(`volcano-tex-${hex.q}-${hex.r}`, 256, scene);
+      const vCtx = volcanoTexture.getContext() as CanvasRenderingContext2D;
+      
+      // Dark volcanic rock base
+      vCtx.fillStyle = '#1a1510';
+      vCtx.fillRect(0, 0, 256, 256);
+      
+      // Add lava cracks
+      for (let i = 0; i < 20; i++) {
+        vCtx.strokeStyle = `rgba(255, ${100 + Math.random() * 50}, 20, ${0.3 + Math.random() * 0.4})`;
+        vCtx.lineWidth = Math.random() * 3 + 1;
+        vCtx.beginPath();
+        vCtx.moveTo(Math.random() * 256, Math.random() * 256);
+        vCtx.lineTo(Math.random() * 256, Math.random() * 256);
+        vCtx.stroke();
+      }
+      
+      // Add rocky texture
+      for (let i = 0; i < 100; i++) {
+        const size = Math.random() * 8 + 2;
+        vCtx.fillStyle = `rgba(${20 + Math.random() * 30}, ${15 + Math.random() * 20}, ${10}, 0.5)`;
+        vCtx.fillRect(Math.random() * 256, Math.random() * 256, size, size);
+      }
+      
+      volcanoTexture.update();
+      
+      const volcanoMat = new StandardMaterial(`volcano-mat-${hex.q}-${hex.r}`, scene);
+      volcanoMat.diffuseTexture = volcanoTexture;
+      volcanoMat.diffuseColor = new Color3(0.8, 0.8, 0.8);
+      volcanoMat.emissiveColor = new Color3(0.5, 0.2, 0.05); // Glowing
+      volcanoMat.specularColor = new Color3(0.1, 0.05, 0.02);
+      building.material = volcanoMat;
+      objects.push(building);
+      
+      // Add lava glow at top
+      const lavaGlow = MeshBuilder.CreateCylinder(
+        `lava-${hex.q}-${hex.r}`,
+        { height: 0.2, diameter: volcanoBase * 0.4, tessellation: 12 },
+        scene
+      );
+      lavaGlow.position = new Vector3(x, hexTopY + buildingHeight + 0.1, z);
+      const lavaMat = new StandardMaterial(`lava-mat-${hex.q}-${hex.r}`, scene);
+      lavaMat.diffuseColor = new Color3(1.0, 0.4, 0.1);
+      lavaMat.emissiveColor = new Color3(1.0, 0.5, 0.2);
+      lavaGlow.material = lavaMat;
+      objects.push(lavaGlow);
+      
+      skipDefaultTexture = true;
+    } else if (isIceWorld) {
+      // ICEBERG - jagged and crystalline
+      buildingHeight = Math.random() * 3 + 2;
+      buildingWidth = Math.random() * 2 + 1.5;
+      
+      // Create multiple ice crystals for jagged look
+      const numCrystals = Math.floor(Math.random() * 3) + 2;
+      for (let i = 0; i < numCrystals; i++) {
+        const crystalHeight = buildingHeight * (0.6 + Math.random() * 0.4);
+        const crystalWidth = buildingWidth * (0.5 + Math.random() * 0.3);
+        const offsetX = (Math.random() - 0.5) * buildingWidth * 0.4;
+        const offsetZ = (Math.random() - 0.5) * buildingWidth * 0.4;
+        
+        const crystal = MeshBuilder.CreateCylinder(
+          `ice-crystal-${hex.q}-${hex.r}-${i}`,
+          { height: crystalHeight, diameterTop: crystalWidth * 0.2, diameterBottom: crystalWidth, tessellation: 6 },
+          scene
+        );
+        crystal.position = new Vector3(x + offsetX, hexTopY + crystalHeight / 2, z + offsetZ);
+        crystal.rotation.y = Math.random() * Math.PI;
+        crystal.rotation.x = (Math.random() - 0.5) * 0.2;
+        crystal.rotation.z = (Math.random() - 0.5) * 0.2;
+        
+        const iceMat = new StandardMaterial(`ice-mat-${hex.q}-${hex.r}-${i}`, scene);
+        iceMat.diffuseColor = new Color3(0.85, 0.92, 1.0);
+        iceMat.specularColor = new Color3(1.0, 1.0, 1.0);
+        iceMat.specularPower = 128; // Very shiny
+        iceMat.alpha = 0.9; // Slightly transparent
+        iceMat.emissiveColor = new Color3(0.15, 0.18, 0.22);
+        crystal.material = iceMat;
+        objects.push(crystal);
+      }
+      
+      building = objects[objects.length - 1]; // Reference last crystal for height calc
+      skipDefaultTexture = true;
+    } else if (isGrassland) {
+      // COTTAGE
+      buildingHeight = Math.random() * 1.5 + 1.2;
+      buildingWidth = Math.random() * 1.2 + 1;
+      buildingDepth = buildingWidth * 0.8;
+      building = MeshBuilder.CreateBox(
+        `cottage-${hex.q}-${hex.r}`,
+        { width: buildingWidth, height: buildingHeight, depth: buildingDepth },
+        scene
+      );
+      building.position = new Vector3(x, hexTopY + buildingHeight / 2, z);
+      const cottageMat = new StandardMaterial(`cottage-mat-${hex.q}-${hex.r}`, scene);
+      cottageMat.diffuseColor = new Color3(0.6, 0.5, 0.4);
+      building.material = cottageMat;
+      objects.push(building);
+      
+      // Thatched Roof with texture
+      const roof = MeshBuilder.CreateCylinder(
+        `roof-${hex.q}-${hex.r}`,
+        { height: buildingHeight * 0.6, diameterTop: 0.1, diameterBottom: buildingWidth * 1.3, tessellation: 4 },
+        scene
+      );
+      roof.position = new Vector3(x, hexTopY + buildingHeight + buildingHeight * 0.3, z);
+      roof.rotation.y = Math.PI / 4;
+      
+      // Create straw texture
+      const thatchTexture = new DynamicTexture(`thatch-tex-${hex.q}-${hex.r}`, 256, scene);
+      const tCtx = thatchTexture.getContext() as CanvasRenderingContext2D;
+      
+      // Base straw color
+      tCtx.fillStyle = '#8B7355';
+      tCtx.fillRect(0, 0, 256, 256);
+      
+      // Add straw strands (horizontal lines)
+      for (let i = 0; i < 40; i++) {
+        const y = (i / 40) * 256;
+        tCtx.strokeStyle = `rgba(${120 + Math.random() * 40}, ${90 + Math.random() * 30}, ${50 + Math.random() * 20}, ${0.6 + Math.random() * 0.4})`;
+        tCtx.lineWidth = Math.random() * 2 + 1;
+        tCtx.beginPath();
+        tCtx.moveTo(0, y);
+        for (let x = 0; x < 256; x += 10) {
+          tCtx.lineTo(x, y + (Math.random() - 0.5) * 3);
+        }
+        tCtx.stroke();
+      }
+      
+      // Add texture variation
+      for (let i = 0; i < 100; i++) {
+        tCtx.fillStyle = `rgba(${100 + Math.random() * 50}, ${70 + Math.random() * 30}, ${40 + Math.random() * 20}, 0.3)`;
+        tCtx.fillRect(Math.random() * 256, Math.random() * 256, Math.random() * 5 + 2, Math.random() * 3 + 1);
+      }
+      
+      thatchTexture.update();
+      
+      const roofMat = new StandardMaterial(`roof-mat-${hex.q}-${hex.r}`, scene);
+      roofMat.diffuseTexture = thatchTexture;
+      roofMat.diffuseColor = new Color3(1, 1, 1);
+      roofMat.specularColor = new Color3(0.1, 0.1, 0.1);
+      roof.material = roofMat;
+      objects.push(roof);
+      skipDefaultTexture = true;
+    } else if (isJungle && hex.terrain === 'forest') {
+      // JUNGLE TREE
+      buildingHeight = Math.random() * 5 + 4;
+      const trunkHeight = buildingHeight * 0.6;
+      const trunk = MeshBuilder.CreateCylinder(
+        `tree-${hex.q}-${hex.r}`,
+        { height: trunkHeight, diameterTop: 0.3, diameterBottom: 0.5, tessellation: 8 },
+        scene
+      );
+      trunk.position = new Vector3(x, hexTopY + trunkHeight / 2, z);
+      const trunkMat = new StandardMaterial(`trunk-mat-${hex.q}-${hex.r}`, scene);
+      trunkMat.diffuseColor = new Color3(0.3, 0.2, 0.15);
+      trunk.material = trunkMat;
+      objects.push(trunk);
+      
+      // Canopy
+      building = MeshBuilder.CreateSphere(
+        `canopy-${hex.q}-${hex.r}`,
+        { diameter: Math.random() * 3 + 2.5, segments: 8 },
+        scene
+      );
+      building.position = new Vector3(x, hexTopY + trunkHeight + 1, z);
+      building.scaling.y = 0.7;
+      const canopyMat = new StandardMaterial(`canopy-mat-${hex.q}-${hex.r}`, scene);
+      canopyMat.diffuseColor = new Color3(0.2, 0.4, 0.2);
+      canopyMat.emissiveColor = new Color3(0.05, 0.1, 0.05);
+      building.material = canopyMat;
+      objects.push(building);
+      skipDefaultTexture = true;
+    } else if (isMinecraftVillage) {
+      // MINECRAFT VILLAGE HOUSE - detailed with stone base, white walls, wood beams
+      buildingHeight = Math.random() * 1.8 + 1.5;
+      buildingWidth = Math.random() * 1.8 + 1.5;
+      buildingDepth = buildingWidth * 0.85;
+      
+      // Stone foundation/base
+      const baseHeight = 0.3;
+      const base = MeshBuilder.CreateBox(
+        `mc-base-${hex.q}-${hex.r}`,
+        { width: buildingWidth + 0.1, height: baseHeight, depth: buildingDepth + 0.1 },
+        scene
+      );
+      base.position = new Vector3(x, hexTopY + baseHeight / 2, z);
+      
+      const baseMat = new StandardMaterial(`mc-base-mat-${hex.q}-${hex.r}`, scene);
+      const baseTexture = new DynamicTexture(`mc-base-tex-${hex.q}-${hex.r}`, 128, scene);
+      const bCtx = baseTexture.getContext() as CanvasRenderingContext2D;
+      
+      // Cobblestone texture
+      bCtx.fillStyle = '#7A7A7A';
+      bCtx.fillRect(0, 0, 128, 128);
+      for (let i = 0; i < 20; i++) {
+        bCtx.fillStyle = i % 2 === 0 ? '#6A6A6A' : '#8A8A8A';
+        bCtx.fillRect(Math.random() * 128, Math.random() * 128, 16, 16);
+      }
+      baseTexture.update();
+      baseMat.diffuseTexture = baseTexture;
+      base.material = baseMat;
+      objects.push(base);
+      
+      // Main house body (white/beige plaster)
+      building = MeshBuilder.CreateBox(
+        `mc-house-${hex.q}-${hex.r}`,
+        { width: buildingWidth, height: buildingHeight, depth: buildingDepth },
+        scene
+      );
+      building.position = new Vector3(x, hexTopY + baseHeight + buildingHeight / 2, z);
+      
+      const houseMat = new StandardMaterial(`mc-house-mat-${hex.q}-${hex.r}`, scene);
+      const houseTexture = new DynamicTexture(`mc-house-tex-${hex.q}-${hex.r}`, 512, scene);
+      const hCtx = houseTexture.getContext() as CanvasRenderingContext2D;
+      
+      // White/beige plaster background
+      hCtx.fillStyle = '#E8D4B8';
+      hCtx.fillRect(0, 0, 512, 512);
+      
+      // Dark oak wood beams (vertical)
+      const beamWidth = 40;
+      const beamColor = '#5C4033';
+      for (let i = 0; i < 4; i++) {
+        const x = i * 128 + 20;
+        hCtx.fillStyle = beamColor;
+        hCtx.fillRect(x, 0, beamWidth, 512);
+        // Wood grain
+        for (let j = 0; j < 10; j++) {
+          hCtx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+          hCtx.lineWidth = 2;
+          hCtx.beginPath();
+          hCtx.moveTo(x, j * 51);
+          hCtx.lineTo(x + beamWidth, j * 51);
+          hCtx.stroke();
+        }
+      }
+      
+      // Horizontal beams
+      for (let i = 0; i < 3; i++) {
+        const y = i * 170 + 20;
+        hCtx.fillStyle = beamColor;
+        hCtx.fillRect(0, y, 512, beamWidth);
+      }
+      
+      // Window (dark)
+      hCtx.fillStyle = '#3A3A3A';
+      hCtx.fillRect(200, 180, 100, 120);
+      hCtx.strokeStyle = beamColor;
+      hCtx.lineWidth = 8;
+      hCtx.strokeRect(200, 180, 100, 120);
+      
+      houseTexture.update();
+      houseMat.diffuseTexture = houseTexture;
+      houseMat.diffuseColor = new Color3(1, 1, 1);
+      building.material = houseMat;
+      objects.push(building);
+      
+      // Oak plank roof (flat, blocky Minecraft style)
+      const roofHeight = 0.3; // Much flatter
+      const roofWidth = buildingWidth + 0.4;
+      const roofDepth = buildingDepth + 0.4;
+      
+      const roof = MeshBuilder.CreateBox(
+        `mc-roof-${hex.q}-${hex.r}`,
+        { width: roofWidth, height: roofHeight, depth: roofDepth },
+        scene
+      );
+      roof.position = new Vector3(x, hexTopY + baseHeight + buildingHeight + roofHeight / 2, z);
+      
+      const roofMat = new StandardMaterial(`mc-roof-mat-${hex.q}-${hex.r}`, scene);
+      const roofTexture = new DynamicTexture(`mc-roof-tex-${hex.q}-${hex.r}`, 256, scene);
+      const rCtx = roofTexture.getContext() as CanvasRenderingContext2D;
+      
+      // Oak planks (horizontal strips)
+      rCtx.fillStyle = '#9C7F4E';
+      rCtx.fillRect(0, 0, 256, 256);
+      for (let i = 0; i < 16; i++) {
+        const y = i * 16;
+        rCtx.fillStyle = i % 2 === 0 ? '#8B6F47' : '#A68C5A';
+        rCtx.fillRect(0, y, 256, 16);
+        rCtx.strokeStyle = '#6B5437';
+        rCtx.lineWidth = 1;
+        rCtx.strokeRect(0, y, 256, 16);
+      }
+      roofTexture.update();
+      roofMat.diffuseTexture = roofTexture;
+      roofMat.diffuseColor = new Color3(1, 1, 1);
+      roof.material = roofMat;
+      objects.push(roof);
+      
+      // Chimney (cobblestone)
+      if (Math.random() < 0.6) {
+        const chimney = MeshBuilder.CreateBox(
+          `chimney-${hex.q}-${hex.r}`,
+          { width: 0.3, height: 0.8, depth: 0.3 },
+          scene
+        );
+        chimney.position = new Vector3(x + buildingWidth * 0.3, hexTopY + baseHeight + buildingHeight + roofHeight * 0.6 + 0.4, z);
+        chimney.material = baseMat; // Reuse cobblestone
+        objects.push(chimney);
+      }
+      
+      skipDefaultTexture = true;
+    } else if (isMinecraftIsland) {
+      // MINECRAFT SHIPWRECK
+      buildingHeight = Math.random() * 1.2 + 0.8;
+      buildingWidth = Math.random() * 2 + 1.5;
+      buildingDepth = buildingWidth * 0.6;
+      
+      // Broken ship hull
+      building = MeshBuilder.CreateBox(
+        `shipwreck-${hex.q}-${hex.r}`,
+        { width: buildingWidth, height: buildingHeight, depth: buildingDepth },
+        scene
+      );
+      building.position = new Vector3(x, hexTopY + buildingHeight / 2, z);
+      building.rotation.y = Math.random() * Math.PI;
+      building.rotation.z = (Math.random() - 0.5) * 0.3; // Tilted
+      
+      // Wood planks texture
+      const shipMat = new StandardMaterial(`ship-mat-${hex.q}-${hex.r}`, scene);
+      const shipTexture = new DynamicTexture(`ship-tex-${hex.q}-${hex.r}`, 256, scene);
+      const sCtx = shipTexture.getContext() as CanvasRenderingContext2D;
+      
+      // Dark oak/spruce planks
+      sCtx.fillStyle = '#4A3728';
+      sCtx.fillRect(0, 0, 256, 256);
+      
+      // Vertical planks
+      for (let i = 0; i < 8; i++) {
+        const x = i * 32;
+        sCtx.fillStyle = i % 2 === 0 ? '#3E2F22' : '#56402F';
+        sCtx.fillRect(x, 0, 32, 256);
+        sCtx.strokeStyle = '#2A1F18';
+        sCtx.lineWidth = 2;
+        sCtx.strokeRect(x, 0, 32, 256);
+      }
+      
+      // Damage/holes
+      for (let i = 0; i < 10; i++) {
+        sCtx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        sCtx.fillRect(Math.random() * 256, Math.random() * 256, 20, 20);
+      }
+      
+      shipTexture.update();
+      shipMat.diffuseTexture = shipTexture;
+      shipMat.diffuseColor = new Color3(1, 1, 1);
+      building.material = shipMat;
+      objects.push(building);
+      
+      // Treasure chest (rare)
+      if (Math.random() < 0.2) {
+        const chest = MeshBuilder.CreateBox(
+          `chest-${hex.q}-${hex.r}`,
+          { width: 0.4, height: 0.3, depth: 0.3 },
+          scene
+        );
+        chest.position = new Vector3(x + (Math.random() - 0.5) * buildingWidth * 0.5, hexTopY + buildingHeight + 0.15, z);
+        const chestMat = new StandardMaterial(`chest-mat-${hex.q}-${hex.r}`, scene);
+        chestMat.diffuseColor = new Color3(0.6, 0.5, 0.3); // Gold trim
+        chestMat.emissiveColor = new Color3(0.3, 0.25, 0.1);
+        chest.material = chestMat;
+        objects.push(chest);
+      }
+      
+      skipDefaultTexture = true;
+    } else {
+      // GRIM DARK INDUSTRIAL (default)
+      buildingHeight = Math.random() * 3 + 2.5;
+      buildingWidth = Math.random() * 1.5 + 1.5;
+      buildingDepth = Math.random() * 1.5 + 1.5;
+      building = MeshBuilder.CreateBox(
+        `building-${hex.q}-${hex.r}`,
+        { width: buildingWidth, height: buildingHeight, depth: buildingDepth },
+        scene
+      );
+      building.position = new Vector3(x, hexTopY + buildingHeight / 2, z);
+    }
     
-    // Create textured material
-    const buildingMat = new StandardMaterial(`building-mat-${hex.q}-${hex.r}`, scene);
+    if (!skipDefaultTexture) {
+      building.rotation.y = Math.random() * Math.PI * 2;
+      
+      // Create textured material
+      const buildingMat = new StandardMaterial(`building-mat-${hex.q}-${hex.r}`, scene);
     
     // Create procedural texture for industrial look
     const texture = new DynamicTexture(`building-tex-${hex.q}-${hex.r}`, 512, scene);
@@ -1036,7 +2130,8 @@ function createTerrainObjects(hex: Hex, hexSize: number, scene: Scene, buildingP
     
     objects.push(building);
     
-    // Add multiple windows - positioned relative to building center
+    // Add multiple windows - only for industrial buildings
+    if (!skipDefaultTexture && buildingWidth > 0) {
     const numWindows = Math.floor(Math.random() * 6) + 3;
     for (let i = 0; i < numWindows; i++) {
       const windowSize = 0.15;
@@ -1083,10 +2178,10 @@ function createTerrainObjects(hex: Hex, hexSize: number, scene: Scene, buildingP
       antennaMat.diffuseColor = new Color3(0.4, 0.35, 0.3);
       antennaMat.emissiveColor = new Color3(0.8, 0.1, 0.1); // Red blinking light
       antenna.material = antennaMat;
-      
-      // Don't add to objects array - parent handles disposal
     }
-  }
+    } // End of if (!skipDefaultTexture && buildingWidth > 0)
+    } // End of if (!skipDefaultTexture)
+  } // End of if (canPlaceStructure)
 
   // Debris/Scrap: Random junk (10% chance on open terrain)
   if (hex.terrain === 'open' && Math.random() < 0.1) {
@@ -1118,10 +2213,79 @@ function createTerrainObjects(hex: Hex, hexSize: number, scene: Scene, buildingP
     }
   }
 
-  // Dead trees/forest: Spiky dead vegetation
+  // Trees/forest: Minecraft-style cubic trees or dead trees
   if (hex.terrain === 'forest') {
-    const numTrees = Math.floor(Math.random() * 3) + 2;
-    for (let i = 0; i < numTrees; i++) {
+    // Use SAME detection as buildings!
+    const isMinecraftWorld = (theme.terrainColors.open.g > 0.6 && theme.ambientIntensity > 0.85 && theme.terrainColors.water.b < 0.8) || 
+                             (theme.terrainColors.open.r > 0.65 && theme.terrainColors.water.b > 0.75 && theme.ambientIntensity > 0.8 && theme.ambientIntensity < 0.9);
+    // Fewer trees in Minecraft (1-2 instead of 2-4)
+    const numTrees = isMinecraftWorld ? Math.floor(Math.random() * 2) + 1 : Math.floor(Math.random() * 3) + 2;
+    
+    if (isMinecraftWorld) {
+      // MINECRAFT TREES - cubic oak trees
+      for (let i = 0; i < numTrees; i++) {
+        const offsetX = (Math.random() - 0.5) * hexSize * 0.6;
+        const offsetZ = (Math.random() - 0.5) * hexSize * 0.6;
+        const trunkHeight = Math.random() * 1.5 + 1.5;
+        
+        // Oak log trunk (cubic)
+        const trunk = MeshBuilder.CreateBox(
+          `mc-tree-${hex.q}-${hex.r}-${i}`,
+          { width: 0.3, height: trunkHeight, depth: 0.3 },
+          scene
+        );
+        trunk.position = new Vector3(x + offsetX, hexTopY + trunkHeight / 2, z + offsetZ);
+        
+        const trunkMat = new StandardMaterial(`mc-trunk-mat-${hex.q}-${hex.r}-${i}`, scene);
+        const trunkTex = new DynamicTexture(`mc-trunk-tex-${hex.q}-${hex.r}-${i}`, 64, scene);
+        const tCtx = trunkTex.getContext() as CanvasRenderingContext2D;
+        
+        // Oak log texture (brown with rings)
+        tCtx.fillStyle = '#6F5436';
+        tCtx.fillRect(0, 0, 64, 64);
+        // Rings
+        tCtx.strokeStyle = '#5A4428';
+        tCtx.lineWidth = 2;
+        for (let r = 10; r < 32; r += 8) {
+          tCtx.beginPath();
+          tCtx.arc(32, 32, r, 0, Math.PI * 2);
+          tCtx.stroke();
+        }
+        trunkTex.update();
+        trunkMat.diffuseTexture = trunkTex;
+        trunk.material = trunkMat;
+        objects.push(trunk);
+        
+        // Leaf canopy (cubic, multiple blocks)
+        const leafSize = 1.2;
+        const canopy = MeshBuilder.CreateBox(
+          `mc-leaves-${hex.q}-${hex.r}-${i}`,
+          { width: leafSize, height: leafSize, depth: leafSize },
+          scene
+        );
+        canopy.position = new Vector3(x + offsetX, hexTopY + trunkHeight + leafSize / 2, z + offsetZ);
+        
+        const leafMat = new StandardMaterial(`mc-leaf-mat-${hex.q}-${hex.r}-${i}`, scene);
+        const leafTex = new DynamicTexture(`mc-leaf-tex-${hex.q}-${hex.r}-${i}`, 64, scene);
+        const lCtx = leafTex.getContext() as CanvasRenderingContext2D;
+        
+        // Oak leaves texture (green, pixelated)
+        lCtx.fillStyle = '#5A9C3E';
+        lCtx.fillRect(0, 0, 64, 64);
+        for (let p = 0; p < 100; p++) {
+          const brightness = Math.random() * 30 - 15;
+          lCtx.fillStyle = `rgb(${90 + brightness}, ${156 + brightness}, ${62 + brightness})`;
+          lCtx.fillRect(Math.random() * 64, Math.random() * 64, 4, 4);
+        }
+        leafTex.update();
+        leafMat.diffuseTexture = leafTex;
+        leafMat.alpha = 0.9; // Slightly transparent
+        canopy.material = leafMat;
+        objects.push(canopy);
+      }
+    } else {
+      // Dead trees for other worlds
+      for (let i = 0; i < numTrees; i++) {
       const offsetX = (Math.random() - 0.5) * hexSize * 0.7;
       const offsetZ = (Math.random() - 0.5) * hexSize * 0.7;
       const treeHeight = Math.random() * 1.2 + 0.8;
@@ -1139,6 +2303,7 @@ function createTerrainObjects(hex: Hex, hexSize: number, scene: Scene, buildingP
       
       objects.push(tree);
     }
+    } // End of else (dead trees)
   }
 
   return objects;

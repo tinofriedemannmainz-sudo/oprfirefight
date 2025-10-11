@@ -33,8 +33,10 @@ export type GameState = {
   counterAttackPrompt?: CounterAttackPrompt;
   objectives: ObjectiveMarker[];
   objectiveScores: [number, number]; // [player0Score, player1Score]
+  worldTheme: 'grimdark' | 'lava' | 'grassland' | 'ice' | 'jungle';
 
   loadTeams: (teams: Team[]) => void;
+  setWorldTheme: (theme: 'grimdark' | 'lava' | 'grassland' | 'ice' | 'jungle') => void;
   availableTeams: Team[];
   selectedTeams: [string?, string?];
   selectTeam: (player: 0 | 1, teamId: string) => void;
@@ -79,6 +81,7 @@ export const useGame = create<GameState>((set, get) => ({
   size: 9,
   grid: [],
   units: [],
+  worldTheme: 'grimdark',
   currentPlayer: 0,
   phase: 'team-select',
   diceLog: [],
@@ -94,6 +97,10 @@ export const useGame = create<GameState>((set, get) => ({
   loadTeams(teams) {
     const sorted = [...teams].sort((a, b) => a.name.localeCompare(b.name));
     set({ availableTeams: sorted });
+  },
+
+  setWorldTheme(theme) {
+    set({ worldTheme: theme });
   },
 
   selectTeam(player, teamId) {
@@ -134,12 +141,13 @@ export const useGame = create<GameState>((set, get) => ({
       selectedUnitId: undefined,
       round: 1,
     });
-    get().regenerate();
   },
 
   canDeployOn(hex) {
     const rules = TERRAIN_RULES[hex.terrain];
     if (!rules || !rules.deployAllowed) return false;
+    // Block deployment on hexes with buildings
+    if (hex.hasBuilding) return false;
     const occupied = get().units.some(
       (u) => u.position && u.position.q === hex.q && u.position.r === hex.r,
     );

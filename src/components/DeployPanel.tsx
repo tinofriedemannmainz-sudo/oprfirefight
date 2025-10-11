@@ -16,7 +16,21 @@ export default function DeployPanel(){
 
   return (
     <div style={{position:'fixed', right:12, top:12, zIndex:60, maxWidth:520}}>
-      <div style={{display:'flex', gap:8, flexWrap:'wrap', justifyContent:'flex-end'}}>
+      <div style={{display:'flex', gap:8, flexWrap:'wrap', justifyContent:'flex-end', alignItems:'center'}}>
+        <select 
+          className="select" 
+          value={g.worldTheme} 
+          onChange={(e)=>g.setWorldTheme(e.target.value as any)}
+          title="Wähle das Welt-Theme"
+        >
+          <option value="grimdark">🌑 Grim Dark</option>
+          <option value="lava">🌋 Lavawelt</option>
+          <option value="grassland">🌿 Grasland</option>
+          <option value="ice">❄️ Eiswelt</option>
+          <option value="jungle">🌴 Dschungel</option>
+          <option value="minecraft_village">⛏️ Minecraft Dorf</option>
+          <option value="minecraft_island">🏝️ Minecraft Insel</option>
+        </select>
         <button className="btn" onClick={()=>setOpen(o=>!o)}>
           {open ? '❌ Liste' : '📋 Liste'}
         </button>
