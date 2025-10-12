@@ -354,7 +354,9 @@ export const useGame = create<GameState>((set, get) => ({
   },
 
   selectUnit(unitId) {
+    console.log('🎯 selectUnit called with:', unitId);
     let u = get().units.find((u) => u.id === unitId);
+    console.log('🔍 Found unit by direct ID:', u?.name, u?.id);
     if (!u) {
       const suffix = '-' + unitId;
       u = get().units.find(
@@ -363,10 +365,20 @@ export const useGame = create<GameState>((set, get) => ({
           x.id.endsWith(suffix) &&
           (!!x.position || get().phase === 'deploy'),
       );
+      console.log('🔍 Found unit by suffix:', u?.name, u?.id);
     }
-    if (!u) return;
-    if (get().phase === 'playing' && u.owner !== get().currentPlayer) return;
-    if (get().phase === 'playing' && (u as any).activated) return;
+    if (!u) {
+      console.warn('❌ Unit not found:', unitId);
+      return;
+    }
+    if (get().phase === 'playing' && u.owner !== get().currentPlayer) {
+      console.warn('❌ Wrong owner:', u.owner, 'vs', get().currentPlayer);
+      return;
+    }
+    if (get().phase === 'playing' && (u as any).activated) {
+      console.warn('❌ Unit already activated:', u.id);
+      return;
+    }
 
     // Reset unit state when selecting
     if (get().phase === 'playing') {
@@ -375,7 +387,9 @@ export const useGame = create<GameState>((set, get) => ({
       u.usedWeapons = u.usedWeapons || [];
     }
 
+    console.log('✅ Setting selectedUnitId to:', u.id);
     set({ selectedUnitId: u.id, selectedWeapon: undefined, actionMode: undefined });
+    console.log('📊 State after set:', get().selectedUnitId);
   },
 
   setActionMode(mode) {
@@ -425,7 +439,9 @@ export const useGame = create<GameState>((set, get) => ({
         // Check ranged weapons (only if not running)
         if (!isRun) {
           for (const weapon of u.weapons) {
-            if (weapon.range && weapon.range > 0 && enemyDist <= weapon.range) {
+            // OPR: weapon.range is in inches, convert to hexes (1 hex = 2 inches)
+            const rangeInHexes = weapon.range ? Math.floor(weapon.range / 2) : 0;
+            if (rangeInHexes > 0 && enemyDist <= rangeInHexes) {
               return true;
             }
           }
@@ -463,7 +479,9 @@ export const useGame = create<GameState>((set, get) => ({
     } else {
       // Ranged weapons: cannot use if run, must be in range
       if (atk.hasRun) return; // Cannot shoot ranged after running
-      if (dist > (weapon.range || 0)) return;
+      // OPR: weapon.range is in inches, convert to hexes (1 hex = 2 inches)
+      const rangeInHexes = Math.floor((weapon.range || 0) / 2);
+      if (dist > rangeInHexes) return;
     }
 
     // Open dice dialog instead of rolling immediately
@@ -518,12 +536,48 @@ export const useGame = create<GameState>((set, get) => ({
       }
     }
 
-    // Check if all weapons used or no more actions possible (only for non-counter attacks)
+    // Check if all weapons used or no more valid targets (only for non-counter attacks)
     if (!isCounterAttack) {
       const allWeaponsUsed = atk.weapons.every((w) => atk.usedWeapons?.includes(w.name));
-      const canStillAct = !atk.hasMoved || !allWeaponsUsed;
-
-      if (!canStillAct || allWeaponsUsed) {
+      
+      // Check if there are any valid targets for remaining weapons
+      let hasValidTargets = false;
+      if (!allWeaponsUsed && atk.position) {
+        const enemies = units.filter((u) => u.owner !== atk.owner && u.position);
+        
+        for (const enemy of enemies) {
+          if (!enemy.position) continue;
+          const dist = axialDistance(atk.position, enemy.position);
+          
+          // Check melee weapons
+          if (dist === 1) {
+            const hasMeleeWeapons = atk.weapons.some(
+              (w) => (w.range || 0) === 0 && !atk.usedWeapons?.includes(w.name)
+            );
+            if (hasMeleeWeapons) {
+              hasValidTargets = true;
+              break;
+            }
+          }
+          
+          // Check ranged weapons (only if not running)
+          if (!atk.hasRun) {
+            for (const weapon of atk.weapons) {
+              if (atk.usedWeapons?.includes(weapon.name)) continue;
+              const rangeInHexes = Math.floor((weapon.range || 0) / 2);
+              if (rangeInHexes > 0 && dist <= rangeInHexes) {
+                hasValidTargets = true;
+                break;
+              }
+            }
+          }
+          
+          if (hasValidTargets) break;
+        }
+      }
+      
+      // Auto-end activation if all weapons used OR no valid targets
+      if (allWeaponsUsed || !hasValidTargets) {
         setTimeout(() => get().endActivation(), 500);
       }
     }
@@ -663,9 +717,11 @@ export const useGame = create<GameState>((set, get) => ({
       // Check ranged weapons (range > 0) - only if not run
       if (!u.hasRun) {
         for (const weapon of u.weapons) {
+          // OPR: weapon.range is in inches, convert to hexes (1 hex = 2 inches)
+          const rangeInHexes = Math.floor((weapon.range || 0) / 2);
           if (
-            (weapon.range || 0) > 0 &&
-            dist <= (weapon.range || 0) &&
+            rangeInHexes > 0 &&
+            dist <= rangeInHexes &&
             !u.usedWeapons?.includes(weapon.name)
           ) {
             // TODO: Add cover check here

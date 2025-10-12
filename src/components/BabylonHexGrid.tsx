@@ -538,12 +538,14 @@ export default function BabylonHexGrid() {
 
   // Handle hex click
   function handleHexClick(hex: Hex) {
-    const currentPhase = phaseRef.current;
-    console.log('handleHexClick called:', hex.q, hex.r, 'phase:', currentPhase, 'selectedUnitId:', selectedUnitIdRef.current);
+    // Get fresh state from store
+    const freshState = useGame.getState();
+    const currentPhase = freshState.phase;
+    console.log('handleHexClick called:', hex.q, hex.r, 'phase:', currentPhase, 'selectedUnitId:', freshState.selectedUnitId);
     setSelectedHex(hex);
     if (currentPhase === 'deploy') {
-      console.log('Deploy phase - selectedUnitId:', g.selectedUnitId);
-      if (!g.selectedUnitId) {
+      console.log('Deploy phase - selectedUnitId:', freshState.selectedUnitId);
+      if (!freshState.selectedUnitId) {
         console.log('No unit selected');
         return;
       }
@@ -551,18 +553,18 @@ export default function BabylonHexGrid() {
         console.log('Cannot deploy on this hex');
         return;
       }
-      console.log('Placing unit:', g.selectedUnitId);
-      g.placeUnit(g.selectedUnitId, hex);
+      console.log('Placing unit:', freshState.selectedUnitId);
+      g.placeUnit(freshState.selectedUnitId, hex);
       return;
     }
     if (currentPhase === 'playing') {
-      // Use ref instead of state to avoid async issues
-      const selectedId = selectedUnitIdRef.current;
+      // Read directly from fresh state to get latest value
+      const selectedId = freshState.selectedUnitId;
       if (!selectedId) {
-        console.log('No unit selected for movement (ref)');
+        console.log('No unit selected for movement');
         return;
       }
-      const selUnit = g.units.find(u => u.id === selectedId);
+      const selUnit = freshState.units.find(u => u.id === selectedId);
       console.log('Playing phase - selected unit:', selUnit?.name, 'ID:', selectedId);
       if (selUnit && selUnit.position) {
         // Calculate distance to determine if we need to run

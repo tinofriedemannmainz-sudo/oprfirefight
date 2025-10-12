@@ -1,5 +1,17 @@
 import type { Hex, TerrainType, Unit } from '@/types/battle'
 
+// OPR Conversion: 1 Hex = 2 inches
+export const INCHES_PER_HEX = 2;
+
+// Helper functions to convert between inches and hexes
+export function inchesToHexes(inches: number): number {
+  return Math.floor(inches / INCHES_PER_HEX);
+}
+
+export function hexesToInches(hexes: number): number {
+  return hexes * INCHES_PER_HEX;
+}
+
 export const TERRAIN_RULES: Record<TerrainType, { moveCost: number; impassable: boolean; deployAllowed: boolean }> = {
   open:      { moveCost: 1, impassable: false, deployAllowed: true },
   road:      { moveCost: 1, impassable: false, deployAllowed: true },

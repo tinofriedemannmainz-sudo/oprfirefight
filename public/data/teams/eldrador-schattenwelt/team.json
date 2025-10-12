@@ -6,7 +6,7 @@
     {
       "id": "schattendrache",
       "name": "Schattendrache",
-      "image": "/assets/eldrador/schattenwelt/01-schattendrache.svg",
+      "image": "/assets/armies/eldrador/schattenwelt/Schattendrache.webp",
       "quality": 3,
       "defense": 4,
       "speed": 5,
@@ -30,9 +30,9 @@
       ]
     },
     {
-      "id": "schattenpanther",
-      "name": "Schattenpanther",
-      "image": "/assets/eldrador/schattenwelt/02-schattenpanther.svg",
+      "id": "schattenloewe",
+      "name": "Schattenlöwe",
+      "image": "/assets/armies/eldrador/schattenwelt/Schattenl%3Fwe.webp",
       "quality": 4,
       "defense": 4,
       "speed": 5,
@@ -49,9 +49,9 @@
       ]
     },
     {
-      "id": "albtraum-greif",
-      "name": "Albtraum-Greif",
-      "image": "/assets/eldrador/schattenwelt/03-albtraum-greif.svg",
+      "id": "schatten-fledermaus",
+      "name": "Schattenfledermaus",
+      "image": "/assets/armies/eldrador/schattenwelt/Schattenfledermaus.webp",
       "quality": 4,
       "defense": 4,
       "speed": 5,
@@ -75,9 +75,9 @@
       ]
     },
     {
-      "id": "nebelbestie",
-      "name": "Nebelbestie",
-      "image": "/assets/eldrador/schattenwelt/04-nebelbestie.svg",
+      "id": "schattenwolf",
+      "name": "Schattenwolf",
+      "image": "/assets/armies/eldrador/schattenwelt/Schattenwolf.webp",
       "quality": 4,
       "defense": 5,
       "speed": 3,
@@ -94,9 +94,9 @@
       ]
     },
     {
-      "id": "schattenwraith",
-      "name": "Schattenwraith",
-      "image": "/assets/eldrador/schattenwelt/05-schattenwraith.svg",
+      "id": "Schattenraptor",
+      "name": "Schattenraptor",
+      "image": "/assets/armies/eldrador/schattenwelt/Schattenraptor.webp",
       "quality": 4,
       "defense": 4,
       "speed": 4,
@@ -113,9 +113,9 @@
       ]
     },
     {
-      "id": "nachtritter",
-      "name": "Nachtritter",
-      "image": "/assets/eldrador/schattenwelt/06-nachtritter.svg",
+      "id": "Schattenassel",
+      "name": "Schattenassel",
+      "image": "/assets/armies/eldrador/schattenwelt/Schattenassel.webp",
       "quality": 3,
       "defense": 4,
       "speed": 4,

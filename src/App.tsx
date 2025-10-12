@@ -222,7 +222,10 @@ function Grid() {
     if (!unit || !unit.position || unit.hasMoved || (unit.usedWeapons?.length || 0) > 0) return [];
     
     const hexes: Hex[] = [];
-    const maxDist = moveMode === 'run' ? unit.speed * 2 : unit.speed;
+    // OPR: speed is in inches, convert to hexes (1 hex = 2 inches)
+    // Normal move: 6" = 3 hexes, Run: 12" = 6 hexes
+    const speedInInches = moveMode === 'run' ? unit.speed * 2 : unit.speed;
+    const maxDist = Math.floor(speedInInches / 2); // Convert inches to hexes
     
     for (const hex of g.grid) {
       const occupied = g.units.some(u => u.position && u.position.q === hex.q && u.position.r === hex.r);
@@ -331,14 +334,14 @@ function Grid() {
                     onClick={() => setMoveMode(moveMode === 'normal' ? undefined : 'normal')}
                     style={{ background: moveMode === 'normal' ? '#7aafff' : undefined }}
                   >
-                    Normal bewegen ({unit.speed}")
+                    Normal bewegen ({unit.speed}" = {Math.floor(unit.speed / 2)} Hexe)
                   </button>
                   <button 
                     className="btn" 
                     onClick={() => setMoveMode(moveMode === 'run' ? undefined : 'run')}
                     style={{ background: moveMode === 'run' ? '#7aafff' : undefined }}
                   >
-                    Rennen ({unit.speed * 2}")
+                    Rennen ({unit.speed * 2}" = {Math.floor(unit.speed * 2 / 2)} Hexe)
                   </button>
                 </div>
               )}
@@ -347,7 +350,7 @@ function Grid() {
                   <div style={{ fontSize: 12, marginBottom: 4 }}>Verfügbare Waffen:</div>
                   {availableWeapons.map(w => (
                     <div key={w.name} style={{ fontSize: 11, color: '#9ca3af' }}>
-                      • {w.name} ({w.type === 'melee' ? 'Nahkampf' : `${w.range}"`})
+                      • {w.name} ({w.type === 'melee' ? 'Nahkampf' : `${w.range}" = ${Math.floor((w.range || 0) / 2)} Hexe`})
                     </div>
                   ))}
                 </div>
